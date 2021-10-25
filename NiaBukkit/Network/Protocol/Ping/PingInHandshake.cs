@@ -1,6 +1,9 @@
-﻿namespace NiaBukkit.Network.PacketList.PingPacketList
+﻿namespace NiaBukkit.Network.Protocol.Ping
 {
-    public class Handshake : Packet
+    /**
+     * <summary>Client Info Received</summary>
+     */
+    public class PingInHandshake
     {
         internal static void Read(NetworkManager networkManager, ByteBuf buf)
         {

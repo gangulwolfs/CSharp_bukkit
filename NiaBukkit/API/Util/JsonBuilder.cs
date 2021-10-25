@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace NiaBukkit.API.Module
+namespace NiaBukkit.API.Util
 {
     public class JsonBuilder
     {

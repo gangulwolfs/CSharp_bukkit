@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using NiaBukkit.API.Module;
+using NiaBukkit.API.Util;
 
 namespace NiaBukkit.API.Config
 {
@@ -27,7 +27,7 @@ namespace NiaBukkit.API.Config
         
         internal static void LoadSettings()
         {
-            if (!File.Exists(Name))
+            if (!File.Exists(Path.Join(Bukkit.ServerPath, Name)))
             {
                 WriteSettings();
                 return;
@@ -74,7 +74,7 @@ namespace NiaBukkit.API.Config
             builder.Append("spawn-animals=");
             builder.AppendLine(SpawnAnimals.ToString());
             
-            File.WriteAllTextAsync(Name, builder.ToString());
+            File.WriteAllTextAsync(Path.Join(Bukkit.ServerPath, Name), builder.ToString());
         }
     }
 }

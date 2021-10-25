@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,8 +9,12 @@ namespace NiaBukkit.API
     public class PluginManager
     {
         private readonly List<Plugin> plugins = new List<Plugin>();
+		
+		/// <summary>플러그인 목록을 가져옵니다.</summary>
         public Plugin[] Plugins => plugins.ToArray();
     
+		
+		/// <summary>플러그인을 불러옵니다.</summary>
         internal void LoadPlugins()
         {
             string directory = Path.Join(Bukkit.ServerPath, "plugins");

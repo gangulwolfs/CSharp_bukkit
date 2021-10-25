@@ -5,9 +5,4 @@
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="Network\PacketList\LoginPacketList" />
-      <Folder Include="Network\PacketList\PlayPacketList" />
-    </ItemGroup>
-
 </Project>

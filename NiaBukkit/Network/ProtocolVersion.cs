@@ -523,7 +523,13 @@
     {
 	    public static string GetProtocolName(this ProtocolVersion protocol)
 	    {
-		    return string.Format("{0} {1}", Program.Name, protocol.ToString());
+		    string version = protocol.ToString().Substring(1)
+			    .Replace("_", ".")
+			    .Replace(".PRE.", " PRE ")
+			    .Replace(".RC.", " RC ")
+			    .Replace(".ES.", " ES ");
+		    
+		    return string.Format("{0} {1}", Program.Name, version);
 	    }
     }
 }

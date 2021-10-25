@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
-using NiaBukkit.API.Module;
+using NiaBukkit.API.Util;
 using NiaBukkit.Network;
 
 namespace NiaBukkit
@@ -21,7 +21,7 @@ namespace NiaBukkit
             ServerProperties.LoadSettings();
 
             Bukkit.minecraftServer = new MinecraftServer();
-            ConsoleSender.SendMessage("Starting Minecraft server on *:" + ServerProperties.Port);
+            Bukkit.ConsoleSender.SendMessage("Starting Minecraft server on *:" + ServerProperties.Port);
             
             Bukkit.PluginManager.LoadPlugins();
         }

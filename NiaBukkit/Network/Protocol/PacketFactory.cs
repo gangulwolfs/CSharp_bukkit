@@ -1,7 +1,9 @@
-﻿using NiaBukkit.Network.PacketList.PingPacketList;
-using NiaBukkit.Network.PacketList.StatusPacketList;
+using NiaBukkit.Network.Protocol;
+using NiaBukkit.Network.Protocol.Ping;
+using NiaBukkit.Network.Protocol.Status;
+using NiaBukkit.Network.Protocol.Login;
 
-namespace NiaBukkit.Network.PacketList
+namespace NiaBukkit.Network.Protocol
 {
     public class PacketFactory
     {
@@ -16,6 +18,7 @@ namespace NiaBukkit.Network.PacketList
                     PacketInStatus(networkManager, buf, packetId);
                     break;
                 case PacketMode.Login:
+					PacketInLogin(networkManager, buf, packetId);
                     break;
                 case PacketMode.Play:
                     break;
@@ -27,7 +30,7 @@ namespace NiaBukkit.Network.PacketList
             switch ((PingPacket) packetId)
             {
                 case PingPacket.Handshake:
-                    Handshake.Read(networkManager, buf);
+                    PingInHandshake.Read(networkManager, buf);
                     break;
             }
         }
@@ -37,10 +40,23 @@ namespace NiaBukkit.Network.PacketList
             switch ((StatusPacket) packetId)
             {
                 case StatusPacket.Request:
-                    Request.Read(networkManager, buf);
+                    StatusInRequest.Read(networkManager, buf);
                     break;
                 case StatusPacket.Ping:
-                    Ping.Read(networkManager, buf);
+                    StatusInPing.Read(networkManager, buf);
+                    break;
+            }
+        }
+
+        private static void PacketInLogin(NetworkManager networkManager, ByteBuf buf, int packetId)
+        {
+            switch ((LoginPacket) packetId)
+            {
+                case LoginPacket.LoginStart:
+                    LoginInStart.Read(networkManager, buf);
+                    break;
+                case LoginPacket.EncryptionResponse:
+                    LoginInEncryptionResponse.Read(networkManager, buf);
                     break;
             }
         }

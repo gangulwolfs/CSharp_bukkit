@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 
-namespace NiaBukkit.API.Module
+namespace NiaBukkit.API.Util
 {
     public class ThreadFactory
     {

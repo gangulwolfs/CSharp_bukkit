@@ -105,6 +105,11 @@ namespace NiaBukkit.Network
             buf.AddRange(data);
         }
 
+        public void WriteByte(byte b)
+        {
+            buf.Add(b);
+        }
+
         public void WriteVarInt(int integer)
         {
             buf.AddRange(GetVarInt(integer));

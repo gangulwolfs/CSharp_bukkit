@@ -1,49 +1,65 @@
-﻿using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Threading;
 using NiaBukkit.API;
-using NiaBukkit.API.Module;
+using NiaBukkit.API.Util;
 using NiaBukkit.API.Config;
 
 namespace NiaBukkit.Network
 {
     public class MinecraftServer
     {
-        public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_17_1;
+        public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_12_2;
+		internal RSAParameters ServerKey;
         
-        private TcpListener listener;
-        private const int Timeout = 30;
+        private TcpListener _listener;
+        private const int Timeout = 2000;
         
         public bool IsAvilable { get; private set; }
-        private List<TcpClient> destroySockets = new List<TcpClient>();
+        private readonly ConcurrentQueue<NetworkManager> _destroySockets = new ConcurrentQueue<NetworkManager>();
+		
         internal MinecraftServer()
         {
+			Init();
+			SocketStart();
+        }
+		
+		private void Init()
+		{
             IsAvilable = true;
-            listener = new TcpListener(IPAddress.Any, ServerProperties.Port);
-            listener.Server.NoDelay = true;
-            listener.Server.SendTimeout = 500;
-
+			
+            _listener = new TcpListener(IPAddress.Any, ServerProperties.Port);
+            _listener.Server.NoDelay = true;
+            _listener.Server.SendTimeout = 500;
+			
+            ServerKey = SelfCryptography.GenerateKeyPair();
+		}
+		
+		private void SocketStart()
+		{
             try
             {
-                listener.Start();
+                _listener.Start();
             }
             catch (SocketException e)
             {
-                ConsoleSender.SendWarnMessage("Failed to start the minecraft server");
+                Bukkit.ConsoleSender.SendWarnMessage("Failed to start the minecraft server");
                 throw e;
             }
             
             ThreadFactory.LaunchThread(new Thread(AcceptSocketWorker), false).Name = "Client Bind Thread";
             ThreadFactory.LaunchThread(new Thread(ClientUpdateWorker), false).Name = "Client Thread";
             ThreadFactory.LaunchThread(new Thread(ClientDestroyWorker), false).Name = "Client Destroy Thread";
-        }
+		}
 
         private void AcceptSocketWorker()
         {
             while (IsAvilable)
             {
-                new NetworkManager(listener.AcceptTcpClient());
+                new NetworkManager(_listener.AcceptTcpClient());
             }
         }
 
@@ -51,21 +67,16 @@ namespace NiaBukkit.Network
         {
             while (IsAvilable)
             {
-                NetworkManager[] networkManagers = NetworkManager.networkManagers.ToArray();
                 long currentTimeMillis = TimeManager.CurrentTimeMillis;
-                foreach (var networkManager in networkManagers)
+                foreach (var networkManager in NetworkManager.networkManagers)
                 {
-                    if (networkManager == null)
-                    {
-                        NetworkManager manager = networkManager;
-                        NetworkManager.networkManagers.TryPeek(out manager);
+                    if (networkManager == null || !networkManager.IsAvilable)
                         continue;
-                    }
-                    if (networkManager.client == null || !networkManager.client.Connected || networkManager.client.Available <= 0 &&
-                        currentTimeMillis - networkManager.lastPacketMillis > Timeout)
+                    
+                    if (networkManager.client == null || !networkManager.client.Connected || currentTimeMillis - networkManager.lastPacketMillis > Timeout)
                     {
                         networkManager.Disconnect();
-                        destroySockets.Add(networkManager.client);
+                        _destroySockets.Enqueue(networkManager);
                         continue;
                     }
 
@@ -79,11 +90,13 @@ namespace NiaBukkit.Network
         {
             while (IsAvilable)
             {
-                TcpClient[] destroyList = destroySockets.ToArray();
-                foreach (var client in destroyList)
+                while(!_destroySockets.IsEmpty)
                 {
-                    if(client != null) client.Close();
-                    destroySockets.Remove(client);
+                    NetworkManager networkManager;
+                    if(!_destroySockets.TryDequeue(out networkManager)) continue;
+                    
+                    if(networkManager.client != null && networkManager.client.Connected) networkManager.client.Close();
+                    NetworkManager.networkManagers.TryTake(out networkManager);
                 }
             }
         }

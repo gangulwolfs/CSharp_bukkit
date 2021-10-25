@@ -1,12 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
-using NiaBukkit.API.Module;
-using NiaBukkit.Network.PacketList;
+using NiaBukkit.API.Util;
+using NiaBukkit.Network.Protocol;
 
 namespace NiaBukkit.Network
 {
@@ -16,17 +15,23 @@ namespace NiaBukkit.Network
 
         internal long lastPacketMillis = 0;
         internal TcpClient client;
+        
+        public bool IsAvilable { get; private set; }
 
         public PacketMode PacketMode { get; internal set; } = PacketMode.Ping;
         public ProtocolVersion Protocol { get; internal set; }
         public string Host { get; internal set; }
         public short Port { get; internal set; }
 
-        private ICryptoTransform Encrypter;
-        private ICryptoTransform Decrypter;
+        internal ICryptoTransform Encrypter;
+        internal ICryptoTransform Decrypter;
+		
+		public Player Player { get; internal set; }
 
         internal NetworkManager(TcpClient client)
         {
+            IsAvilable = true;
+            
             this.client = client;
             lastPacketMillis = TimeManager.CurrentTimeMillis;
             
@@ -35,6 +40,8 @@ namespace NiaBukkit.Network
 
         internal void Disconnect()
         {
+            IsAvilable = false;
+            
             NetworkManager manager = this;
             networkManagers.TryTake(out manager);
             
@@ -57,6 +64,8 @@ namespace NiaBukkit.Network
 
         internal void Update()
         {
+            lastPacketMillis = TimeManager.CurrentTimeMillis;
+            
             byte[] bytes = new byte[GetPacketLength()];
             client.GetStream().Read(bytes, 0, bytes.Length);
             //TODO: 압축 추가
@@ -70,15 +79,18 @@ namespace NiaBukkit.Network
 
             ByteBuf buf = new ByteBuf(bytes);
             var packetId = buf.ReadVarInt();
+			Bukkit.ConsoleSender.SendMessage(PacketMode.ToString() +", " + packetId);
             PacketFactory.Handle(this, buf, packetId);
         }
 
         public void SendPacket(Packet packet)
         {
+            if (client == null || !client.Connected) return;
             ByteBuf buf = new ByteBuf();
-            packet.Write(buf);
+            packet.Write(buf, Protocol);
 
             byte[] data = buf.Flush();
+            
 
             try
             {

@@ -1,4 +1,4 @@
-﻿namespace NiaBukkit.API.Module
+﻿namespace NiaBukkit.API.Util
 {
     public enum Difficulty
     {

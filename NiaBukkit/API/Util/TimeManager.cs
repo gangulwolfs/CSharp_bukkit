@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NiaBukkit.API.Module
+namespace NiaBukkit.API.Util
 {
     public class TimeManager
     {

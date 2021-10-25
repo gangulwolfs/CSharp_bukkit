@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Threading;
-using NiaBukkit.API.Module;
+using NiaBukkit.API.Command;
+using NiaBukkit.API.Util;
 
 namespace NiaBukkit.API
 {
-    public class ConsoleSender
+    public class ConsoleSender : CommandSender
     {
         internal static void PrintInfo()
         {
@@ -18,12 +19,19 @@ namespace NiaBukkit.API
                 Console.Write("Other Thread");
         }
 
-        public static void SendMessage(object message)
+        public void SendMessage(object message)
         {
+            if (message == null)
+                message = "null";
+            
             SendMessage(message.ToString());
         }
-        public static void SendMessage(string message)
+		
+        public void SendMessage(string message)
         {
+            if (message == null)
+                message = "null";
+
             PrintInfo();
             Console.Write("/INFO]: ");
             
@@ -54,12 +62,19 @@ namespace NiaBukkit.API
             Console.Write(">");
         }
 
-        public static void SendWarnMessage(object message)
+        public void SendWarnMessage(object message)
         {
+            if (message == null)
+                message = "null";
+            
             SendWarnMessage(message.ToString());
         }
-        public static void SendWarnMessage(string message)
+		
+        public void SendWarnMessage(string message)
         {
+            if (message == null)
+                message = "null";
+
             PrintInfo();
             Console.Write("/WARN]: ");
             
