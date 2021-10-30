@@ -25,10 +25,21 @@ namespace NiaBukkit.API
 
         public override void WriteLine(object? value)
         {
-            WriteLine(value.ToString());
+            if(value == null)
+                WriteLine("null");
+            else
+                WriteLine(value.ToString());
         }
 
-        public override void WriteLine(string? value)
+        public override void WriteLine(StringBuilder? value)
+        {
+            if(value == null)
+                WriteLine("null");
+            else
+                WriteLine(value.ToString());
+        }
+
+        public override void WriteLine(string value)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             ConsoleSender.PrintInfo();

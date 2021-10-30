@@ -60,6 +60,8 @@ namespace NiaBukkit.Network.Protocol.Play
             //
             // if(protocol > ProtocolVersion.v1_14_3_CT)
             //     buf.WriteBool(_player.World.WorldType == WorldType.Flat);
+            
+            //TODO: Other Version
             Write_V1_12(buf);
         }
 

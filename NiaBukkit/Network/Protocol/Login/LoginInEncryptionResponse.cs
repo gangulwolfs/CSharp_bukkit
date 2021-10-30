@@ -9,6 +9,7 @@ namespace NiaBukkit.Network.Protocol.Login
 	{
         internal static void Read(NetworkManager networkManager, ByteBuf buf)
         {
+	        //TODO: Encrpypion
 	        byte[] sharedSecret = buf.Read(buf.ReadVarInt());
 	        byte[] vertifyToken = buf.Read(buf.ReadVarInt());
 	        

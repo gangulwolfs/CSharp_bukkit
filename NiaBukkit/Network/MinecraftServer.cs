@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
@@ -12,6 +11,7 @@ namespace NiaBukkit.Network
 {
     public class MinecraftServer
     {
+        // public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_12_2;
         public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_12_2;
 		internal RSAParameters ServerKey;
         
@@ -99,6 +99,11 @@ namespace NiaBukkit.Network
                     NetworkManager.networkManagers.TryTake(out networkManager);
                 }
             }
+        }
+
+        public string GetServerModName()
+        {
+            return "NiaBukkit";
         }
     }
 }

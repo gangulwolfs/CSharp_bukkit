@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
+using NiaBukkit.API.Entity;
 using NiaBukkit.API.Util;
 using NiaBukkit.Network.Protocol;
+using NiaBukkit.Network.Protocol.Play;
 
 namespace NiaBukkit.Network
 {
@@ -27,6 +31,8 @@ namespace NiaBukkit.Network
         internal ICryptoTransform Decrypter;
 		
 		public Player Player { get; internal set; }
+
+        private int _teleportAwait = 0;
 
         internal NetworkManager(TcpClient client)
         {
@@ -83,6 +89,29 @@ namespace NiaBukkit.Network
             PacketFactory.Handle(this, buf, packetId);
         }
 
+        internal void Teleport(Location loc, IEnumerable<TeleportFlags> flags)
+        {
+            if (++_teleportAwait == Int32.MaxValue)
+                _teleportAwait = 0;
+            
+            SendPacket(new PlayOutPosition(loc.X, loc.Y, loc.Z, loc.Yaw, loc.Pitch, flags, _teleportAwait));
+            Location pos = (Location) loc.Clone();
+
+            if (flags.Contains(TeleportFlags.X))
+                pos.X += Player.Location.X;
+            if (flags.Contains(TeleportFlags.Y))
+                pos.Y += Player.Location.Y;
+            if (flags.Contains(TeleportFlags.Z))
+                pos.Z += Player.Location.Z;
+            
+            if (flags.Contains(TeleportFlags.YRot))
+                pos.Yaw += Player.Location.Yaw;
+            if (flags.Contains(TeleportFlags.XRot))
+                pos.Pitch += Player.Location.Pitch;
+
+            ((EntityPlayer) Player).SetLocation(pos.X, pos.Y, pos.Z, pos.Yaw, pos.Pitch);
+        }
+
         public void SendPacket(Packet packet)
         {
             if (client == null || !client.Connected) return;
@@ -113,8 +142,7 @@ namespace NiaBukkit.Network
             catch (Exception e)
             {
                 //TODO: client disconnect and send error
-
-                throw e;
+                Console.Error.WriteLine(e.Message);
             }
         }
     }

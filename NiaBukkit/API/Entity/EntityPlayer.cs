@@ -10,16 +10,34 @@ namespace NiaBukkit.API.Entity
 		public readonly GameProfile Profile;
 
 		public World.World _world;
-		public World.World World => _world;
-		
+
 		private GameMode _gameMode;
-		public GameMode GameMode => _gameMode;
 
 		private int _entityId;
-		public int EntityId => _entityId;
 
-		private Location _location;
-		public Location Location => _location;
+		
+		internal Location _location;
+		
+		internal string locate;
+		internal byte viewDistance;
+		internal MainHand mainHand;
+		internal int heldItemSlot;
+
+		int Player.HeldItemSlot => heldItemSlot;
+		GameMode Player.GameMode => _gameMode;
+		string Player.Locate => locate;
+		byte Player.ViewDistance => viewDistance;
+		MainHand Player.MainHand => mainHand;
+		
+		World.World Entity.World => _world;
+		int Entity.EntityId => _entityId;
+		Location Entity.Location => _location;
+
+		public ChatMode ChatMode { get; internal set; }
+		public bool ChatColor { get; internal set; }
+		public int SkinPart { get; internal set; }
+
+		public readonly PlayerAbilities PlayerAbilities = new PlayerAbilities();
 
 		public EntityPlayer(NetworkManager networkManager, GameProfile profile, World.World world, GameMode gameMode)
 		{
@@ -44,6 +62,15 @@ namespace NiaBukkit.API.Entity
 		public void SendMessage(string message)
 		{
 			//TODO: SendMessage
+		}
+
+		public void SetLocation(double x, double y, double z, float yaw, float pitch)
+		{
+			_location.X = x;
+			_location.Y = y;
+			_location.Z = z;
+			_location.Yaw = yaw;
+			_location.Pitch = pitch;
 		}
 	}
 }

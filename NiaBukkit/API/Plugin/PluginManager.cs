@@ -31,14 +31,14 @@ namespace NiaBukkit.API
                 catch(Exception e)
                 {
                     Console.Error.WriteLine("Could not load '" + Path.GetFileName(path) +"' in folder 'plugins'");
-                    Console.Error.WriteLine(e);
+                    throw e;
                 }
             }
         }
 
         private void GetPluginDescription(Assembly plugin)
         {
-            Console.WriteLine(plugin.GetManifestResourceInfo("plugin.yml").FileName);
+            Console.WriteLine(plugin.GetManifestResourceInfo("plugin.yml"));
         }
     }
 }

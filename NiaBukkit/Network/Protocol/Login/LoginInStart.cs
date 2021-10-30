@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Entity;
@@ -38,7 +41,16 @@ namespace NiaBukkit.Network.Protocol.Login
 				
 				networkManager.PacketMode = PacketMode.Play;
 				networkManager.SendPacket(new PlayOutJoinGame(networkManager.Player));
-				// networkManager.SendPacket(new PlayOutSpawnPosition(networkManager.Player.Location));
+				networkManager.SendPacket(new PlayOutServerDifficulty(networkManager.Player.World.Difficulty));
+				networkManager.SendPacket(new PlayOutPlayerAbilities(((EntityPlayer) networkManager.Player).PlayerAbilities));
+				networkManager.SendPacket(new PlayOutHeldItemSlot(networkManager.Player.HeldItemSlot));
+				networkManager.SendPacket(new PlayOutEntityStatus(networkManager.Player.EntityId, 9));
+				
+				//TODO: PacketPlayOutRecipes
+				//TODO: PacketPlayOutSetSlot
+				
+				networkManager.Teleport(networkManager.Player.Location, Enumerable.Empty<TeleportFlags>());
+				networkManager.SendPacket(new PlayOutSpawnPosition(networkManager.Player.Location));
 			}
         }
 	}

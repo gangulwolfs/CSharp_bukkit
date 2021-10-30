@@ -1,12 +1,15 @@
-using NiaBukkit.Network.Protocol;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NiaBukkit.Network.Protocol.Ping;
 using NiaBukkit.Network.Protocol.Status;
 using NiaBukkit.Network.Protocol.Login;
+using NiaBukkit.Network.Protocol.Play;
 
 namespace NiaBukkit.Network.Protocol
 {
     public class PacketFactory
     {
+        private static ReadOnlyCollection<PlayInPacket> _playPackets;
         internal static void Handle(NetworkManager networkManager, ByteBuf buf, int packetId)
         {
             switch (networkManager.PacketMode)
@@ -21,6 +24,7 @@ namespace NiaBukkit.Network.Protocol
 					PacketInLogin(networkManager, buf, packetId);
                     break;
                 case PacketMode.Play:
+                    PacketInPlay(networkManager, buf, packetId);
                     break;
             }
         }
@@ -59,6 +63,29 @@ namespace NiaBukkit.Network.Protocol
                     LoginInEncryptionResponse.Read(networkManager, buf);
                     break;
             }
+        }
+
+        private static void PacketInPlay(NetworkManager networkManager, ByteBuf buf, int packetId)
+        {
+            if (_playPackets == null)
+                PlayPacketInit();
+            
+            foreach(PlayInPacket packet in _playPackets!)
+            {
+                if(packet.GetPacketId(networkManager.Protocol) == packetId)
+                    packet.Read(networkManager, buf);
+            }
+        }
+
+        private static void PlayPacketInit()
+        {
+            List<PlayInPacket> packets = new List<PlayInPacket>();
+            packets.AddRange(new []
+            {
+                new PlayInClientSettings()
+            });
+
+            _playPackets = new ReadOnlyCollection<PlayInPacket>(packets);
         }
     }
 }

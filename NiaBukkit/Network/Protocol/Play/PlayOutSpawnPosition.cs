@@ -15,8 +15,27 @@ namespace NiaBukkit.Network.Protocol.Play
             long data = ((long) _location.X & 0x3FFFFFF) << 38 | (long) _location.Y & 0xFFF << 26 |
                         (long) _location.Z & 0x3FFFFFF;
             
-            buf.WriteVarInt(70);
+            buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteLong(data);
+        }
+
+        private int GetPacketId(ProtocolVersion protocol)
+        {
+            if (protocol > ProtocolVersion.v1_16_5)
+                return 75;
+            if (protocol > ProtocolVersion.v1_15_2)
+                return 66;
+            if (protocol > ProtocolVersion.v1_14_3_CT)
+                return 78;
+            if (protocol > ProtocolVersion.v1_13_2)
+                return 77;
+            if (protocol > ProtocolVersion.v1_12_2)
+                return 73;
+            if (protocol > ProtocolVersion.v1_11_2)
+                return 70;
+            if (protocol > ProtocolVersion.v1_8_9)
+                return 67;
+            return 5;
         }
     }
 }

@@ -66,6 +66,11 @@ namespace NiaBukkit.Network
             
             return buffer;
         }
+
+        public bool ReadBool()
+        {
+            return ReadByte() != 0;
+        }
         
         public int ReadVarInt()
         {
@@ -149,7 +154,8 @@ namespace NiaBukkit.Network
 
         public void WriteFloat(float data)
         {
-            buf.AddRange(HostToNetworkOrder(data));
+            buf.AddRange(BitConverter.GetBytes(data));
+            // buf.AddRange(HostToNetworkOrder(data));
         }
 
         public void WriteLong(long data)
