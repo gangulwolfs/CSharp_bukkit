@@ -28,17 +28,37 @@ namespace NiaBukkit.Network.Protocol.Play
 
         internal override void Write(ByteBuf buf, ProtocolVersion protocol)
         {
-            buf.WriteVarInt(47);
+            buf.WriteVarInt(GetPacketId(protocol));
             
             buf.WriteDouble(_x);
             buf.WriteDouble(_y);
             buf.WriteDouble(_z);
             
-            buf.WriteFloat(_pitch);
             buf.WriteFloat(_yaw);
+            buf.WriteFloat(_pitch);
             
             buf.WriteByte(_flags);
-            buf.WriteVarInt(_teleportAwait);
+            if(protocol >= ProtocolVersion.v1_9)
+                buf.WriteVarInt(_teleportAwait);
+        }
+    
+        private static int GetPacketId(ProtocolVersion protocol)
+        {
+            if (protocol > ProtocolVersion.v1_16_5)
+                return 56;
+            if (protocol > ProtocolVersion.v1_15_2)
+                return 52;
+            if (protocol > ProtocolVersion.v1_14_3_CT)
+                return 54;
+            if (protocol > ProtocolVersion.v1_13_2)
+                return 53;
+            if (protocol > ProtocolVersion.v1_12_2)
+                return 50;
+            if (protocol > ProtocolVersion.v1_11_2)
+                return 47;
+            if (protocol >= ProtocolVersion.v1_9)
+                return 46;
+            return 8;
         }
     }
 

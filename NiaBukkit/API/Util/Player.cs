@@ -4,10 +4,14 @@ namespace NiaBukkit.API.Util
 {
     public interface Player : CommandSender, Entity.Entity
     {
-        public GameMode GameMode { get; }
-        public string Locate { get; }
-        public byte ViewDistance { get; }
-        public MainHand MainHand { get; }
-        public int HeldItemSlot { get; }
+        GameMode GameMode { get; }
+        string Locate { get; }
+        byte ViewDistance { get; }
+        MainHand MainHand { get; }
+        int HeldItemSlot { get; }
+        
+        Uuid Uuid { get; }
+        string Name { get; }
+        string ListName { get; }
     }
 }

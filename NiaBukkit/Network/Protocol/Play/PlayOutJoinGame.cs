@@ -62,14 +62,17 @@ namespace NiaBukkit.Network.Protocol.Play
             //     buf.WriteBool(_player.World.WorldType == WorldType.Flat);
             
             //TODO: Other Version
-            Write_V1_12(buf);
+            buf.WriteVarInt(GetPacketId(protocol));
+            buf.WriteInt(_player.EntityId);
+            
+            if (protocol >= ProtocolVersion.v1_9_1)
+                Write_V1_9_1(buf);
+            else
+                WriteOld(buf);
         }
 
-        private void Write_V1_12(ByteBuf buf)
+        private void Write_V1_9_1(ByteBuf buf)
         {
-            buf.WriteVarInt(35); // Packet ID(1.9~1.12)
-            
-            buf.WriteInt(_player.EntityId);
             int gameMode = (int) _player.GameMode;
             
             if (_player.World.IsHardCore)
@@ -80,7 +83,36 @@ namespace NiaBukkit.Network.Protocol.Play
             buf.WriteByte((byte) _player.World.Difficulty);
             buf.WriteByte((byte) ServerProperties.MaxPlayers);
             buf.WriteString(_player.World.WorldType.GetName());
-            buf.WriteBool(true); // 디버그모드 최소화
+            buf.WriteBool(false); // 정보 최소화
+        }
+
+        private void WriteOld(ByteBuf buf)
+        {
+            int gameMode = (int) _player.GameMode;
+            
+            if (_player.World.IsHardCore)
+                gameMode |= 0x8;
+            buf.WriteByte((byte) gameMode);
+            buf.WriteByte((byte) _player.World.Dimension);
+            buf.WriteByte((byte) _player.World.Difficulty);
+            buf.WriteByte((byte) ServerProperties.MaxPlayers);
+            buf.WriteString(_player.World.WorldType.GetName());
+            buf.WriteBool(false); // 정보 최소화
+        }
+
+        private static int GetPacketId(ProtocolVersion protocol)
+        {
+            if (protocol > ProtocolVersion.v1_16_5)
+                return 38;
+            if (protocol > ProtocolVersion.v1_15_2)
+                return 36;
+            if (protocol > ProtocolVersion.v1_14_3_CT)
+                return 38;
+            if (protocol > ProtocolVersion.v1_12_2)
+                return 37;
+            if (protocol >= ProtocolVersion.v1_9)
+                return 35;
+            return 1;
         }
     }
 }

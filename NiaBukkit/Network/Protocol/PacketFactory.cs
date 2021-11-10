@@ -72,17 +72,23 @@ namespace NiaBukkit.Network.Protocol
             
             foreach(PlayInPacket packet in _playPackets!)
             {
-                if(packet.GetPacketId(networkManager.Protocol) == packetId)
+                if (packet.GetPacketId(networkManager.Protocol) == packetId)
+                {
                     packet.Read(networkManager, buf);
+                    return;
+                }
             }
         }
 
         private static void PlayPacketInit()
         {
             List<PlayInPacket> packets = new List<PlayInPacket>();
-            packets.AddRange(new []
+            packets.AddRange(new PlayInPacket[]
             {
-                new PlayInClientSettings()
+                new PlayInClientSettings(),
+                new PlayInLook(),
+                new PlayInPositionLook(),
+                new PlayInPosition(),
             });
 
             _playPackets = new ReadOnlyCollection<PlayInPacket>(packets);

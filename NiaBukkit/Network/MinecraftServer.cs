@@ -6,21 +6,24 @@ using System.Threading;
 using NiaBukkit.API;
 using NiaBukkit.API.Util;
 using NiaBukkit.API.Config;
+using NiaBukkit.API.Entity;
+using NiaBukkit.API.World;
+using NiaBukkit.Network.Protocol;
 
 namespace NiaBukkit.Network
 {
     public class MinecraftServer
     {
+        public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v15w33b;
         // public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_12_2;
-        public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_12_2;
 		internal RSAParameters ServerKey;
         
         private TcpListener _listener;
-        private const int Timeout = 2000;
+        private const int Timeout = 25000;
         
         public bool IsAvilable { get; private set; }
         private readonly ConcurrentQueue<NetworkManager> _destroySockets = new ConcurrentQueue<NetworkManager>();
-		
+
         internal MinecraftServer()
         {
 			Init();
@@ -55,6 +58,11 @@ namespace NiaBukkit.Network
             ThreadFactory.LaunchThread(new Thread(ClientDestroyWorker), false).Name = "Client Destroy Thread";
 		}
 
+        internal void AddDestroySocket(NetworkManager networkManager)
+        {
+            _destroySockets.Enqueue(networkManager);
+        }
+
         private void AcceptSocketWorker()
         {
             while (IsAvilable)
@@ -68,20 +76,18 @@ namespace NiaBukkit.Network
             while (IsAvilable)
             {
                 long currentTimeMillis = TimeManager.CurrentTimeMillis;
-                foreach (var networkManager in NetworkManager.networkManagers)
+                foreach (var networkManager in NetworkManager.NetworkManagers)
                 {
                     if (networkManager == null || !networkManager.IsAvilable)
                         continue;
                     
-                    if (networkManager.client == null || !networkManager.client.Connected || currentTimeMillis - networkManager.lastPacketMillis > Timeout)
+                    if (networkManager.Client is not {Connected: true} || currentTimeMillis - networkManager.LastPacketMillis > Timeout)
                     {
                         networkManager.Disconnect();
-                        _destroySockets.Enqueue(networkManager);
                         continue;
                     }
-
-                    if (networkManager.client.Available > 0)
-                        networkManager.Update();
+                    
+                    networkManager.Update();
                 }
             }
         }
@@ -95,8 +101,8 @@ namespace NiaBukkit.Network
                     NetworkManager networkManager;
                     if(!_destroySockets.TryDequeue(out networkManager)) continue;
                     
-                    if(networkManager.client != null && networkManager.client.Connected) networkManager.client.Close();
-                    NetworkManager.networkManagers.TryTake(out networkManager);
+                    if(networkManager.Client != null && networkManager.Client.Connected) networkManager.Client.Close();
+                    NetworkManager.NetworkManagers.Remove(networkManager);
                 }
             }
         }
@@ -104,6 +110,15 @@ namespace NiaBukkit.Network
         public string GetServerModName()
         {
             return "NiaBukkit";
+        }
+
+        internal static void BroadcastInWorld(Player sender, World world, Packet packet, bool me = true)
+        {
+            foreach (Player player in world.Players)
+            {
+                if(player == sender && !me) continue;
+                ((EntityPlayer) player).NetworkManager.SendPacket(packet);
+            }
         }
     }
 }

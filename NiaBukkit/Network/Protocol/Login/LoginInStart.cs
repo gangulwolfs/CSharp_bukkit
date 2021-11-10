@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
@@ -20,7 +17,14 @@ namespace NiaBukkit.Network.Protocol.Login
         {
 			string name = buf.ReadString();
 			
-			GameProfile profile = new GameProfile(Uuid.FromUserName(name), name);
+			GameProfile profile = new GameProfile(Uuid.FromUserName("OfflinePlayer: " + name), name);
+			
+			if (Bukkit.Players.ContainsKey(profile.Uuid))
+			{
+				networkManager.Kick("Player Already Connected.");
+				return;
+			}
+			
 			//TODO: Load World
 			networkManager.Player =
 				new EntityPlayer(networkManager, profile, new World(), ServerProperties.GameMode);
@@ -49,8 +53,26 @@ namespace NiaBukkit.Network.Protocol.Login
 				//TODO: PacketPlayOutRecipes
 				//TODO: PacketPlayOutSetSlot
 				
-				networkManager.Teleport(networkManager.Player.Location, Enumerable.Empty<TeleportFlags>());
+				Packet packet = new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer,
+					(EntityPlayer) networkManager.Player);
+				foreach (Player onlinePlayer in Bukkit.OnlinePlayers)
+				{
+					EntityPlayer player = (EntityPlayer) onlinePlayer;
+					if(player.CanSee(networkManager.Player))
+						player.NetworkManager.SendPacket(packet);
+					if(player != networkManager.Player && ((EntityPlayer) networkManager.Player).CanSee(player))
+						networkManager.SendPacket(new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer, player));
+				}
+				
+				//TODO: PacketPlayOutEntityMetadata
+				//
+				//
+				networkManager.SetPosition(networkManager.Player.Location, Enumerable.Empty<TeleportFlags>());
 				networkManager.SendPacket(new PlayOutSpawnPosition(networkManager.Player.Location));
+				
+				networkManager.SendPacket(new PlayOutChunkData(networkManager.Player.World.GetChunk(0, 0)));
+				// networkManager.SendPacket(new PlayOutChunkData(networkManager.Player.World.GetChunk(1, 0)));
+				// networkManager.SendPacket(new PlayOutChunkData(networkManager.Player.World.GetChunk(-1, 0)));
 			}
         }
 	}

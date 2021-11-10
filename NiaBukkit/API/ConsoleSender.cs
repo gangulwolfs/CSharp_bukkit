@@ -7,16 +7,18 @@ namespace NiaBukkit.API
 {
     public class ConsoleSender : CommandSender
     {
-        internal static void PrintInfo()
+        internal static string GetInfo()
         {
             Console.SetCursorPosition(0, Console.GetCursorPosition().Top);
-            Console.Write("[");
-            Console.Write(DateTime.Now.ToString("HH:mm:ss"));
-            Console.Write("] [");
+            string threadInfo;
+            
             if(Thread.CurrentThread.Name != null)
-                Console.Write(Thread.CurrentThread.Name);
+                threadInfo = Thread.CurrentThread.Name;
             else
-                Console.Write("Other Thread");
+                threadInfo = "Other Thread";
+            
+            
+            return string.Format("[{0:HH:mm:ss}] [{1}", DateTime.Now, threadInfo);
         }
 
         public void SendMessage(object message)
@@ -32,8 +34,7 @@ namespace NiaBukkit.API
             if (message == null)
                 message = "null";
 
-            PrintInfo();
-            Console.Write("/INFO]: ");
+            Console.Write("{0}/INFO]: ", GetInfo());
             
             string[] text = message.Split("§");
             Console.Write(text[0]);
@@ -75,8 +76,7 @@ namespace NiaBukkit.API
             if (message == null)
                 message = "null";
 
-            PrintInfo();
-            Console.Write("/WARN]: ");
+            Console.Write("{0}/WARN]: ", GetInfo());
             
             string[] text = message.Split("§");
             Console.Write(text[0]);

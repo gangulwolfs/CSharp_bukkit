@@ -43,7 +43,7 @@ namespace NiaBukkit.Network.Protocol.Play
                 return 46;
             if (protocol > ProtocolVersion.v1_11_2)
                 return 44;
-            if (protocol > ProtocolVersion.v1_8_9)
+            if (protocol >= ProtocolVersion.v1_9)
                 return 43;
             return 57;
         }

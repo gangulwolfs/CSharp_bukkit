@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network
 {
@@ -15,6 +16,9 @@ namespace NiaBukkit.Network
         private int pos = 0;
 
         public bool Available => buf.Count > 0;
+        public int Length => readBuf.Length - pos;
+        public int WriteLength => buf.Count;
+        public int Position => pos;
 
         public ByteBuf(byte[] data)
         {
@@ -42,6 +46,24 @@ namespace NiaBukkit.Network
             int b;
 
             while (((b = stream.ReadByte()) & 0x80) == 0x80)
+            {
+                value |= (b & 0x7F) << (size++ * 7);
+                if (size > 5)
+                {
+                    throw new IOException("VarInt too long.");
+                }
+            }
+
+            return value | ((b & 0x7F) << (size * 7));
+        }
+        
+        public static int ReadVarInt(byte[] data)
+        {
+            var value = 0;
+            var size = 0;
+            int b;
+
+            while (((b = data[size]) & 0x80) == 0x80)
             {
                 value |= (b & 0x7F) << (size++ * 7);
                 if (size > 5)
@@ -105,6 +127,21 @@ namespace NiaBukkit.Network
             return IPAddress.NetworkToHostOrder(BitConverter.ToInt16(Read(2), 0));
         }
 
+        public float ReadFloat()
+        {
+            return BitConverter.ToSingle(Read(4));
+        }
+
+        public double ReadDouble()
+        {
+            return NetworkToHostOrder(Read(8));
+        }
+
+        public Uuid ReadUuid()
+        {
+            return new Uuid(ReadLong(), ReadLong());
+        }
+
         public void Write(byte[] data)
         {
             buf.AddRange(data);
@@ -160,7 +197,14 @@ namespace NiaBukkit.Network
 
         public void WriteLong(long data)
         {
+            // buf.AddRange(BitConverter.GetBytes(data));
             buf.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data)));
+        }
+
+        public void WriteUuid(Uuid uuid)
+        {
+            WriteLong(uuid.GetMostSignificantBits());
+            WriteLong(uuid.GetLeastSignificantBits());
         }
 
         private byte[] HostToNetworkOrder(double d)
@@ -172,13 +216,22 @@ namespace NiaBukkit.Network
             return data;
         }
 
-        private byte[] HostTONetworkOrder(float host)
+        private byte[] HostToNetworkOrder(float host)
         {
             byte[] data = BitConverter.GetBytes(host);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(data);
 
             return data;
+        }
+
+        private double NetworkToHostOrder(byte[] data)
+        {
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(data);
+            }
+            return BitConverter.ToDouble(data, 0);
         }
 
         public byte[] Flush()
@@ -190,6 +243,11 @@ namespace NiaBukkit.Network
             buf.Clear();
 
             return data;
+        }
+
+        public byte[] GetBytes()
+        {
+            return buf.ToArray();
         }
     }
 }

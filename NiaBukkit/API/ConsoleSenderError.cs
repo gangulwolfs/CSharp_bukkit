@@ -42,8 +42,7 @@ namespace NiaBukkit.API
         public override void WriteLine(string value)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            ConsoleSender.PrintInfo();
-            originalConsoleStream.Write("/ERROR]: ");
+            Console.Write("{0}/ERROR]: ", ConsoleSender.GetInfo());
             
             originalConsoleStream.WriteLine(value);
             Console.ResetColor();

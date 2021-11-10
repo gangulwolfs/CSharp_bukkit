@@ -29,7 +29,7 @@
                 return 61;
             if (protocol > ProtocolVersion.v1_11_2)
                 return 58;
-            if (protocol > ProtocolVersion.v1_8_9)
+            if (protocol >= ProtocolVersion.v1_9)
                 return 55;
             return 9;
         }

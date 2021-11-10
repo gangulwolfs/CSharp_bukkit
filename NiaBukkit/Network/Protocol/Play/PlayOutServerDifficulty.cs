@@ -24,7 +24,7 @@ namespace NiaBukkit.Network.Protocol.Play
                 return 13;
             if (protocol > ProtocolVersion.v1_14_3_CT)
                 return 14;
-            if (protocol > ProtocolVersion.v1_8_9)
+            if (protocol >= ProtocolVersion.v1_9)
                 return 13;
             return 65;
         }

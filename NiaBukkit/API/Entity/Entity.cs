@@ -4,10 +4,11 @@ namespace NiaBukkit.API.Entity
 {
     public interface Entity
     {
-        public int EntityId { get; }
-        public Location Location { get; }
-        public World.World World { get; }
+        int EntityId { get; }
+        Location Location { get; }
+        World.World World { get; }
+        bool IsOnGround { get; }
 
-        public void SetLocation(double x, double y, double z, float yaw, float pitch);
+        void SetLocation(double x, double y, double z, float yaw, float pitch);
     }
 }
