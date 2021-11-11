@@ -17,7 +17,8 @@ namespace NiaBukkit.Network.Protocol.Login
         {
 			string name = buf.ReadString();
 			
-			GameProfile profile = new GameProfile(Uuid.FromUserName("OfflinePlayer: " + name), name);
+			// GameProfile profile = new GameProfile(Uuid.FromUserName("OfflinePlayer: " + name), name);
+			GameProfile profile = new GameProfile(Uuid.FromUserName(name), name);
 			
 			if (Bukkit.Players.ContainsKey(profile.Uuid))
 			{
@@ -53,16 +54,9 @@ namespace NiaBukkit.Network.Protocol.Login
 				//TODO: PacketPlayOutRecipes
 				//TODO: PacketPlayOutSetSlot
 				
-				Packet packet = new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer,
-					(EntityPlayer) networkManager.Player);
-				foreach (Player onlinePlayer in Bukkit.OnlinePlayers)
-				{
-					EntityPlayer player = (EntityPlayer) onlinePlayer;
-					if(player.CanSee(networkManager.Player))
-						player.NetworkManager.SendPacket(packet);
-					if(player != networkManager.Player && ((EntityPlayer) networkManager.Player).CanSee(player))
-						networkManager.SendPacket(new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer, player));
-				}
+				networkManager.InitPlayer();
+
+				Bukkit.AddPlayer(networkManager.Player);
 				
 				//TODO: PacketPlayOutEntityMetadata
 				//

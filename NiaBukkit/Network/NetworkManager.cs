@@ -167,6 +167,30 @@ namespace NiaBukkit.Network
             Disconnect();
         }
 
+        internal void InitPlayer()
+        {
+            Packet playerInfo = new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer, (EntityPlayer) Player);
+            Packet spawnPlayer = new PlayOutSpawnPlayer(Player);
+            
+            SendPacket(playerInfo);
+            foreach (Player onlinePlayer in Bukkit.OnlinePlayers)
+            {
+                EntityPlayer player = (EntityPlayer) onlinePlayer;
+                if (player.CanSee(Player))
+                {
+                    player.NetworkManager.SendPacket(playerInfo);
+                    player.NetworkManager.SendPacket(spawnPlayer);
+                }
+
+                if (((EntityPlayer) Player).CanSee(player))
+                {
+                    SendPacket(
+                        new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer, player));
+                    SendPacket(new PlayOutSpawnPlayer(player));
+                }
+            }
+        }
+
         public void SendPacket(Packet packet)
         {
             if (Client == null || !Client.Connected) return;

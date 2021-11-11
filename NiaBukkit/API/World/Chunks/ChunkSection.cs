@@ -33,7 +33,7 @@ namespace NiaBukkit.API.World.Chunks
         {
             if (_skyLight == null)
                 _skyLight = new NibbleArray(Size);
-
+            
             _skyLight[x, y, z] = data;
         }
 

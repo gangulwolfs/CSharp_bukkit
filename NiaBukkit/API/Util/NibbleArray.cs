@@ -18,6 +18,16 @@ namespace NiaBukkit.API.Util
             get => (byte) (_data[i/2] >> (i % 2 * 4) & 0xF);
             set
             {
+                // if (i % 2 == 0)
+                // {
+                //     i /= 2;
+                //     _data[i] = (byte) ((_data[i] & 0xF0) | (value & 0xF));
+                // }
+                // else
+                // {
+                //     i /= 2;
+                //     _data[i] = (byte) ((_data[i] & 0xF) | ((value & 0xF) << 4));
+                // }
                 value &= 0xF;
                 _data[i / 2] &= (byte) (0xF << ((i + 1) % 2 * 4));
                 _data[i / 2] |= (byte) (value << (i % 2 * 4));

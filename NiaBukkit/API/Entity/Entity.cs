@@ -1,14 +1,36 @@
-﻿using NiaBukkit.API.Util;
+﻿using System;
+using NiaBukkit.API.Util;
 
 namespace NiaBukkit.API.Entity
 {
-    public interface Entity
+    public class Entity
     {
-        int EntityId { get; }
-        Location Location { get; }
-        World.World World { get; }
-        bool IsOnGround { get; }
+        public readonly int EntityId;
+        public Location Location { get; internal set; }
+        public World.World World => Location.World;
+        public bool IsOnGround { get; internal set; }
 
-        void SetLocation(double x, double y, double z, float yaw, float pitch);
+        public Entity(World.World world) : this(world, 0, 0, 0) { }
+
+        public Entity(World.World world, double x, double y, double z)
+        {
+            Location = new Location(world, 0, 0, 0);
+            EntityId = GenerateEntityId();
+        }
+
+        public void SetLocation(double x, double y, double z, float yaw, float pitch)
+        {
+            Location = new Location(Location.World, x, y, z, yaw, pitch);
+        }
+
+        private static int _currentEntityId = -1;
+
+        public static int GenerateEntityId()
+        {
+            if (_currentEntityId == Int32.MaxValue)
+                return _currentEntityId = 0;
+
+            return ++_currentEntityId;
+        }
     }
 }

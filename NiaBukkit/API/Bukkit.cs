@@ -26,5 +26,11 @@ namespace NiaBukkit.API
 
 		/// <summary>서버 파일이 있는 디렉터리 위치를 가져옵니다.</summary>
         public static string ServerPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+		internal static void AddPlayer(Player player)
+		{
+			player.World.Players.Add(player);
+			Players.TryAdd(player.Uuid, player);
+		}
     }
 }

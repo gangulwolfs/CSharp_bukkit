@@ -120,5 +120,13 @@ namespace NiaBukkit.Network
                 ((EntityPlayer) player).NetworkManager.SendPacket(packet);
             }
         }
+
+        internal static void Broadcast(Packet packet)
+        {
+            foreach (Player player in Bukkit.OnlinePlayers)
+            {
+                ((EntityPlayer) player).NetworkManager.SendPacket(packet);
+            }
+        }
     }
 }
