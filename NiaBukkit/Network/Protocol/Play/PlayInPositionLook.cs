@@ -4,7 +4,7 @@
     {
         internal override void Read(NetworkManager networkManager, ByteBuf buf)
         {
-            networkManager.Teleport(buf.ReadDouble(), buf.ReadDouble(), buf.ReadDouble()
+            networkManager.Move(buf.ReadDouble(), buf.ReadDouble(), buf.ReadDouble()
                 , buf.ReadFloat(), buf.ReadFloat()
                 , buf.ReadBool());
         }

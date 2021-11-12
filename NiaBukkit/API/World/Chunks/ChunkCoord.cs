@@ -16,7 +16,6 @@ namespace NiaBukkit.API.World.Chunks
         
         public static bool operator ==(ChunkCoord c1, ChunkCoord c2)
         {
-                
             if (c1 is null || c2 is null) return c1 is null && c2 is null;
 
             return c1.World == c2.World && c1.X == c2.X && c1.Z == c2.Z;

@@ -28,6 +28,8 @@ namespace NiaBukkit.Network.Protocol.Login
 			//TODO: Load World
 			networkManager.Player =
 				new EntityPlayer(networkManager, profile, Bukkit.MainWorld, ServerProperties.GameMode);
+
+			Bukkit.AddPlayer(networkManager.Player);
 			
 			if(!ServerProperties.OnlineMode)
 			{
@@ -54,8 +56,6 @@ namespace NiaBukkit.Network.Protocol.Login
 				//TODO: PacketPlayOutSetSlot
 				
 				networkManager.InitPlayer();
-
-				Bukkit.AddPlayer(networkManager.Player);
 				
 				//TODO: PacketPlayOutEntityMetadata
 				//

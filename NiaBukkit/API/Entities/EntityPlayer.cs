@@ -6,6 +6,7 @@ using NiaBukkit.API.Threads;
 using NiaBukkit.API.Util;
 using NiaBukkit.API.World.Chunks;
 using NiaBukkit.Network;
+using NiaBukkit.Network.Protocol.Play;
 
 namespace NiaBukkit.API.Entities
 {
@@ -25,9 +26,12 @@ namespace NiaBukkit.API.Entities
 
 		private readonly ConcurrentBag<ChunkCoord> _loadedChunk = new ConcurrentBag<ChunkCoord>();
 
+		private Location _beforeLocation;
+
 		public EntityPlayer(NetworkManager networkManager, GameProfile profile, World.World world, GameMode gameMode) : base(profile, world, gameMode)
 		{
 			NetworkManager = networkManager;
+			_beforeLocation = (Location) Location.Clone();
 		}
 
 		/**
@@ -65,10 +69,23 @@ namespace NiaBukkit.API.Entities
 		internal override void Update()
 		{
 			ChunkUpdate();
+			PlayerChunkMoveUpdate();
+			
+			_beforeLocation = (Location) Location.Clone();
+		}
+
+		private void PlayerChunkMoveUpdate()
+		{
+			if (_loadedChunk.Contains(_currentChunkCoord)) return;
+			
+			if(_beforeLocation != Location && NetworkManager != null)
+				NetworkManager.Teleport(_beforeLocation, Enumerable.Empty<TeleportFlags>());
 		}
 
 		private void ChunkUpdate()
 		{
+			if (NetworkManager == null) return;
+			
 			if (_currentChunkCoord != null && _currentChunkCoord.X == (int) Location.X >> 4 &&
 			    _currentChunkCoord.Z == (int) Location.Z >> 4)
 				return;

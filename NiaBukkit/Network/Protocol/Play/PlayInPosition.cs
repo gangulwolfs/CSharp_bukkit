@@ -6,7 +6,7 @@ namespace NiaBukkit.Network.Protocol.Play
     {
         internal override void Read(NetworkManager networkManager, ByteBuf buf)
         {
-            networkManager.Teleport(buf.ReadDouble(), buf.ReadDouble(), buf.ReadDouble()
+            networkManager.Move(buf.ReadDouble(), buf.ReadDouble(), buf.ReadDouble()
                 , networkManager.Player.Location.Yaw, networkManager.Player.Location.Pitch
                 , buf.ReadBool());
         }

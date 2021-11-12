@@ -93,5 +93,19 @@ namespace NiaBukkit.API.Util
         {
             return new Location(World, X, Y, Z, Yaw, Pitch);
         }
+
+        public static bool operator ==(Location loc1, Location loc2)
+        {
+            if (loc1 is null || loc2 is null) return loc1 is null && loc2 is null;
+
+            return loc1.World == loc2.World && loc1.X == loc2.X && loc1.Y == loc2.Y && loc1.Z == loc2.Z && loc1.Yaw == loc2.Yaw && loc1.Pitch == loc2.Pitch;
+        }
+
+        public static bool operator !=(Location loc1, Location loc2) => !(loc1 == loc2);
+
+        public override string ToString()
+        {
+            return $"Location{{{World.Name}, x={X}, y={Y}, z={Z}}}";
+        }
     }
 }

@@ -109,13 +109,17 @@ namespace NiaBukkit.Network
             SendPacket(new PlayOutKeepAlive(TimeManager.CurrentTimeMillis));
         }
 
-        internal void SetPosition(Location loc, IEnumerable<TeleportFlags> flags)
+        private int TeleportAwaitUpdate()
         {
             if (++_teleportAwait == Int32.MaxValue)
                 _teleportAwait = 0;
-            List<TeleportFlags> flagsList = flags.ToList();
-            SendPacket(new PlayOutPosition(loc.X, loc.Y, loc.Z, loc.Yaw, loc.Pitch, flagsList, _teleportAwait));
-            Location pos = (Location) loc.Clone();
+
+            return _teleportAwait;
+        }
+
+        private Location GetFlagLocation(ICloneable loc, ICollection<TeleportFlags> flagsList)
+        {
+            var pos = (Location) loc.Clone();
 
             if (flagsList.Contains(TeleportFlags.X))
                 pos.X += Player.Location.X;
@@ -129,7 +133,14 @@ namespace NiaBukkit.Network
             if (flagsList.Contains(TeleportFlags.XRot))
                 pos.Pitch += Player.Location.Pitch;
 
-            Player.SetLocation(pos.X, pos.Y, pos.Z, pos.Yaw, pos.Pitch);
+            return pos;
+        }
+
+        internal void SetPosition(Location loc, IEnumerable<TeleportFlags> flags)
+        {
+            List<TeleportFlags> flagsList = flags.ToList();
+            SendPacket(new PlayOutPosition(loc.X, loc.Y, loc.Z, loc.Yaw, loc.Pitch, flagsList, TeleportAwaitUpdate()));
+            Player.Location = GetFlagLocation(loc, flagsList);
         }
 
         internal void LookUpdate(float yaw, float pitch, bool onGround)
@@ -141,16 +152,25 @@ namespace NiaBukkit.Network
             MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityLook(Player.EntityId, yaw, pitch, onGround), false);
         }
 
-        internal void Teleport(double x, double y, double z, float yaw, float pitch, bool onGround)
+        internal void Move(double x, double y, double z, float yaw, float pitch, bool onGround) =>
+            Move(new Location(Player.World, x, y, z, yaw, pitch), onGround);
+
+        private void Move(Location loc, bool onGround)
         {
-            Player.Location.X = x;
-            Player.Location.Y = y;
-            Player.Location.Z = z;
-            Player.Location.Yaw = yaw;
-            Player.Location.Pitch = pitch;
+            Player.Location = (Location) loc.Clone();
             
             ((EntityPlayer) Player).IsOnGround = onGround;
-            MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityTeleport(Player.EntityId, x, y, z, yaw, pitch, onGround), false);
+            MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityTeleport(Player.EntityId, loc.X, loc.Y, loc.Z, loc.Yaw, loc.Pitch, onGround), false);
+        }
+
+        internal void Teleport(double x, double y, double z, float yaw, float pitch, IEnumerable<TeleportFlags> flags) =>
+            Teleport(new Location(Player.World, x, y, z, yaw, pitch), flags);
+
+        internal void Teleport(Location loc, IEnumerable<TeleportFlags> flags)
+        {
+            //TODO: Teleport Event
+            loc = GetFlagLocation(loc, flags.ToList());
+            SetPosition(loc, Enumerable.Empty<TeleportFlags>());
         }
 
         public void Kick(string reason)
@@ -172,6 +192,7 @@ namespace NiaBukkit.Network
             foreach (Player onlinePlayer in Bukkit.OnlinePlayers)
             {
                 EntityPlayer player = (EntityPlayer) onlinePlayer;
+                if(player == Player) continue;
                 if (player.CanSee(Player))
                 {
                     player.NetworkManager.SendPacket(playerInfo);
@@ -189,7 +210,7 @@ namespace NiaBukkit.Network
 
         public void SendPacket(Packet packet)
         {
-            if (Client == null || !Client.Connected) return;
+            if (Client is not {Connected: true}) return;
             ByteBuf buf = new ByteBuf();
             packet.Write(buf, Protocol);
 
