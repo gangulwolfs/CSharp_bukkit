@@ -7,7 +7,7 @@ using NiaBukkit.Network.Protocol.Play;
 
 namespace NiaBukkit.Network.Protocol
 {
-    public class PacketFactory
+    public static class PacketFactory
     {
         private static ReadOnlyCollection<PlayInPacket> _playPackets;
         internal static void Handle(NetworkManager networkManager, ByteBuf buf, int packetId)
@@ -89,6 +89,7 @@ namespace NiaBukkit.Network.Protocol
                 new PlayInLook(),
                 new PlayInPositionLook(),
                 new PlayInPosition(),
+                new PlayInChatMessage(),
             });
 
             _playPackets = new ReadOnlyCollection<PlayInPacket>(packets);

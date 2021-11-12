@@ -175,6 +175,18 @@ namespace NiaBukkit.Network
             SetPosition(loc, Enumerable.Empty<TeleportFlags>());
         }
 
+        internal void MessageReceived(string message)
+        {
+            if (message.StartsWith(ChatSettings.CommandPrefix))
+            {
+                //TODO: Command
+                return;
+            }
+
+            string format = ChatSettings.ChatFormat(Player, message);
+            Bukkit.BroadcastMessage(Player.Uuid, format);
+        }
+
         public void Kick(string reason)
         {
             Packet packet = PacketMode == PacketMode.Login

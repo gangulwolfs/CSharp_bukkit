@@ -40,15 +40,25 @@ namespace NiaBukkit.API.Entities
 		 */
 		public override void SendMessage(object message)
 		{
+			if (message == null)
+				message = "null";
+			
 			SendMessage(message.ToString());
 		}
 
 		/**
 		 * <summary>Send Message To Player</summary>
 		 */
-		public void SendMessage(string message)
+		public override void SendMessage(string message) => SendMessage(Uuid.RandomUuid(), ChatMessageType.Chat, message);
+
+		public override void SendMessage(Uuid sender, string message) => SendMessage(sender, ChatMessageType.Chat, message);
+
+		public override void SendMessage(ChatMessageType position, string message) =>
+			SendMessage(Uuid.RandomUuid(), position, message);
+		
+		public override void SendMessage(Uuid sender, ChatMessageType position, string message)
 		{
-			//TODO: SendMessage
+			NetworkManager.SendPacket(new PlayOutChatMessage(message, ChatMessageType.Chat, Uuid.RandomUuid()));
 		}
 
 		public bool CanSee(Player player)

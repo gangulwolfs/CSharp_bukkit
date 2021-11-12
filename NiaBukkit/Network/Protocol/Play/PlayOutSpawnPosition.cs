@@ -19,7 +19,7 @@ namespace NiaBukkit.Network.Protocol.Play
             buf.WriteLong(data);
         }
 
-        private int GetPacketId(ProtocolVersion protocol)
+        private static int GetPacketId(ProtocolVersion protocol)
         {
             if (protocol > ProtocolVersion.v1_16_5)
                 return 75;

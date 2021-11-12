@@ -21,5 +21,10 @@ namespace NiaBukkit.API.Util
         }
 
         public virtual void SendMessage(object obj) {}
+
+        public virtual void SendMessage(string message) {}
+        public virtual void SendMessage(Uuid sender, string message) {}
+        public virtual void SendMessage(ChatMessageType position, string message) {}
+        public virtual void SendMessage(Uuid sender, ChatMessageType position, string message) {}
     }
 }

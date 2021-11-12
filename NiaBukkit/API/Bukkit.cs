@@ -5,6 +5,7 @@ using System.Reflection;
 using NiaBukkit.API.Entities;
 using NiaBukkit.API.Util;
 using NiaBukkit.Network;
+using NiaBukkit.Network.Protocol.Play;
 
 namespace NiaBukkit.API
 {
@@ -41,6 +42,14 @@ namespace NiaBukkit.API
 			player.World.Entities.Remove(player);
 			Players.Remove(player.Uuid, out var resultPlayer);
 			Entities.Remove(player.Uuid, out var resultEntity);
+		}
+
+		public static void BroadcastMessage(string message) => BroadcastMessage(Uuid.RandomUuid(), message);
+
+		internal static void BroadcastMessage(Uuid sender, string message)
+		{
+			ConsoleSender.SendMessage(message);
+			MinecraftServer.Broadcast(new PlayOutChatMessage(message, ChatMessageType.Chat, sender));
 		}
     }
 }
