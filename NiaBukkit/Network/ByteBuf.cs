@@ -129,7 +129,7 @@ namespace NiaBukkit.Network
 
         public float ReadFloat()
         {
-            return BitConverter.ToSingle(Read(4));
+            return NetworkToHostOrder(BitConverter.ToSingle(Read(4), 0));
         }
 
         public double ReadDouble()
@@ -216,13 +216,13 @@ namespace NiaBukkit.Network
             return data;
         }
 
-        private byte[] HostToNetworkOrder(float host)
+        private float NetworkToHostOrder(float host)
         {
             byte[] data = BitConverter.GetBytes(host);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(data);
 
-            return data;
+            return BitConverter.ToSingle(data, 0);
         }
 
         private double NetworkToHostOrder(byte[] data)

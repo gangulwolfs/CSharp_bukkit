@@ -33,7 +33,10 @@ namespace NiaBukkit.Network.Protocol.Play
 			
             //TODO: DataWatcher
             if (protocol < ProtocolVersion.v1_9)
+            {
+                buf.WriteShort(0);
                 buf.WriteByte(127);
+            }
             else
                 buf.WriteByte(255);
         }

@@ -16,12 +16,12 @@ namespace NiaBukkit.Network
 {
     public class NetworkManager
     {
-        internal static ConcurrentBag<NetworkManager> NetworkManagers = new ConcurrentBag<NetworkManager>();
+        internal static readonly ConcurrentBag<NetworkManager> NetworkManagers = new ConcurrentBag<NetworkManager>();
 
         internal long LastPacketMillis = 0;
-        internal TcpClient Client;
+        internal readonly TcpClient Client;
         
-        public bool IsAvilable { get; private set; }
+        public bool IsAvailable { get; private set; }
 
         public PacketMode PacketMode { get; internal set; } = PacketMode.Ping;
         public ProtocolVersion Protocol { get; internal set; }
@@ -39,7 +39,7 @@ namespace NiaBukkit.Network
 
         internal NetworkManager(TcpClient client)
         {
-            IsAvilable = true;
+            IsAvailable = true;
             
             Client = client;
             LastPacketMillis = TimeManager.CurrentTimeMillis;
@@ -49,7 +49,7 @@ namespace NiaBukkit.Network
 
         internal void Disconnect()
         {
-            IsAvilable = false;
+            IsAvailable = false;
             
             NetworkManager manager = this;
             NetworkManagers.Remove(manager);
@@ -150,6 +150,7 @@ namespace NiaBukkit.Network
             
             ((EntityPlayer) Player).IsOnGround = onGround;
             MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityLook(Player.EntityId, yaw, pitch, onGround), false);
+            MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityHeadRotation(Player.EntityId, yaw), false);
         }
 
         internal void Move(double x, double y, double z, float yaw, float pitch, bool onGround) =>
@@ -161,6 +162,7 @@ namespace NiaBukkit.Network
             
             ((EntityPlayer) Player).IsOnGround = onGround;
             MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityTeleport(Player.EntityId, loc.X, loc.Y, loc.Z, loc.Yaw, loc.Pitch, onGround), false);
+            MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityHeadRotation(Player.EntityId, loc.Yaw), false);
         }
 
         internal void Teleport(double x, double y, double z, float yaw, float pitch, IEnumerable<TeleportFlags> flags) =>
@@ -185,11 +187,12 @@ namespace NiaBukkit.Network
 
         internal void InitPlayer()
         {
+            //TODO: removeSpawnPlayer
             Packet playerInfo = new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer, (EntityPlayer) Player);
             Packet spawnPlayer = new PlayOutSpawnPlayer(Player);
             
             SendPacket(playerInfo);
-            foreach (Player onlinePlayer in Bukkit.OnlinePlayers)
+            foreach (var onlinePlayer in Bukkit.OnlinePlayers)
             {
                 EntityPlayer player = (EntityPlayer) onlinePlayer;
                 if(player == Player) continue;
@@ -199,12 +202,10 @@ namespace NiaBukkit.Network
                     player.NetworkManager.SendPacket(spawnPlayer);
                 }
 
-                if (((EntityPlayer) Player).CanSee(player))
-                {
-                    SendPacket(
-                        new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer, player));
-                    SendPacket(new PlayOutSpawnPlayer(player));
-                }
+                if (!((EntityPlayer) Player).CanSee(player)) continue;
+                SendPacket(
+                    new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer, player));
+                SendPacket(new PlayOutSpawnPlayer(player));
             }
         }
 
@@ -236,7 +237,7 @@ namespace NiaBukkit.Network
             }
             catch (SocketException e)
             {
-                if (e.ErrorCode != 10053 && e.SocketErrorCode != SocketError.Disconnecting && Client != null && Client.Connected)
+                if (e.ErrorCode != 10053 && e.SocketErrorCode != SocketError.Disconnecting && Client is {Connected: true})
                 {
                     Console.Error.WriteLine(e.Message);
                     Kick(e.Message);
@@ -246,7 +247,7 @@ namespace NiaBukkit.Network
             catch (Exception e)
             {
                 Console.Error.WriteLine(e.Message);
-                if(Client != null && Client.Connected)
+                if(Client is {Connected: true})
                     try
                     {
                         Kick(e.Message);

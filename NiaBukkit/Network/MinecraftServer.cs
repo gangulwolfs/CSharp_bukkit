@@ -85,7 +85,7 @@ namespace NiaBukkit.Network
                 long currentTimeMillis = TimeManager.CurrentTimeMillis;
                 foreach (var networkManager in NetworkManager.NetworkManagers)
                 {
-                    if (networkManager is not {IsAvilable: true})
+                    if (networkManager is not {IsAvailable: true})
                         continue;
                     
                     if (networkManager.Client is not {Connected: true} || currentTimeMillis - networkManager.LastPacketMillis > Timeout)

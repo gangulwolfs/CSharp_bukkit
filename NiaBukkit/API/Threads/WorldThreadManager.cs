@@ -1,4 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NiaBukkit.API.Entities;
 using NiaBukkit.API.World.Chunks;
@@ -13,6 +15,12 @@ namespace NiaBukkit.API.Threads
 
         private static readonly ConcurrentDictionary<ChunkCoord, ConcurrentBag<EntityPlayer>> ChunkSendPlayers =
             new ConcurrentDictionary<ChunkCoord, ConcurrentBag<EntityPlayer>>();
+        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.Util.MaterialAttribute")]
+        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.Reflection.CustomAttributeRecord[]")]
+        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.RuntimeMethodInfoStub")]
+        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.Util.Material")]
+        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.Util.MaterialAttribute[]")]
+        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.Byte[]")]
         internal static void Worker()
         {
             while (Bukkit.MinecraftServer.IsAvilable)
@@ -34,7 +42,7 @@ namespace NiaBukkit.API.Threads
                     Packet packet = new PlayOutChunkData(chunk);
                     foreach (var player in players)
                     {
-                        if(player?.NetworkManager == null || !player.NetworkManager.IsAvilable || player.World != target.World)
+                        if(player?.NetworkManager == null || !player.NetworkManager.IsAvailable || player.World != target.World)
                             continue;
                         
                         player.NetworkManager.SendPacket(packet);

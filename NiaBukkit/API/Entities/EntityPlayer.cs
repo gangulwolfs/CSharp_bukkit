@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Threads;
@@ -18,13 +19,13 @@ namespace NiaBukkit.API.Entities
 		public int SkinPart { get; internal set; }
 		public int Ping { get; internal set; } = 0;
 
-		public readonly PlayerAbilities PlayerAbilities = new PlayerAbilities();
+		public readonly PlayerAbilities PlayerAbilities = new();
 
-		private readonly List<Player> _hidePlayers = new List<Player>();
+		private readonly List<Player> _hidePlayers = new();
 
 		private ChunkCoord _currentChunkCoord;
 
-		private readonly ConcurrentBag<ChunkCoord> _loadedChunk = new ConcurrentBag<ChunkCoord>();
+		private readonly ConcurrentBag<ChunkCoord> _loadedChunk = new();
 
 		private Location _beforeLocation;
 
@@ -74,6 +75,8 @@ namespace NiaBukkit.API.Entities
 			_beforeLocation = (Location) Location.Clone();
 		}
 
+		[SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.World.Chunks.ChunkCoord[]")]
+		[SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: Enumerator[NiaBukkit.API.World.Chunks.ChunkCoord]")]
 		private void PlayerChunkMoveUpdate()
 		{
 			if (_loadedChunk.Contains(_currentChunkCoord)) return;
@@ -82,6 +85,7 @@ namespace NiaBukkit.API.Entities
 				NetworkManager.Teleport(_beforeLocation, Enumerable.Empty<TeleportFlags>());
 		}
 
+		[SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.World.Chunks.ChunkCoord[]")]
 		private void ChunkUpdate()
 		{
 			if (NetworkManager == null) return;

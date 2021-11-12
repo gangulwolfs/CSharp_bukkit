@@ -10,7 +10,7 @@ namespace NiaBukkit.Network.Protocol.Login
 	/**
 	 * <summary>Client Server Connect Request</summary>
 	 */
-	public class LoginInStart
+	public static class LoginInStart
 	{
         internal static void Read(NetworkManager networkManager, ByteBuf buf)
         {
@@ -28,8 +28,6 @@ namespace NiaBukkit.Network.Protocol.Login
 			//TODO: Load World
 			networkManager.Player =
 				new EntityPlayer(networkManager, profile, Bukkit.MainWorld, ServerProperties.GameMode);
-
-			Bukkit.AddPlayer(networkManager.Player);
 			
 			if(!ServerProperties.OnlineMode)
 			{
@@ -54,7 +52,8 @@ namespace NiaBukkit.Network.Protocol.Login
 				
 				//TODO: PacketPlayOutRecipes
 				//TODO: PacketPlayOutSetSlot
-				
+
+				Bukkit.AddPlayer(networkManager.Player);
 				networkManager.InitPlayer();
 				
 				//TODO: PacketPlayOutEntityMetadata
@@ -62,10 +61,6 @@ namespace NiaBukkit.Network.Protocol.Login
 				//
 				networkManager.SetPosition(networkManager.Player.Location, Enumerable.Empty<TeleportFlags>());
 				networkManager.SendPacket(new PlayOutSpawnPosition(networkManager.Player.Location));
-				
-				// networkManager.SendPacket(new PlayOutChunkData(networkManager.Player.World.GetChunk(0, 0)));
-				// networkManager.SendPacket(new PlayOutChunkData(networkManager.Player.World.GetChunk(1, 0)));
-				// networkManager.SendPacket(new PlayOutChunkData(networkManager.Player.World.GetChunk(-1, 0)));
 			}
         }
 	}

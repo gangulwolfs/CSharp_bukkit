@@ -103,6 +103,20 @@ namespace NiaBukkit.API.Util
 
         public static bool operator !=(Location loc1, Location loc2) => !(loc1 == loc2);
 
+        #nullable enable
+        public override bool Equals(object? obj)
+        {
+            if (obj is not Location loc) return false;
+            return loc == this;
+        }
+
+        protected bool Equals(Location other) => other == this;
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_world, _x, _y, _z, _yaw, _pitch);
+        }
+
         public override string ToString()
         {
             return $"Location{{{World.Name}, x={X}, y={Y}, z={Z}}}";
