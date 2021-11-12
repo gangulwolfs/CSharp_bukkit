@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 
-namespace NiaBukkit.API.Util
+namespace NiaBukkit.API.Threads
 {
     public class ThreadFactory
     {
@@ -28,7 +28,7 @@ namespace NiaBukkit.API.Util
             
             foreach (var thread in Threads.Where(thread => thread.IsAlive))
             {
-                thread.Abort();
+                thread.Interrupt();
             }
         }
     }

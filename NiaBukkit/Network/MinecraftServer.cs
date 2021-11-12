@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
@@ -6,7 +7,8 @@ using System.Threading;
 using NiaBukkit.API;
 using NiaBukkit.API.Util;
 using NiaBukkit.API.Config;
-using NiaBukkit.API.Entity;
+using NiaBukkit.API.Entities;
+using NiaBukkit.API.Threads;
 using NiaBukkit.API.World;
 using NiaBukkit.Network.Protocol;
 
@@ -47,16 +49,19 @@ namespace NiaBukkit.Network
             {
                 _listener.Start();
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 Bukkit.ConsoleSender.SendWarnMessage("Failed to start the minecraft server");
-                throw e;
+                throw;
             }
             
             ThreadFactory.LaunchThread(new Thread(AcceptSocketWorker), false).Name = "Client Bind Thread";
             ThreadFactory.LaunchThread(new Thread(ClientUpdateWorker), false).Name = "Client Thread";
             ThreadFactory.LaunchThread(new Thread(ClientDestroyWorker), false).Name = "Client Destroy Thread";
-		}
+
+            ThreadFactory.LaunchThread(new Thread(WorldThreadManager.Worker), false).Name = "World Generator";
+            ThreadFactory.LaunchThread(new Thread(EntityThreadManager.Worker), false).Name = "Entity Thread";
+        }
 
         internal void AddDestroySocket(NetworkManager networkManager)
         {
@@ -71,6 +76,8 @@ namespace NiaBukkit.Network
             }
         }
 
+        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: Enumerator[NiaBukkit.Network.NetworkManager]")]
+        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.Network.NetworkManager[]")]
         private void ClientUpdateWorker()
         {
             while (IsAvilable)
@@ -78,7 +85,7 @@ namespace NiaBukkit.Network
                 long currentTimeMillis = TimeManager.CurrentTimeMillis;
                 foreach (var networkManager in NetworkManager.NetworkManagers)
                 {
-                    if (networkManager == null || !networkManager.IsAvilable)
+                    if (networkManager is not {IsAvilable: true})
                         continue;
                     
                     if (networkManager.Client is not {Connected: true} || currentTimeMillis - networkManager.LastPacketMillis > Timeout)

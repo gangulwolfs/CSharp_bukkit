@@ -1,4 +1,6 @@
-﻿namespace NiaBukkit.API.World.Chunks
+﻿using System;
+
+namespace NiaBukkit.API.World.Chunks
 {
     public class ChunkCoord
     {
@@ -22,10 +24,11 @@
 
         public static bool operator !=(ChunkCoord c1, ChunkCoord c2) => !(c1 == c2);
 
+        #nullable enable
         public override bool Equals(object? obj)
         {
-            if (obj is null || !(obj is ChunkCoord)) return false;
-            return (ChunkCoord) obj == this;
+            if (obj is not ChunkCoord coord) return false;
+            return coord == this;
         }
 
         public override int GetHashCode()
@@ -35,8 +38,13 @@
             hash = 13 * hash + World.GetHashCode();
             hash = 19 * hash + X | X << 6;
             hash = 19 * hash + Z | Z << 6;
-            
-            return hash;
+
+            return HashCode.Combine(World, X, Z);
+        }
+
+        public override string ToString()
+        {
+            return $"ChunkCoord({World.Name}, {X}, {Z})";
         }
     }
 }

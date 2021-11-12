@@ -1,7 +1,7 @@
 ﻿using System;
 using NiaBukkit.API.Util;
 
-namespace NiaBukkit.API.Entity
+namespace NiaBukkit.API.Entities
 {
     public class Entity
     {
@@ -10,11 +10,16 @@ namespace NiaBukkit.API.Entity
         public World.World World => Location.World;
         public bool IsOnGround { get; internal set; }
 
-        public Entity(World.World world) : this(world, 0, 0, 0) { }
+        public readonly Uuid Uuid;
 
-        public Entity(World.World world, double x, double y, double z)
+        public Entity(World.World world) : this(Uuid.RandomUuid(), world, 0, 0, 0) { }
+        public Entity(Uuid uuid, World.World world) : this(uuid, world, 0, 0, 0) { }
+
+        public Entity(Uuid uuid, World.World world, double x, double y, double z)
         {
-            Location = new Location(world, 0, 0, 0);
+            Uuid = uuid;
+            Location = new Location(world, 0, 5, 0);
+            Location.Changeable = false;
             EntityId = GenerateEntityId();
         }
 
@@ -32,5 +37,7 @@ namespace NiaBukkit.API.Entity
 
             return ++_currentEntityId;
         }
+
+        internal virtual void Update() { }
     }
 }

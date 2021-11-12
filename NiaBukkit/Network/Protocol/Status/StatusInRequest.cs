@@ -10,7 +10,7 @@ namespace NiaBukkit.Network.Protocol.Status
     {
         internal static void Read(NetworkManager networkManager, ByteBuf buf)
         {
-            networkManager.SendPacket(new StatusOutResponse(Bukkit.minecraftServer.Protocol, ServerProperties.MaxPlayers, 0,
+            networkManager.SendPacket(new StatusOutResponse(Bukkit.MinecraftServer.Protocol, ServerProperties.MaxPlayers, 0,
                 ServerProperties.Motd));
         }
     }

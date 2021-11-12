@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
-using NiaBukkit.API.Entity;
+using NiaBukkit.API.Entities;
 using NiaBukkit.API.Util;
 using NiaBukkit.Network.Protocol;
 using NiaBukkit.Network.Protocol.Login;
@@ -55,13 +55,9 @@ namespace NiaBukkit.Network
             NetworkManagers.Remove(manager);
 
             if (Player != null)
-            {
-                Player.World.Players.Remove(Player);
-                Player player;
-                Bukkit.Players.Remove(Player.Uuid, out player);
-            }
+                Bukkit.RemovePlayer(Player);
 
-            Bukkit.minecraftServer.AddDestroySocket(this);
+            Bukkit.MinecraftServer.AddDestroySocket(this);
             // TODO: Client Disconnected
         }
 
@@ -234,8 +230,11 @@ namespace NiaBukkit.Network
                     {
                         Kick(e.Message);
                     }
-                    catch (Exception err) {}
-                
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+
                 Disconnect();
             }
         }

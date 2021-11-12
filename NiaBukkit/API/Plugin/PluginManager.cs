@@ -28,12 +28,17 @@ namespace NiaBukkit.API
                     Assembly plugin = Assembly.LoadFile(path);
                     GetPluginDescription(plugin);
                 }
-                catch(Exception e)
+                catch(Exception)
                 {
                     Console.Error.WriteLine("Could not load '" + Path.GetFileName(path) +"' in folder 'plugins'");
-                    throw e;
+                    throw;
                 }
             }
+        }
+
+        internal void DisablePlugins()
+        {
+            // TODO: OnDisable
         }
 
         private void GetPluginDescription(Assembly plugin)

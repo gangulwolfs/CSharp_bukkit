@@ -1,9 +1,8 @@
 using System.Linq;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
-using NiaBukkit.API.Entity;
+using NiaBukkit.API.Entities;
 using NiaBukkit.API.Util;
-using NiaBukkit.API.World;
 using NiaBukkit.Network.Protocol.Play;
 
 namespace NiaBukkit.Network.Protocol.Login
@@ -28,12 +27,12 @@ namespace NiaBukkit.Network.Protocol.Login
 			
 			//TODO: Load World
 			networkManager.Player =
-				new EntityPlayer(networkManager, profile, new World(), ServerProperties.GameMode);
+				new EntityPlayer(networkManager, profile, Bukkit.MainWorld, ServerProperties.GameMode);
 			
 			if(!ServerProperties.OnlineMode)
 			{
 				networkManager.SendPacket(new LoginOutEncryptionRequest(
-					SelfCryptography.PublicKeyToAsn1(Bukkit.minecraftServer.ServerKey),
+					SelfCryptography.PublicKeyToAsn1(Bukkit.MinecraftServer.ServerKey),
 					SelfCryptography.GetRandomToken()
 				));
 			}
@@ -64,7 +63,7 @@ namespace NiaBukkit.Network.Protocol.Login
 				networkManager.SetPosition(networkManager.Player.Location, Enumerable.Empty<TeleportFlags>());
 				networkManager.SendPacket(new PlayOutSpawnPosition(networkManager.Player.Location));
 				
-				networkManager.SendPacket(new PlayOutChunkData(networkManager.Player.World.GetChunk(0, 0)));
+				// networkManager.SendPacket(new PlayOutChunkData(networkManager.Player.World.GetChunk(0, 0)));
 				// networkManager.SendPacket(new PlayOutChunkData(networkManager.Player.World.GetChunk(1, 0)));
 				// networkManager.SendPacket(new PlayOutChunkData(networkManager.Player.World.GetChunk(-1, 0)));
 			}

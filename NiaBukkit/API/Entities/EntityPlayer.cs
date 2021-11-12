@@ -1,8 +1,13 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using NiaBukkit.API.Config;
+using NiaBukkit.API.Threads;
 using NiaBukkit.API.Util;
+using NiaBukkit.API.World.Chunks;
 using NiaBukkit.Network;
 
-namespace NiaBukkit.API.Entity
+namespace NiaBukkit.API.Entities
 {
 	public class EntityPlayer : Player
 	{
@@ -15,6 +20,10 @@ namespace NiaBukkit.API.Entity
 		public readonly PlayerAbilities PlayerAbilities = new PlayerAbilities();
 
 		private readonly List<Player> _hidePlayers = new List<Player>();
+
+		private ChunkCoord _currentChunkCoord;
+
+		private readonly ConcurrentBag<ChunkCoord> _loadedChunk = new ConcurrentBag<ChunkCoord>();
 
 		public EntityPlayer(NetworkManager networkManager, GameProfile profile, World.World world, GameMode gameMode) : base(profile, world, gameMode)
 		{
@@ -45,6 +54,36 @@ namespace NiaBukkit.API.Entity
 		public void AddHidePlayer(Player player)
 		{
 			_hidePlayers.Add(player);
+		}
+
+		internal void ChunkLoaded(ChunkCoord coord)
+		{
+			if(!_loadedChunk.Contains(coord))
+				_loadedChunk.Add(coord);
+		}
+
+		internal override void Update()
+		{
+			ChunkUpdate();
+		}
+
+		private void ChunkUpdate()
+		{
+			if (_currentChunkCoord != null && _currentChunkCoord.X == (int) Location.X >> 4 &&
+			    _currentChunkCoord.Z == (int) Location.Z >> 4)
+				return;
+			_currentChunkCoord = new ChunkCoord(World, (int) Location.X >> 4, (int) Location.Z >> 4);
+
+			var radius = ServerProperties.ViewDistance;
+			for (var x = -radius; x <= radius; x++)
+			{
+				for (var z = -radius; z <= radius; z++)
+				{
+					var target = new ChunkCoord(World, _currentChunkCoord.X + x, _currentChunkCoord.Z + z);
+					if(!_loadedChunk.Contains(target))
+						WorldThreadManager.AddRequireChunk(target, this);
+				}
+			}
 		}
 	}
 }

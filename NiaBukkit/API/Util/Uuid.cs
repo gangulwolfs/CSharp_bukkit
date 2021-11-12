@@ -128,6 +128,7 @@ namespace NiaBukkit.API.Util
 		
 		
 
+		#nullable enable
 		public override bool Equals(object? obj)
 		{
 			if (obj is not Uuid uuid) return false;

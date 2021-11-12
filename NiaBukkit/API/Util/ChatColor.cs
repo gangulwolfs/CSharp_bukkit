@@ -113,10 +113,21 @@ namespace NiaBukkit.API.Util
 
         public static bool operator !=(ChatColor c1, ChatColor c2) => !(c1 == c2);
 
+        #nullable enable
         public override bool Equals(object? obj)
         {
-            if (obj is null || !(obj is ChatColor)) return false;
-            return (ChatColor) obj == this;
+            if (obj is not ChatColor color) return false;
+            return color == this;
+        }
+
+        protected bool Equals(ChatColor other)
+        {
+            return code == other.code && name == other.name;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(code, name);
         }
     }
 }

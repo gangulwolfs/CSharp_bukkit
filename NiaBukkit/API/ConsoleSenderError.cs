@@ -23,6 +23,7 @@ namespace NiaBukkit.API
             WriteLine(value.ToString());
         }
 
+        #nullable enable
         public override void WriteLine(object? value)
         {
             if(value == null)
@@ -39,8 +40,11 @@ namespace NiaBukkit.API
                 WriteLine(value.ToString());
         }
 
-        public override void WriteLine(string value)
+        public override void WriteLine(string? value)
         {
+            if (value == null)
+                value = "null";
+            
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("{0}/ERROR]: ", ConsoleSender.GetInfo());
             

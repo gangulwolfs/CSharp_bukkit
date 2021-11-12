@@ -1,4 +1,4 @@
-﻿using NiaBukkit.API.Entity;
+﻿using NiaBukkit.API.Entities;
 
 namespace NiaBukkit.Network.Protocol.Play
 {
