@@ -1,10 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Threads;
 using NiaBukkit.API.Util;
+using NiaBukkit.API.World.Chunks;
 using NiaBukkit.Network;
 
 namespace NiaBukkit
@@ -26,6 +28,8 @@ namespace NiaBukkit
             Bukkit.PluginManager.LoadPlugins();
 
             Console.CancelKeyPress += ConsoleCloseEvent;
+
+            ChunkRegionManager.GetChunk(Bukkit.MainWorld, 1, 0);
         }
 
         private static void Init()

@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using NiaBukkit.API;
 using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network
@@ -18,7 +19,11 @@ namespace NiaBukkit.Network
         public bool Available => buf.Count > 0;
         public int Length => readBuf.Length - pos;
         public int WriteLength => buf.Count;
-        public int Position => pos;
+        public int Position
+        {
+            get => pos;
+            set => pos = value;
+        }
 
         public ByteBuf(byte[] data)
         {
@@ -83,10 +88,68 @@ namespace NiaBukkit.Network
         public byte[] Read(int length)
         {
             var buffer = new byte[length];
-            Array.Copy(readBuf, pos, buffer, 0, length);
+            Buffer.BlockCopy(readBuf, pos, buffer, 0, length);
             pos += length;
             
             return buffer;
+        }
+
+        public string ReadUtf()
+        {
+            //https://stackoverflow.com/questions/26416779/c-sharp-binaryreader-readutf-from-javas-dataoutputstream
+            var length = (ReadByte() << 8) + ReadByte();
+
+            var bytes = Read(length);
+            var result = new char[length];
+
+            var count = 0;
+            var index = 0;
+            
+            while(count < length)
+            {
+                var b = bytes[count] & 0xff;
+                if (b > 127) break;
+                count++;
+                result[index++] = (char) b;
+            }
+
+            while (count < length)
+            {
+                var b = bytes[count] & 0xff;
+                switch (b >> 4)
+                {
+                    case >= 0 and <= 7:
+                        count++;
+                        result[index++] = (char) b;
+                        break;
+                    case 12: case 13:
+                        count += 2;
+                        if(count > length)
+                            throw new IOException("Count too long");
+                        int b2 = bytes[count - 1];
+                        if((b2 & 0xC0) != 0x80)
+                            throw new IOException("Malformed Input");
+                        
+                        result[index++] = (char) (((b & 0x1F) << 6) | (b2 & 0x3F));
+                        break;
+                    case 14:
+                        count += 3;
+                        if (count > length)
+                            throw new IOException("Count too long");
+
+                        b2 = bytes[count - 2];
+                        int b3 = bytes[count - 1];
+                        if (((b2 & 0xC0) != 0x80) || ((b3 & 0xC0) != 0x80))
+                            throw new IOException("Malformed Input");
+
+                        result[index++] = (char) (((b & 0x0F) << 12) | ((b2 & 0x3F) << 6) | ((b3 & 0x3F) << 0));
+                        break;
+                    default:
+                        throw new IOException("Malformed Input");
+                }
+            }
+
+            return new string(result);
         }
 
         public bool ReadBool()
@@ -110,6 +173,11 @@ namespace NiaBukkit.Network
             }
 
             return value | ((b & 0x7F) << (size * 7));
+        }
+
+        public int ReadInt()
+        {
+            return IPAddress.NetworkToHostOrder(BitConverter.ToInt32(Read(4), 0));
         }
 
         public string ReadString()
@@ -142,9 +210,74 @@ namespace NiaBukkit.Network
             return new Uuid(ReadLong(), ReadLong());
         }
 
-        public void Write(byte[] data)
+        public void Write(IEnumerable<byte> data)
         {
             buf.AddRange(data);
+        }
+
+        public void WriteUtf(string str)
+        {
+            var stringLength = str.Length;
+            var length = 0;
+            var count = 0;
+            int b;
+
+            for (int i = 0; i < stringLength; i++)
+            {
+                b = str[i];
+                switch (b)
+                {
+                    case >= 0x0001 and <= 0x007F:
+                        length++;
+                        break;
+                    case > 0x07FF:
+                        length += 3;
+                        break;
+                    default:
+                        length += 2;
+                        break;
+                }
+            }
+
+            if (length > 65535)
+                throw new IOException($"String Too long :{length}");
+
+            var arr = new byte[length * 2 + 2];
+            arr[count++] = (byte) (((uint) length >> 8) & 0xFF);
+            arr[count++] = (byte) ((uint) length & 0xFF);
+
+            int x = 0;
+            while (x < stringLength)
+            {
+                b = str[x];
+                if (b is not (>= 0x0001 and <= 0x007F))
+                    break;
+                arr[count++] = (byte) b;
+                x++;
+            }
+
+            while (x < stringLength)
+            {
+                b = str[x];
+                switch (b)
+                {
+                    case >= 0x0001 and <= 0x007F:
+                        arr[count++] = (byte) b;
+                        break;
+                    case > 0x07FF:
+                        arr[count++] = (byte) (0xE0 | ((b >> 12) & 0x0F));
+                        arr[count++] = (byte) (0x80 | ((b >> 6) & 0x3F));
+                        arr[count++] = (byte) (0x80 | ((b >> 0) & 0x3F));
+                        break;
+                    default:
+                        arr[count++] = (byte) (0xC0 | ((b >>  6) & 0x1F));
+                        arr[count++] = (byte) (0x80 | ((b >>  0) & 0x3F));
+                        break;
+                }
+                x++;
+            }
+            
+            Write(arr);
         }
 
         public void WriteByte(byte b)
