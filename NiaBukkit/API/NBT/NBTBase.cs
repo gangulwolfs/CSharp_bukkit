@@ -4,17 +4,24 @@ namespace NiaBukkit.API.NBT
 {
     public class NBTBase
     {
+        public virtual NBTType NBTType { get; }
         internal static NBTBase CreateTag(byte b)
         {
             return b switch
             {
-                1 => new NBTTagByte(),
-                3 => new NBTTagInt(),
-                4 => new NBTTagLong(),
-                7 => new NBTTagByteArray(),
-                9 => new NBTTagList(),
-                10 => new NBTTagCompound(),
-                11 => new NBTTagIntArray(),
+                (byte) NBTType.End => new NBTTagEnd(),
+                (byte) NBTType.Byte => new NBTTagByte(),
+                (byte) NBTType.Short => new NBTTagShort(),
+                (byte) NBTType.Int => new NBTTagInt(),
+                (byte) NBTType.Long => new NBTTagLong(),
+                (byte) NBTType.Float => new NBTTagFloat(),
+                (byte) NBTType.Double => new NBTTagDouble(),
+                (byte) NBTType.ByteArray => new NBTTagByteArray(),
+                (byte) NBTType.String => new NBTTagString(),
+                (byte) NBTType.List => new NBTTagList(),
+                (byte) NBTType.Compound => new NBTTagCompound(),
+                (byte) NBTType.IntArray => new NBTTagIntArray(),
+                (byte) NBTType.LongArray => new NBTTagLongArray(),
                 _ => null
             };
         }

@@ -13,6 +13,11 @@ namespace NiaBukkit.API.Util
             _data = new byte[length / 2];
         }
 
+        public NibbleArray(byte[] arr)
+        {
+            _data = arr;
+        }
+
         public byte this[int i]
         {
             get => (byte) (_data[i/2] >> (i % 2 * 4) & 0xF);

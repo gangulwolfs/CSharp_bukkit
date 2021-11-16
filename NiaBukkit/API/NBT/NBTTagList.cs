@@ -8,16 +8,24 @@ namespace NiaBukkit.API.NBT
     {
         private List<NBTBase> _data;
         public ReadOnlyCollection<NBTBase> Data => new(_data);
-        private byte _type;
+        public byte Type { get; private set; }
+        public int Length => Data.Count;
+        public override NBTType NBTType => NBTType.List;
+
+        public NBTBase this[int i]
+        {
+            get => _data[i];
+        }
+        
         internal override void Load(ByteBuf buf, int id)
         {
-            _type = (byte) buf.ReadByte();
+            Type = (byte) buf.ReadByte();
             var length = buf.ReadInt();
 
             _data = new List<NBTBase>(length);
             for (var i = 0; i < length; i++)
             {
-                var nbt = CreateTag(_type);
+                var nbt = CreateTag(Type);
                 nbt.Load(buf, id + 1);
                 _data.Add(nbt);
             }

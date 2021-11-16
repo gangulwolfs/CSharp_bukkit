@@ -5,6 +5,7 @@ namespace NiaBukkit.API.NBT
     public class NBTTagIntArray : NBTBase
     {
         public int[] Data { get; private set; }
+        public override NBTType NBTType => NBTType.IntArray;
         internal override void Load(ByteBuf buf, int id)
         {
             var length = buf.ReadInt();

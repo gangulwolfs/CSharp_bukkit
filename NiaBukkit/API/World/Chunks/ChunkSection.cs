@@ -14,6 +14,8 @@ namespace NiaBukkit.API.World.Chunks
 
         private readonly NibbleArray _blockLight = new NibbleArray(Size);
         private NibbleArray _skyLight;
+
+        public byte YPos { get; private set; }
         
         internal static int Index(int x, int y, int z) => y << 8 | z << 4 | x;
 
@@ -22,6 +24,11 @@ namespace NiaBukkit.API.World.Chunks
         public ChunkSection()
         {
             GetOrCreatePaletteIndex(Material.Air);
+        }
+
+        public ChunkSection(byte yPos) : this()
+        {
+            YPos = yPos;
         }
 
         public void SetBlockLight(int x, int y, int z, byte data)

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NiaBukkit.API.Util;
 using NiaBukkit.Network;
 
@@ -7,20 +8,25 @@ namespace NiaBukkit.API.World.Chunks
     public class Chunk
     {
         public readonly ChunkCoord Coord;
-        private ChunkSection[] _sections;
-        public ChunkSection[] ChunkSections => _sections;
-        
-        private byte[] _biomes = Enumerable.Repeat<byte>(1, 256).ToArray();
-        public byte[] Biomes => _biomes;
+        public ChunkSection[] ChunkSections { get; private set; }
+
+        public byte[] Biomes { get; private set; } = Enumerable.Repeat<byte>(1, 256).ToArray();
 
         private readonly bool _isFullChunk;
+
+        private readonly int[] _heightMap;
+        
+        public bool Done { get; internal set; }
+        public bool Light { get; internal set; }
+        public bool InhabitedTime { get; internal set; }
 
         public Chunk(World world, int x, int z, bool isFullChunk = true)
         {
             Coord = new ChunkCoord(world, x, z);
-            _sections = new ChunkSection[16];
+            ChunkSections = new ChunkSection[16];
 
             _isFullChunk = isFullChunk;
+            _heightMap = new int[256];
 
             // for (int i = 0; i < _sections.Length; i++)
             //     GetOrCreateSection(i);
@@ -44,11 +50,11 @@ namespace NiaBukkit.API.World.Chunks
         public ushort GetBitMask()
         {
             ushort mask = 0;
-            for (int i = _sections.Length - 1; i >= 0; i--)
+            for (int i = ChunkSections.Length - 1; i >= 0; i--)
             {
                 mask <<= 1;
                 
-                if (_sections[i] != null)
+                if (ChunkSections[i] != null)
                     mask += 1;
             }
 
@@ -57,17 +63,25 @@ namespace NiaBukkit.API.World.Chunks
 
         public void WriteBiomes(ByteBuf buf)
         {
-            buf.Write(_biomes);
+            buf.Write(Biomes);
         }
 
         private ChunkSection GetOrCreateSection(int index)
         {
-            if (_sections[index] == null)
-                _sections[index] = new ChunkSection();
+            if (ChunkSections[index] == null)
+                ChunkSections[index] = new ChunkSection();
 
-            return _sections[index];
+            return ChunkSections[index];
         }
 
         public bool IsFullChunk() => _isFullChunk;
+
+        public void SetHeightMap(int[] heightMap)
+        {
+            if (_heightMap.Length != heightMap.Length)
+                throw new Exception($"Could not set level chunk heightmap, array length is {heightMap.Length} instead of {_heightMap.Length}");
+            
+            Buffer.BlockCopy(heightMap, 0, _heightMap, 0, heightMap.Length);
+        }
     }
 }

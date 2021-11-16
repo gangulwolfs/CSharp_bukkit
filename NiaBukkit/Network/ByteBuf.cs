@@ -242,7 +242,8 @@ namespace NiaBukkit.Network
             if (length > 65535)
                 throw new IOException($"String Too long :{length}");
 
-            var arr = new byte[length * 2 + 2];
+            // var arr = new byte[length * 2 + 2];
+            var arr = new byte[length];
             arr[count++] = (byte) (((uint) length >> 8) & 0xFF);
             arr[count++] = (byte) ((uint) length & 0xFF);
 

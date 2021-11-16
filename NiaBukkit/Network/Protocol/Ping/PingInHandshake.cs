@@ -1,4 +1,6 @@
-﻿namespace NiaBukkit.Network.Protocol.Ping
+﻿using NiaBukkit.API;
+
+namespace NiaBukkit.Network.Protocol.Ping
 {
     /**
      * <summary>Client Info Received</summary>
