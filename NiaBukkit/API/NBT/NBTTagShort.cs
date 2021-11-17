@@ -21,5 +21,10 @@ namespace NiaBukkit.API.NBT
         {
             Data = BitConverter.ToInt16(buf.Read(2));
         }
+
+        public override string ToString()
+        {
+            return Data.ToString();
+        }
     }
 }

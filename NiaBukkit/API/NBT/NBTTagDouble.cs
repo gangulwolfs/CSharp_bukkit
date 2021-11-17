@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NiaBukkit.Network;
 
 namespace NiaBukkit.API.NBT
@@ -19,6 +20,11 @@ namespace NiaBukkit.API.NBT
         internal override void Load(ByteBuf buf, int id)
         {
             Data = BitConverter.ToDouble(buf.Read(8));
+        }
+
+        public override string ToString()
+        {
+            return Data.ToString("F");
         }
     }
 }

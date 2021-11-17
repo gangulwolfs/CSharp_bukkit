@@ -26,5 +26,10 @@ namespace NiaBukkit.API.NBT
                 Data[i] = BitConverter.ToInt64(buf.Read(8));
             }
         }
+
+        public override string ToString()
+        {
+            return $"[{string.Join(", ", Data)}]";
+        }
     }
 }

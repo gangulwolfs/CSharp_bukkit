@@ -14,5 +14,10 @@ namespace NiaBukkit.API.NBT
             for (var i = 0; i < length; i++)
                 Data[i] = buf.ReadInt();
         }
+
+        public override string ToString()
+        {
+            return $"[{string.Join(", ", Data)}]";
+        }
     }
 }

@@ -59,7 +59,7 @@ namespace NiaBukkit.Network.Protocol.Play
                 else
                     data.WriteVarInt(0);
                 
-                long[] chunkArray = ChunkDataVersionUtil.ChunkCompactArray(bitsPerBlock,
+                long[] chunkArray = ChunkDataVersionUtil.CreateCompactArray(bitsPerBlock,
                     bitsPerBlock == MaxBitsBlock ? section.GetOldBlockData : section.GetPaletteIndex);
                 data.WriteVarInt(chunkArray.Length);
 

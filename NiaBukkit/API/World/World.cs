@@ -38,10 +38,10 @@ namespace NiaBukkit.API.World
         internal Chunk GetChunk(int x, int z)
         {
             _loadedChunks.TryGetValue(new ChunkCoord(this, x, z), out var chunk);
-            if(chunk == null)
-                return _provider.GetChunk(x, z);
+            if (chunk != null)
+                return chunk;
 
-            return chunk;
+            return ChunkRegionManager.GetChunk(this, x, z) ?? _provider.GetChunk(x, z);
         }
 
         internal void AddChunk(Chunk chunk)

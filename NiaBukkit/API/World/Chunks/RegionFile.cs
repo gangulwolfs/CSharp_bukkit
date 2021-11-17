@@ -8,6 +8,8 @@ namespace NiaBukkit.API.World.Chunks
     {
         public static ByteBuf Load(string path, int x, int z)
         {
+            if (!File.Exists(path)) return null;
+            
             var buf = new ByteBuf(File.ReadAllBytes(path));
             
             var byteInfo = new int[1024];

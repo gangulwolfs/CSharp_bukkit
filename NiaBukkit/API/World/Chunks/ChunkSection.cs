@@ -8,11 +8,11 @@ namespace NiaBukkit.API.World.Chunks
     public class ChunkSection
     {
         public const int Size = 16 * 16 * 16;
-        private int[] _blocks = new int[Size];//Enumerable.Repeat<int>(-1, Size).ToArray();
+        private readonly int[] _blocks = new int[Size];//Enumerable.Repeat<int>(-1, Size).ToArray();
         private readonly List<Material> _palette = new List<Material>();
         private readonly Dictionary<Material, int> _inversePalette = new Dictionary<Material, int>();
 
-        private readonly NibbleArray _blockLight = new NibbleArray(Size);
+        private NibbleArray _blockLight = new NibbleArray(Size);
         private NibbleArray _skyLight;
 
         public byte YPos { get; private set; }
@@ -44,11 +44,27 @@ namespace NiaBukkit.API.World.Chunks
             _skyLight[x, y, z] = data;
         }
 
+        public void SetBlockLight(byte[] data)
+        {
+            if (Size / 2 != data.Length)
+                throw new Exception($"Block Light Length Error {data.Length} != {_blockLight.Length}");
+
+            _blockLight = new NibbleArray(data);
+        }
+
+        public void SetSkyLight(byte[] data)
+        {
+            if (Size / 2 != data.Length)
+                throw new Exception($"Block Light Length Error {data.Length} != {_blockLight.Length}");
+
+            _skyLight = new NibbleArray(data);
+        }
+
         public Material GetPalette(int index)
         {
             return _palette[index];
         }
-        public int GetOldPaletteData(int i) => GetPalette(i).GetOldId() << 4 | GetPalette(i).GetOldSubId();
+        public int GetOldPaletteData(int i) => GetPalette(i).GetLegacyId() << 4 | GetPalette(i).GetOldSubId();
 
         public int GetOrCreatePaletteIndex(Material block)
         {
@@ -84,7 +100,7 @@ namespace NiaBukkit.API.World.Chunks
 
         public int GetBlockData(int i) => GetBlock(i).GetId();
 
-        public int GetOldBlockData(int i) => GetBlock(i).GetOldId() << 4 | GetBlock(i).GetOldSubId();
+        public int GetOldBlockData(int i) => GetBlock(i).GetLegacyId() << 4 | GetBlock(i).GetOldSubId();
 
         public int GetPaletteIndex(int i)
         {

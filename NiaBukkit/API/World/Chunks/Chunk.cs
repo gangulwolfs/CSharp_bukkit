@@ -17,7 +17,6 @@ namespace NiaBukkit.API.World.Chunks
         private readonly int[] _heightMap;
         
         public bool Done { get; internal set; }
-        public bool Light { get; internal set; }
         public bool InhabitedTime { get; internal set; }
 
         public Chunk(World world, int x, int z, bool isFullChunk = true)
@@ -82,6 +81,11 @@ namespace NiaBukkit.API.World.Chunks
                 throw new Exception($"Could not set level chunk heightmap, array length is {heightMap.Length} instead of {_heightMap.Length}");
             
             Buffer.BlockCopy(heightMap, 0, _heightMap, 0, heightMap.Length);
+        }
+
+        public void SetChunkSections(ChunkSection[] sections)
+        {
+            ChunkSections = sections;
         }
     }
 }

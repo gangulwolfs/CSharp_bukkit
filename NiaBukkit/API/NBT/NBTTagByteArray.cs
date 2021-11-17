@@ -1,4 +1,5 @@
-﻿using NiaBukkit.Network;
+﻿using System.Text;
+using NiaBukkit.Network;
 
 namespace NiaBukkit.API.NBT
 {
@@ -10,6 +11,11 @@ namespace NiaBukkit.API.NBT
         internal override void Load(ByteBuf buf, int id)
         {
             Data = buf.Read(buf.ReadInt());
+        }
+
+        public override string ToString()
+        {
+            return $"[{string.Join(", ", Data)}]";
         }
     }
 }

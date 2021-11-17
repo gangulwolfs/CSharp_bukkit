@@ -10,5 +10,10 @@ namespace NiaBukkit.API.NBT
         {
             Data = buf.ReadInt();
         }
+
+        public override string ToString()
+        {
+            return Data.ToString();
+        }
     }
 }

@@ -4,30 +4,29 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using NiaBukkit.API;
 using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network
 {
     public class ByteBuf
     {
-        private byte[] readBuf;
-        private List<byte> buf = new List<byte>();
+        private byte[] _readBuf;
+        private readonly List<byte> _buf = new List<byte>();
 
-        private int pos = 0;
+        private int _pos = 0;
 
-        public bool Available => buf.Count > 0;
-        public int Length => readBuf.Length - pos;
-        public int WriteLength => buf.Count;
+        public bool Available => _buf.Count > 0;
+        public int Length => _readBuf.Length - _pos;
+        public int WriteLength => _buf.Count;
         public int Position
         {
-            get => pos;
-            set => pos = value;
+            get => _pos;
+            set => _pos = value;
         }
 
         public ByteBuf(byte[] data)
         {
-            readBuf = data;
+            _readBuf = data;
         }
         public ByteBuf() {}
 
@@ -82,14 +81,22 @@ namespace NiaBukkit.Network
 
         public int ReadByte()
         {
-            return readBuf[pos++];
+            return _readBuf[_pos++];
         }
 
         public byte[] Read(int length)
         {
             var buffer = new byte[length];
-            Buffer.BlockCopy(readBuf, pos, buffer, 0, length);
-            pos += length;
+            Buffer.BlockCopy(_readBuf, _pos, buffer, 0, length);
+            _pos += length;
+            
+            return buffer;
+        }
+
+        public byte[] Peek(int length)
+        {
+            var buffer = new byte[length];
+            Buffer.BlockCopy(_readBuf, _pos, buffer, 0, length);
             
             return buffer;
         }
@@ -99,7 +106,7 @@ namespace NiaBukkit.Network
             //https://stackoverflow.com/questions/26416779/c-sharp-binaryreader-readutf-from-javas-dataoutputstream
             var length = (ReadByte() << 8) + ReadByte();
 
-            var bytes = Read(length);
+            var bytes = Peek(length);
             var result = new char[length];
 
             var count = 0;
@@ -124,31 +131,48 @@ namespace NiaBukkit.Network
                         break;
                     case 12: case 13:
                         count += 2;
-                        if(count > length)
+                        if (count > length)
+                        {
+                            _pos += count;
                             throw new IOException("Count too long");
+                        }
+
                         int b2 = bytes[count - 1];
-                        if((b2 & 0xC0) != 0x80)
+                        if ((b2 & 0xC0) != 0x80)
+                        {
+                            _pos += count;
                             throw new IOException("Malformed Input");
-                        
+                        }
+
                         result[index++] = (char) (((b & 0x1F) << 6) | (b2 & 0x3F));
                         break;
                     case 14:
                         count += 3;
                         if (count > length)
+                        {
+                            _pos += count;
                             throw new IOException("Count too long");
+                        }
 
                         b2 = bytes[count - 2];
                         int b3 = bytes[count - 1];
                         if (((b2 & 0xC0) != 0x80) || ((b3 & 0xC0) != 0x80))
+                        {
+                            _pos += count;
                             throw new IOException("Malformed Input");
+                        }
 
                         result[index++] = (char) (((b & 0x0F) << 12) | ((b2 & 0x3F) << 6) | ((b3 & 0x3F) << 0));
                         break;
                     default:
+                    {
+                        _pos += count;
                         throw new IOException("Malformed Input");
+                    }
                 }
             }
 
+            _pos += count;
             return new string(result);
         }
 
@@ -212,7 +236,14 @@ namespace NiaBukkit.Network
 
         public void Write(IEnumerable<byte> data)
         {
-            buf.AddRange(data);
+            _buf.AddRange(data);
+        }
+
+        public void Write(byte[] data, int length)
+        {
+            var arr = new byte[length];
+            Buffer.BlockCopy(data, 0, arr, 0, length);
+            _buf.AddRange(arr);
         }
 
         public void WriteUtf(string str)
@@ -242,8 +273,8 @@ namespace NiaBukkit.Network
             if (length > 65535)
                 throw new IOException($"String Too long :{length}");
 
-            // var arr = new byte[length * 2 + 2];
-            var arr = new byte[length];
+            var arr = new byte[length * 2 + 2];
+            // var arr = new byte[length];
             arr[count++] = (byte) (((uint) length >> 8) & 0xFF);
             arr[count++] = (byte) ((uint) length & 0xFF);
 
@@ -278,61 +309,61 @@ namespace NiaBukkit.Network
                 x++;
             }
             
-            Write(arr);
+            Write(arr, count);
         }
 
         public void WriteByte(byte b)
         {
-            buf.Add(b);
+            _buf.Add(b);
         }
 
         public void WriteVarInt(int integer)
         {
-            buf.AddRange(GetVarInt(integer));
+            _buf.AddRange(GetVarInt(integer));
         }
 
         public void WriteInt(int data)
         {
-            buf.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data)));
+            _buf.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data)));
         }
 
         public void WriteString(string data)
         {
             byte[] stringData = Encoding.UTF8.GetBytes(data);
             WriteVarInt(stringData.Length);
-            buf.AddRange(stringData);
+            _buf.AddRange(stringData);
         }
 
         public void WriteShort(short data)
         {
-            buf.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data)));
+            _buf.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data)));
         }
 
         public void WriteUShort(ushort data)
         {
-            buf.AddRange(BitConverter.GetBytes(data));
+            _buf.AddRange(BitConverter.GetBytes(data));
         }
 
         public void WriteBool(bool data)
         {
-            buf.AddRange(BitConverter.GetBytes(data));
+            _buf.AddRange(BitConverter.GetBytes(data));
         }
 
         public void WriteDouble(double data)
         {
-            buf.AddRange(HostToNetworkOrder(data));
+            _buf.AddRange(HostToNetworkOrder(data));
         }
 
         public void WriteFloat(float data)
         {
-            buf.AddRange(BitConverter.GetBytes(data));
+            _buf.AddRange(BitConverter.GetBytes(data));
             // buf.AddRange(HostToNetworkOrder(data));
         }
 
         public void WriteLong(long data)
         {
             // buf.AddRange(BitConverter.GetBytes(data));
-            buf.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data)));
+            _buf.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data)));
         }
 
         public void WriteUuid(Uuid uuid)
@@ -370,18 +401,23 @@ namespace NiaBukkit.Network
 
         public byte[] Flush()
         {
-            buf.InsertRange(0, GetVarInt(buf.Count));
-            byte[] data = buf.ToArray();
+            _buf.InsertRange(0, GetVarInt(_buf.Count));
+            byte[] data = _buf.ToArray();
 
-            readBuf = null;
-            buf.Clear();
+            _readBuf = null;
+            _buf.Clear();
 
             return data;
         }
 
         public byte[] GetBytes()
         {
-            return buf.ToArray();
+            return _buf.ToArray();
+        }
+
+        public byte[] GetReadBytes()
+        {
+            return _readBuf;
         }
     }
 }

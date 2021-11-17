@@ -20,10 +20,10 @@ namespace NiaBukkit.API.Compress
         public static byte[] ZLipDecompress(byte[] origin)
         {
             using var stream = new MemoryStream(origin);
-            // stream.Position = 2;
+            stream.Position = 2;
             
-            // using var zipStream = new System.IO.Compression.DeflateStream(stream, CompressionMode.Decompress);
-            using var zipStream = new Ionic.Zlib.ZlibStream(stream, Ionic.Zlib.CompressionMode.Decompress);
+            using var zipStream = new System.IO.Compression.DeflateStream(stream, CompressionMode.Decompress);
+            // using var zipStream = new Ionic.Zlib.ZlibStream(stream, Ionic.Zlib.CompressionMode.Decompress);
             using var resultStream = new MemoryStream();
             zipStream.CopyTo(resultStream);
 

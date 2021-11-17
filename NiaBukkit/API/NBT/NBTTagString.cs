@@ -22,5 +22,10 @@ namespace NiaBukkit.API.NBT
         {
             buf.WriteUtf(Data);
         }
+
+        public override string ToString()
+        {
+            return $"\"{Data}\"";
+        }
     }
 }

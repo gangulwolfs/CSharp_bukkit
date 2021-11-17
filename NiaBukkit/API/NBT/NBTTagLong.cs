@@ -11,5 +11,10 @@ namespace NiaBukkit.API.NBT
         {
             Data = BitConverter.ToInt64(buf.Read(8));
         }
+
+        public override string ToString()
+        {
+            return Data.ToString();
+        }
     }
 }

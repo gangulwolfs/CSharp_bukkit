@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text;
 using NiaBukkit.Network;
 
 namespace NiaBukkit.API.NBT
@@ -21,8 +22,8 @@ namespace NiaBukkit.API.NBT
             while ((b = (byte) buf.ReadByte()) != 0)
             {
                 var tag = buf.ReadUtf();
-                var nbt = LoadData(b, buf, complexity + 1);
                 Bukkit.ConsoleSender.SendMessage(tag);
+                var nbt = LoadData(b, buf, complexity + 1);
                 _data.Add(tag, nbt);
             }
         }
@@ -127,6 +128,27 @@ namespace NiaBukkit.API.NBT
         public bool GetBool(string tagName)
         {
             return GetByte(tagName) != 0;
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            builder.Append("NBTTagCompound(");
+            var isFirst = true;
+            foreach (var (key, value) in _data)
+            {
+                if (!isFirst)
+                    builder.Append(", ");
+                
+                isFirst = false;
+
+                builder.Append(key);
+                builder.Append('=');
+                builder.Append(value);
+            }
+            builder.Append(')');
+
+            return builder.ToString();
         }
     }
 }

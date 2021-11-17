@@ -22,5 +22,10 @@ namespace NiaBukkit.API.NBT
         {
             Data = BitConverter.ToSingle(buf.Read(4));
         }
+
+        public override string ToString()
+        {
+            return Data.ToString("F");
+        }
     }
 }
