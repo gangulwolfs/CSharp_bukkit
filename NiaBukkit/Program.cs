@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using NiaBukkit.API;
+using NiaBukkit.API.Blocks;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Threads;
 using NiaBukkit.API.Util;
@@ -40,6 +41,7 @@ namespace NiaBukkit
             Console.SetError(new ConsoleSenderError(Console.Error));
 
             ChatColor.InitColors();
+            BlockFactory.InitBlocks();
         }
 
         private static void ConsoleCloseEvent(object sender, ConsoleCancelEventArgs args)

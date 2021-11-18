@@ -64,7 +64,7 @@ namespace NiaBukkit.API.World.Chunks
         {
             return _palette[index];
         }
-        public int GetOldPaletteData(int i) => GetPalette(i).GetLegacyId() << 4 | GetPalette(i).GetOldSubId();
+        public int GetOldPaletteData(int i) => GetPalette(i).GetLegacyId() << 4 | GetPalette(i).GetLegacySubId();
 
         public int GetOrCreatePaletteIndex(Material block)
         {
@@ -100,7 +100,7 @@ namespace NiaBukkit.API.World.Chunks
 
         public int GetBlockData(int i) => GetBlock(i).GetId();
 
-        public int GetOldBlockData(int i) => GetBlock(i).GetLegacyId() << 4 | GetBlock(i).GetOldSubId();
+        public int GetLegacyBlockData(int i) => GetBlock(i).GetLegacyId() << 4 | GetBlock(i).GetLegacySubId();
 
         public int GetPaletteIndex(int i)
         {
