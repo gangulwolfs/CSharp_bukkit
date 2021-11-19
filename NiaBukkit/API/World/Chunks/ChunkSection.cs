@@ -84,6 +84,16 @@ namespace NiaBukkit.API.World.Chunks
             _blocks[Index(x, y, z)] = GetOrCreatePaletteIndex(block);
         }
 
+        internal void SetBlock(int x, int y, int z, int id)
+        {
+            _blocks[Index(x, y, z)] = id;
+        }
+
+        internal void SetBlock(int index, int id)
+        {
+            _blocks[index] = id;
+        }
+
         public Material GetBlock(int x, int y, int z)
         {
             return GetBlock(Index(x, y, z));

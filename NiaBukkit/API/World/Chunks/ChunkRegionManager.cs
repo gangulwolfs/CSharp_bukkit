@@ -1,4 +1,5 @@
 ﻿using System;
+using NiaBukkit.API.Blocks;
 using NiaBukkit.API.NBT;
 using NiaBukkit.API.Util;
 using NiaBukkit.Network.Protocol;
@@ -96,10 +97,10 @@ namespace NiaBukkit.API.World.Chunks
             for (var i = 0; i < paletteList.Length; i++)
             {
                 if(paletteList[i] is not NBTTagCompound paletteCompound) continue;
-                Bukkit.ConsoleSender.SendMessage(paletteCompound.ToString());
+                section.GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(paletteCompound.GetString("Name")).Type);
             }
-            ChunkDataVersionUtil.IterateCompactArrayWithPadding(bits, 4096,
-                blockStateList);
+            ChunkDataVersionUtil.IterateCompactArrayWithPadding(bits, ChunkSection.Size,
+                blockStateList, section.SetBlock);
 
             return section;
         }
@@ -126,7 +127,8 @@ namespace NiaBukkit.API.World.Chunks
                 var id = blockArray[k] & 0xFF;
                 var subId = subIdList[x, y, z];
                 
-                section.SetBlock(x, y, z, (Material) id);
+                // Bukkit.ConsoleSender.SendMessage(BlockData.GetBlockDataById(id, subId).Type);
+                section.SetBlock(x, y, z, BlockData.GetBlockDataById(id, subId).Type);
                 // var packed = data << 12 | id << 4 | blockData;
             }
             

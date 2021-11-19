@@ -54,7 +54,7 @@ namespace NiaBukkit.Network.Protocol
             return data;
         }
 
-        internal static void IterateCompactArrayWithPadding(int bitsPerEntry, int entries, long[] data)
+        internal static void IterateCompactArrayWithPadding(int bitsPerEntry, int entries, long[] data, Action<int, int> action)
         {
             var maxEntryValue = (1L << bitsPerEntry) - 1;
             var valuesPerLong = 64 / bitsPerEntry;
@@ -68,6 +68,8 @@ namespace NiaBukkit.Network.Protocol
                 var cellIndex = (int) ((ulong) i * divideMul + divideAdd >> 32 >> divideShift);
                 var bitIndex = (i - cellIndex * valuesPerLong) * bitsPerEntry;
                 var value = (int) (data[cellIndex] >> bitIndex & maxEntryValue);
+
+                action.Invoke(i, value);
             }
         }
     }

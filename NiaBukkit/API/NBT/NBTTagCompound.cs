@@ -22,7 +22,7 @@ namespace NiaBukkit.API.NBT
             while ((b = (byte) buf.ReadByte()) != 0)
             {
                 var tag = buf.ReadUtf();
-                Bukkit.ConsoleSender.SendMessage(tag);
+                // Bukkit.ConsoleSender.SendMessage(tag);
                 var nbt = LoadData(b, buf, complexity + 1);
                 _data.Add(tag, nbt);
             }

@@ -2370,6 +2370,235 @@ namespace NiaBukkit.API.Util
             return false;
         }
 
+        public static bool IsEdible(this Material m)
+        {
+            switch (m)
+            {
+                case Material.Apple: case Material.MushroomStew: case Material.Bread: case Material.Porkchop: case Material.CookedPorkchop: case Material.GoldenApple:
+                case Material.EnchantedGoldenApple: case Material.Cod: case Material.Salmon: case Material.TropicalFish: case Material.Pufferfish: case Material.CookedCod:
+                case Material.CookedSalmon: case Material.Cookie: case Material.MelonSlice: case Material.DriedKelp: case Material.Beef: case Material.CookedBeef:
+                case Material.Chicken: case Material.CookedChicken: case Material.RottenFlesh: case Material.SpiderEye: case Material.Carrot: case Material.Potato:
+                case Material.BakedPotato: case Material.PoisonousPotato: case Material.GoldenCarrot: case Material.PumpkinPie: case Material.Rabbit: case Material.CookedRabbit:
+                case Material.RabbitStew: case Material.Mutton: case Material.CookedMutton: case Material.ChorusFruit: case Material.Beetroot: case Material.BeetrootSoup:
+                case Material.SuspiciousStew: case Material.SweetBerries: case Material.HoneyBottle:
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsRecord(this Material m)
+        {
+            switch (m)
+            {
+                case Material.MusicDisc13: case Material.MusicDiscCat: case Material.MusicDiscBlocks: case Material.MusicDiscChirp:
+                case Material.MusicDiscFar: case Material.MusicDiscMall: case Material.MusicDiscMellohi: case Material.MusicDiscStal:
+                case Material.MusicDiscStrad: case Material.MusicDiscWard: case Material.MusicDisc11: case Material.MusicDiscWait:
+                case Material.MusicDiscPigstep:
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsSolid(this Material m)
+        {
+            if (!IsBlock(m))
+                return false;
+            switch (m)
+            {
+                case Material.Stone: case Material.Granite: case Material.PolishedGranite: case Material.Diorite: case Material.PolishedDiorite: case Material.Andesite:
+                case Material.PolishedAndesite: case Material.GrassBlock: case Material.Dirt: case Material.CoarseDirt: case Material.Podzol: case Material.CrimsonNylium:
+                case Material.WarpedNylium: case Material.Cobblestone: case Material.OakPlanks: case Material.SprucePlanks: case Material.BirchPlanks: case Material.JunglePlanks:
+                case Material.AcaciaPlanks: case Material.DarkOakPlanks: case Material.CrimsonPlanks: case Material.WarpedPlanks: case Material.Bedrock: case Material.Sand:
+                case Material.RedSand: case Material.Gravel: case Material.GoldOre: case Material.IronOre: case Material.CoalOre: case Material.NetherGoldOre: case Material.OakLog:
+                case Material.SpruceLog: case Material.BirchLog: case Material.JungleLog: case Material.AcaciaLog: case Material.DarkOakLog: case Material.CrimsonStem: case Material.WarpedStem:
+                case Material.StrippedOakLog: case Material.StrippedSpruceLog: case Material.StrippedBirchLog: case Material.StrippedJungleLog: case Material.StrippedAcaciaLog:
+                case Material.StrippedDarkOakLog: case Material.StrippedCrimsonStem: case Material.StrippedWarpedStem: case Material.StrippedOakWood: case Material.StrippedSpruceWood:
+                case Material.StrippedBirchWood: case Material.StrippedJungleWood: case Material.StrippedAcaciaWood: case Material.StrippedDarkOakWood: case Material.StrippedCrimsonHyphae:
+                case Material.StrippedWarpedHyphae: case Material.OakWood: case Material.SpruceWood: case Material.BirchWood: case Material.JungleWood: case Material.AcaciaWood:
+                case Material.DarkOakWood: case Material.CrimsonHyphae: case Material.WarpedHyphae: case Material.OakLeaves: case Material.SpruceLeaves: case Material.BirchLeaves:
+                case Material.JungleLeaves: case Material.AcaciaLeaves: case Material.DarkOakLeaves: case Material.Sponge: case Material.WetSponge: case Material.Glass: case Material.LapisOre:
+                case Material.LapisBlock: case Material.Dispenser: case Material.Sandstone: case Material.ChiseledSandstone: case Material.CutSandStone: case Material.NoteBlock:
+                case Material.StickyPiston: case Material.Piston: case Material.WhiteWool: case Material.OrangeWool: case Material.MagentaWool: case Material.LightBlueWool:
+                case Material.YellowWool: case Material.LimeWool: case Material.PinkWool: case Material.GrayWool: case Material.LightGrayWool: case Material.CyanWool: case Material.PurpleWool:
+                case Material.BlueWool: case Material.BrownWool: case Material.GreenWool: case Material.RedWool: case Material.BlackWool: case Material.Bamboo: case Material.GoldBlock:
+                case Material.IronBlock: case Material.OakSlab: case Material.SpruceSlab: case Material.BirchSlab: case Material.JungleSlab: case Material.AcaciaSlab: case Material.DarkOakSlab:
+                case Material.CrimsonSlab: case Material.WarpedSlab: case Material.StoneSlab: case Material.SmoothStoneSlab: case Material.SandstoneSlab: case Material.CutSandstoneSlab:
+                case Material.PetrifiedOakSlab: case Material.CobblestoneSlab: case Material.BrickSlab: case Material.StoneBrickSlab: case Material.NetherBrickSlab: case Material.QuartzSlab:
+                case Material.RedSandstoneSlab: case Material.CutRedSandstoneSlab: case Material.PurpurSlab: case Material.PrismarineSlab: case Material.PrismarineBrickSlab: case Material.DarkPrismarineSlab:
+                case Material.SmoothQuartz: case Material.SmoothRedSandstone: case Material.SmoothSandstone: case Material.SmoothStone: case Material.Bricks: case Material.Tnt: case Material.Bookshelf:
+                case Material.MossyCobblestone: case Material.Obsidian: case Material.PurpurBlock: case Material.PurpurPillar: case Material.PurpurStairs: case Material.Spawner: case Material.OakStairs:
+                case Material.Chest: case Material.DiamondOre: case Material.DiamondBlock: case Material.CraftingTable: case Material.Farmland: case Material.Furnace: case Material.CobblestoneStairs:
+                case Material.StonePressurePlate: case Material.OakPressurePlate: case Material.SprucePressurePlate: case Material.BirchPressurePlate: case Material.JunglePressurePlate: case Material.AcaciaPressurePlate:
+                case Material.DarkOakPressurePlate: case Material.CrimsonPressurePlate: case Material.WarpedPressurePlate: case Material.PolishedBlackstonePressurePlate: case Material.RedstoneOre: case Material.Ice:
+                case Material.SnowBlock: case Material.Cactus: case Material.Clay: case Material.Jukebox: case Material.OakFence: case Material.SpruceFence: case Material.BirchFence: case Material.JungleFence:
+                case Material.AcaciaFence: case Material.DarkOakFence: case Material.CrimsonFence: case Material.WarpedFence: case Material.Pumpkin: case Material.CarvedPumpkin: case Material.NetherRack:
+                case Material.SoulSand: case Material.SoulSoil: case Material.Basalt: case Material.PolishedBasalt: case Material.Glowstone: case Material.JackOLantern: case Material.OakTrapdoor: case Material.SpruceTrapdoor:
+                case Material.BirchTrapdoor: case Material.JungleTrapdoor: case Material.AcaciaTrapdoor: case Material.DarkOakTrapdoor: case Material.CrimsonTrapdoor: case Material.WarpedTrapdoor: case Material.InfestedStone:
+                case Material.InfestedCobblestone: case Material.InfestedStoneBricks: case Material.InfestedMossyStoneBricks: case Material.InfestedCrackedStoneBricks: case Material.InfestedChiseledStoneBricks:
+                case Material.StoneBricks: case Material.MossyStoneBricks: case Material.CrackedStoneBricks: case Material.ChiseledStoneBricks: case Material.BrownMushroomBlock: case Material.RedMushroomBlock:
+                case Material.MushroomStem: case Material.IronBars: case Material.Chain: case Material.GlassPane: case Material.Melon: case Material.OakFenceGate: case Material.SpruceFenceGate: case Material.BirchFenceGate:
+                case Material.JungleFenceGate: case Material.AcaciaFenceGate: case Material.DarkOakFenceGate: case Material.CrimsonFenceGate: case Material.WarpedFenceGate: case Material.BrickStairs: case Material.StoneBrickStairs:
+                case Material.Mycelium: case Material.NetherBricks: case Material.CrackedNetherBricks: case Material.ChiseledNetherBricks: case Material.NetherBrickFence: case Material.NetherBrickStairs: case Material.EnchantingTable:
+                case Material.EndPortalFrame: case Material.EndStone: case Material.EndStoneBricks: case Material.DragonEgg: case Material.RedstoneLamp: case Material.SandstoneStairs: case Material.EmeraldOre: case Material.EnderChest:
+                case Material.EmeraldBlock: case Material.SpruceStairs: case Material.BirchStairs: case Material.JungleStairs: case Material.CrimsonStairs: case Material.WarpedStairs: case Material.CommandBlock: case Material.Beacon:
+                case Material.CobblestoneWall: case Material.MossyCobblestoneWall: case Material.BrickWall: case Material.PrismarineWall: case Material.RedSandstoneWall: case Material.MossyStoneBrickWall: case Material.GraniteWall:
+                case Material.StoneBrickWall: case Material.NetherBrickWall: case Material.AndesiteWall: case Material.RedNetherBrickWall: case Material.SandstoneWall: case Material.EndStoneBrickWall: case Material.DioriteWall:
+                case Material.BlackstoneWall: case Material.PolishedBlackstoneWall: case Material.PolishedBlackstoneBrickWall: case Material.Anvil: case Material.ChippedAnvil: case Material.DamagedAnvil: case Material.TrappedChest:
+                case Material.LightWeightedPressurePlate: case Material.HeavyWeightedPressurePlate: case Material.DaylightDetector: case Material.RedstoneBlock: case Material.NetherQuartzOre: case Material.Hopper:
+                case Material.ChiseledQuartzBlock: case Material.QuartzBlock: case Material.QuartzBricks: case Material.QuartzPillar: case Material.QuartzStairs: case Material.Dropper: case Material.WhiteTerracotta:
+                case Material.OrangeTerracotta: case Material.MagentaTerracotta: case Material.LightBlueTerracotta: case Material.YellowTerracotta: case Material.LimeTerracotta: case Material.PinkTerracotta: case Material.GrayTerracotta:
+                case Material.LightGrayTerracotta: case Material.CyanTerracotta: case Material.PurpleTerracotta: case Material.BlueTerracotta: case Material.BrownTerracotta: case Material.GreenTerracotta: case Material.RedTerracotta:
+                case Material.BlackTerracotta: case Material.Barrier: case Material.IronTrapdoor: case Material.HayBlock: case Material.Terracotta: case Material.CoalBlock: case Material.PackedIce: case Material.AcaciaStairs:
+                case Material.DarkOakStairs: case Material.SlimeBlock: case Material.GrassPath: case Material.WhiteStainedGlass: case Material.OrangeStainedGlass: case Material.MagentaStainedGlass: case Material.LightBlueStainedGlass:
+                case Material.YellowStainedGlass: case Material.LimeStainedGlass: case Material.PinkStainedGlass: case Material.GrayStainedGlass: case Material.LightGrayStainedGlass: case Material.CyanStainedGlass: case Material.PurpleStainedGlass:
+                case Material.BlueStainedGlass: case Material.BrownStainedGlass: case Material.GreenStainedGlass: case Material.RedStainedGlass: case Material.BlackStainedGlass: case Material.WhiteStainedGlassPane: case Material.OrangeStainedGlassPane:
+                case Material.MagentaStainedGlassPane: case Material.LightBlueStainedGlassPane: case Material.YellowStainedGlassPane: case Material.LimeStainedGlassPane: case Material.PinkStainedGlassPane: case Material.GrayStainedGlassPane:
+                case Material.LightGrayStainedGlassPane: case Material.CyanStainedGlassPane: case Material.PurpleStainedGlassPane: case Material.BlueStainedGlassPane: case Material.BrownStainedGlassPane: case Material.GreenStainedGlassPane:
+                case Material.RedStainedGlassPane: case Material.BlackStainedGlassPane: case Material.Prismarine: case Material.PrismarineBricks: case Material.DarkPrismarine: case Material.PrismarineStairs: case Material.PrismarineBrickStairs:
+                case Material.DarkPrismarineStairs: case Material.SeaLantern: case Material.RedSandstone: case Material.ChiseledRedSandstone: case Material.CutRedSandstone: case Material.RedSandstoneStairs: case Material.RepeatingCommandBlock:
+                case Material.ChainCommandBlock: case Material.MagmaBlock: case Material.NetherWartBlock: case Material.WarpedWartBlock: case Material.RedNetherBricks: case Material.BoneBlock: case Material.Observer: case Material.ShulkerBox:
+                case Material.WhiteShulkerBox: case Material.OrangeShulkerBox: case Material.MagentaShulkerBox: case Material.LightBlueShulkerBox: case Material.YellowShulkerBox: case Material.LimeShulkerBox: case Material.PinkShulkerBox:
+                case Material.GrayShulkerBox: case Material.LightGrayShulkerBox: case Material.CyanShulkerBox: case Material.PurpleShulkerBox: case Material.BlueShulkerBox: case Material.BrownShulkerBox: case Material.GreenShulkerBox:
+                case Material.RedShulkerBox: case Material.BlackShulkerBox: case Material.WhiteGlazedTerracotta: case Material.OrangeGlazedTerracotta: case Material.MagentaGlazedTerracotta: case Material.LightBlueGlazedTerracotta: case Material.YellowGlazedTerracotta:
+                case Material.LimeGlazedTerracotta: case Material.PinkGlazedTerracotta: case Material.GrayGlazedTerracotta: case Material.LightGrayGlazedTerracotta: case Material.CyanGlazedTerracotta: case Material.PurpleGlazedTerracotta: case Material.BlueGlazedTerracotta:
+                case Material.BrownGlazedTerracotta: case Material.GreenGlazedTerracotta: case Material.RedGlazedTerracotta: case Material.BlackGlazedTerracotta: case Material.WhiteConcrete: case Material.OrangeConcrete: case Material.MagentaConcrete:
+                case Material.LightBlueConcrete: case Material.YellowConcrete: case Material.LimeConcrete: case Material.PinkConcrete: case Material.GrayConcrete: case Material.LightGrayConcrete: case Material.CyanConcrete: case Material.PurpleConcrete:
+                case Material.BlueConcrete: case Material.BrownConcrete: case Material.GreenConcrete: case Material.RedConcrete: case Material.BlackConcrete: case Material.WhiteConcretePowder: case Material.OrangeConcretePowder: case Material.MagentaConcretePowder:
+                case Material.LightBlueConcretePowder: case Material.YellowConcretePowder: case Material.LimeConcretePowder: case Material.PinkConcretePowder: case Material.GrayConcretePowder: case Material.LightGrayConcretePowder: case Material.CyanConcretePowder:
+                case Material.PurpleConcretePowder: case Material.BlueConcretePowder: case Material.BrownConcretePowder: case Material.GreenConcretePowder: case Material.RedConcretePowder: case Material.BlackConcretePowder: case Material.TurtleEgg: case Material.DeadTubeCoralBlock:
+                case Material.DeadBrainCoralBlock: case Material.DeadBubbleCoralBlock: case Material.DeadFireCoralBlock: case Material.DeadHornCoralBlock: case Material.TubeCoralBlock: case Material.BrainCoralBlock: case Material.BubbleCoralBlock: case Material.FireCoralBlock:
+                case Material.HornCoralBlock: case Material.DeadBrainCoral: case Material.DeadBubbleCoral: case Material.DeadFireCoral: case Material.DeadHornCoral: case Material.DeadTubeCoral: case Material.DeadTubeCoralFan: case Material.DeadBrainCoralFan: case Material.DeadBubbleCoralFan:
+                case Material.DeadFireCoralFan: case Material.DeadHornCoralFan: case Material.BlueIce: case Material.Conduit: case Material.PolishedGraniteStairs: case Material.SmoothRedSandstoneStairs: case Material.MossyStoneBrickStairs: case Material.PolishedDioriteStairs: case Material.MossyCobblestoneStairs:
+                case Material.EndStoneBrickStairs: case Material.StoneStairs: case Material.SmoothSandstoneStairs: case Material.SmoothQuartzStairs: case Material.GraniteStairs: case Material.AndesiteStairs: case Material.RedNetherBrickStairs: case Material.PolishedAndesiteStairs:
+                case Material.DioriteStairs: case Material.PolishedGraniteSlab: case Material.SmoothRedSandstoneSlab: case Material.MossyStoneBrickSlab: case Material.PolishedDioriteSlab: case Material.MossyCobblestoneSlab: case Material.EndStoneBrickSlab: case Material.SmoothSandstoneSlab:
+                case Material.SmoothQuartzSlab: case Material.GraniteSlab: case Material.AndesiteSlab: case Material.RedNetherBrickSlab: case Material.PolishedAndesiteSlab: case Material.DioriteSlab: case Material.IronDoor: case Material.OakDoor: case Material.SpruceDoor: case Material.BirchDoor:
+                case Material.JungleDoor: case Material.AcaciaDoor: case Material.DarkOakDoor: case Material.CrimsonDoor: case Material.WarpedDoor: case Material.StructureBlock: case Material.Jigsaw: case Material.OakSign: case Material.SpruceSign: case Material.BirchSign: case Material.JungleSign:
+                case Material.AcaciaSign: case Material.DarkOakSign: case Material.CrimsonSign: case Material.WarpedSign: case Material.DriedKelpBlock: case Material.Cake: case Material.WhiteBed: case Material.OrangeBed: case Material.MagentaBed: case Material.LightBlueBed: case Material.YellowBed:
+                case Material.LimeBed: case Material.PinkBed: case Material.GrayBed: case Material.LightGrayBed: case Material.CyanBed: case Material.PurpleBed: case Material.BlueBed: case Material.BrownBed: case Material.GreenBed: case Material.RedBed: case Material.BlackBed: case Material.BrewingStand:
+                case Material.Cauldron: case Material.WhiteBanner: case Material.OrangeBanner: case Material.MagentaBanner: case Material.LightBlueBanner: case Material.YellowBanner: case Material.LimeBanner: case Material.PinkBanner: case Material.GrayBanner: case Material.LightGrayBanner: case Material.CyanBanner:
+                case Material.PurpleBanner: case Material.BlueBanner: case Material.BrownBanner: case Material.GreenBanner: case Material.RedBanner: case Material.BlackBanner: case Material.Loom: case Material.Composter: case Material.Barrel: case Material.Smoker: case Material.BlastFurnace: case Material.CartographyTable:
+                case Material.FletchingTable: case Material.Grindstone: case Material.Lectern: case Material.SmithingTable: case Material.Stonecutter: case Material.Bell: case Material.Lantern: case Material.SoulLantern: case Material.Campfire: case Material.SoulCampfire: case Material.Shroomlight: case Material.BeeNest: case Material.Beehive:
+                case Material.HoneyBlock: case Material.HoneycombBlock: case Material.Lodestone: case Material.NetheriteBlock: case Material.AncientDebris: case Material.Target: case Material.CryingObsidian: case Material.Blackstone: case Material.BlackstoneSlab: case Material.BlackstoneStairs: case Material.GildedBlackstone: case Material.PolishedBlackstone:
+                case Material.PolishedBlackstoneSlab: case Material.PolishedBlackstoneStairs: case Material.ChiseledPolishedBlackstone: case Material.PolishedBlackstoneBricks: case Material.PolishedBlackstoneBrickSlab: case Material.PolishedBlackstoneBrickStairs: case Material.CrackedPolishedBlackstoneBricks: case Material.RespawnAnchor:
+                case Material.PistonHead: case Material.MovingPiston: case Material.OakWallSign: case Material.SpruceWallSign: case Material.BirchWallSign: case Material.AcaciaWallSign: case Material.JungleWallSign: case Material.DarkOakWallSign: case Material.WhiteWallBanner:
+                case Material.OrangeWallBanner: case Material.MagentaWallBanner: case Material.LightBlueWallBanner: case Material.YellowWallBanner: case Material.LimeWallBanner: case Material.PinkWallBanner: case Material.GrayWallBanner: case Material.LightGrayWallBanner: case Material.CyanWallBanner:
+                case Material.PurpleWallBanner: case Material.BlueWallBanner: case Material.BrownWallBanner: case Material.GreenWallBanner: case Material.RedWallBanner: case Material.BlackWallBanner: case Material.FrostedIce: case Material.DeadTubeCoralWallFan:
+                case Material.DeadBrainCoralWallFan: case Material.DeadBubbleCoralWallFan: case Material.DeadFireCoralWallFan: case Material.DeadHornCoralWallFan: case Material.CrimsonWallSign: case Material.WarpedWallSign:
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsAir(this Material m)
+        {
+            switch (m)
+            {
+                case Material.Air: case Material.CaveAir: case Material.VoidAir:
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsTransparent(this Material m)
+        {
+            switch (m)
+            {
+                case Material.Air: case Material.OakSapling: case Material.SpruceSapling: case Material.BirchSapling: case Material.JungleSapling: case Material.AcaciaSapling: case Material.DarkOakSapling:
+                case Material.PoweredRail: case Material.DetectorRail: case Material.Grass: case Material.Fern: case Material.DeadBush: case Material.Dandelion: case Material.Poppy: case Material.BlueOrchid:
+                case Material.Allium: case Material.AzureBluet: case Material.RedTulip: case Material.OrangeTulip: case Material.WhiteTulip: case Material.PinkTulip: case Material.OxeyeDaisy: case Material.BrownMushroom:
+                case Material.RedMushRoom: case Material.SugarCane: case Material.Torch: case Material.EndRod: case Material.ChorusPlant: case Material.ChorusFlower: case Material.Ladder: case Material.Rail:
+                case Material.Lever: case Material.RedstoneTorch: case Material.Snow: case Material.Vine: case Material.LilyPad: case Material.TripwireHook: case Material.StoneButton: case Material.OakButton:
+                case Material.SpruceButton: case Material.BirchButton: case Material.JungleButton: case Material.AcaciaButton: case Material.DarkOakButton: case Material.ActivatorRail: case Material.Barrier:
+                case Material.WhiteCarpet: case Material.OrangeCarpet: case Material.MagentaCarpet: case Material.LightBlueCarpet: case Material.YellowCarpet: case Material.LimeCarpet: case Material.PinkCarpet:
+                case Material.GrayCarpet: case Material.LightGrayCarpet: case Material.CyanCarpet: case Material.PurpleCarpet: case Material.BlueCarpet: case Material.BrownCarpet: case Material.GreenCarpet:
+                case Material.RedCarpet: case Material.BlackCarpet: case Material.Sunflower: case Material.Lilac: case Material.RoseBush: case Material.Peony: case Material.TallGrass: case Material.LargeFern:
+                case Material.StructureVoid: case Material.Repeater: case Material.Comparator: case Material.Wheat: case Material.NetherWart: case Material.FlowerPot: case Material.SkeletonSkull:
+                case Material.WitherSkeletonSkull: case Material.PlayerHead: case Material.ZombieHead: case Material.CreeperHead: case Material.DragonHead: case Material.WallTorch: case Material.Fire:
+                case Material.RedstoneWire: case Material.RedstoneWallTorch: case Material.NetherPortal: case Material.AttachedPumpkinStem: case Material.AttachedMelonStem: case Material.PumpkinStem:
+                case Material.MelonStem: case Material.EndPortal: case Material.Cocoa: case Material.Tripwire: case Material.PottedOakSapling: case Material.PottedSpruceSapling: case Material.PottedBirchSapling:
+                case Material.PottedJungleSapling: case Material.PottedAcaciaSapling: case Material.PottedDarkOakSapling: case Material.PottedFern: case Material.PottedDandelion: case Material.PottedPoppy:
+                case Material.PottedBlueOrchid: case Material.PottedAllium: case Material.PottedAzureBluet: case Material.PottedRedTulip: case Material.PottedOrangeTulip: case Material.PottedWhiteTulip:
+                case Material.PottedPinkTulip: case Material.PottedOxeyeDaisy: case Material.PottedRedMushroom: case Material.PottedBrownMushroom: case Material.PottedDeadBush: case Material.PottedCactus:
+                case Material.Carrots: case Material.Potatoes: case Material.SkeletonWallSkull: case Material.WitherSkeletonWallSkull: case Material.ZombieWallHead: case Material.PlayerWallHead:
+                case Material.CreeperWallHead: case Material.DragonWallHead: case Material.Beetroots: case Material.EndGateway: case Material.VoidAir: case Material.CaveAir:
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsFlammable(this Material m)
+        {
+            if (!IsBlock(m))
+                return false;
+
+            switch (m)
+            {
+                case Material.OakPlanks: case Material.SprucePlanks: case Material.BirchPlanks: case Material.JunglePlanks: case Material.AcaciaPlanks: case Material.DarkOakPlanks: case Material.OakLog: case Material.SpruceLog:
+                case Material.BirchLog: case Material.JungleLog: case Material.AcaciaLog: case Material.DarkOakLog: case Material.StrippedOakLog: case Material.StrippedSpruceLog: case Material.StrippedBirchLog: case Material.StrippedJungleLog:
+                case Material.StrippedAcaciaLog: case Material.StrippedDarkOakLog: case Material.StrippedOakWood: case Material.StrippedSpruceWood: case Material.StrippedBirchWood: case Material.StrippedJungleWood: case Material.StrippedAcaciaWood:
+                case Material.StrippedDarkOakWood: case Material.OakWood: case Material.SpruceWood: case Material.BirchWood: case Material.JungleWood: case Material.AcaciaWood: case Material.DarkOakWood: case Material.OakLeaves: case Material.SpruceLeaves:
+                case Material.BirchLeaves: case Material.JungleLeaves: case Material.AcaciaLeaves: case Material.DarkOakLeaves: case Material.NoteBlock: case Material.Grass: case Material.Fern: case Material.DeadBush: case Material.WhiteWool:
+                case Material.OrangeWool: case Material.MagentaWool: case Material.LightBlueWool: case Material.YellowWool: case Material.LimeWool: case Material.PinkWool: case Material.GrayWool: case Material.LightGrayWool: case Material.CyanWool:
+                case Material.PurpleWool: case Material.BlueWool: case Material.BrownWool: case Material.GreenWool: case Material.RedWool: case Material.BlackWool: case Material.Bamboo: case Material.OakSlab: case Material.SpruceSlab:
+                case Material.BirchSlab: case Material.JungleSlab: case Material.AcaciaSlab: case Material.DarkOakSlab: case Material.Tnt: case Material.Bookshelf: case Material.OakStairs: case Material.Chest: case Material.CraftingTable:
+                case Material.OakPressurePlate: case Material.SprucePressurePlate: case Material.BirchPressurePlate: case Material.JunglePressurePlate: case Material.AcaciaPressurePlate: case Material.DarkOakPressurePlate: case Material.Jukebox:
+                case Material.OakFence: case Material.SpruceFence: case Material.BirchFence: case Material.JungleFence: case Material.AcaciaFence: case Material.DarkOakFence: case Material.OakTrapdoor: case Material.SpruceTrapdoor: case Material.BirchTrapdoor:
+                case Material.JungleTrapdoor: case Material.AcaciaTrapdoor: case Material.DarkOakTrapdoor: case Material.BrownMushroomBlock: case Material.RedMushroomBlock: case Material.MushroomStem: case Material.Vine: case Material.OakFenceGate:
+                case Material.SpruceFenceGate: case Material.BirchFenceGate: case Material.JungleFenceGate: case Material.AcaciaFenceGate: case Material.DarkOakFenceGate: case Material.SpruceStairs: case Material.BirchStairs: case Material.JungleStairs:
+                case Material.TrappedChest: case Material.DaylightDetector: case Material.WhiteCarpet: case Material.OrangeCarpet: case Material.MagentaCarpet: case Material.LightBlueCarpet: case Material.YellowCarpet: case Material.LimeCarpet:
+                case Material.PinkCarpet: case Material.GrayCarpet: case Material.LightGrayCarpet: case Material.CyanCarpet: case Material.PurpleCarpet: case Material.BlueCarpet: case Material.BrownCarpet: case Material.GreenCarpet: case Material.RedCarpet:
+                case Material.BlackCarpet: case Material.AcaciaStairs: case Material.DarkOakStairs: case Material.Sunflower: case Material.Lilac: case Material.RoseBush: case Material.Peony: case Material.TallGrass: case Material.LargeFern: case Material.OakDoor:
+                case Material.SpruceDoor: case Material.BirchDoor: case Material.JungleDoor: case Material.AcaciaDoor: case Material.DarkOakDoor: case Material.OakSign: case Material.SpruceSign: case Material.BirchSign: case Material.JungleSign:
+                case Material.AcaciaSign: case Material.DarkOakSign: case Material.WhiteBed: case Material.OrangeBed: case Material.MagentaBed: case Material.LightBlueBed: case Material.YellowBed: case Material.LimeBed: case Material.PinkBed:
+                case Material.GrayBed: case Material.LightGrayBed: case Material.CyanBed: case Material.PurpleBed: case Material.BlueBed: case Material.BrownBed: case Material.GreenBed: case Material.RedBed: case Material.BlackBed: case Material.WhiteBanner:
+                case Material.OrangeBanner: case Material.MagentaBanner: case Material.LightBlueBanner: case Material.YellowBanner: case Material.LimeBanner: case Material.PinkBanner: case Material.GrayBanner: case Material.LightGrayBanner: case Material.CyanBanner:
+                case Material.PurpleBanner: case Material.BlueBanner: case Material.BrownBanner: case Material.GreenBanner: case Material.RedBanner: case Material.BlackBanner: case Material.Loom: case Material.Composter: case Material.Barrel:
+                case Material.CartographyTable: case Material.FletchingTable: case Material.Lectern: case Material.SmithingTable: case Material.Campfire: case Material.SoulCampfire: case Material.BeeNest: case Material.Beehive: case Material.OakWallSign:
+                case Material.SpruceWallSign: case Material.BirchWallSign: case Material.AcaciaWallSign: case Material.JungleWallSign: case Material.DarkOakWallSign: case Material.WhiteWallBanner: case Material.OrangeWallBanner: case Material.MagentaWallBanner:
+                case Material.LightBlueWallBanner: case Material.YellowWallBanner: case Material.LimeWallBanner: case Material.PinkWallBanner: case Material.GrayWallBanner: case Material.LightGrayWallBanner: case Material.CyanWallBanner: case Material.PurpleWallBanner:
+                case Material.BlueWallBanner: case Material.BrownWallBanner: case Material.GreenWallBanner: case Material.RedWallBanner: case Material.BlackWallBanner: case Material.BambooSapling:
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsFuel(this Material m)
+        {
+            switch (m)
+            {
+                case Material.OakPlanks: case Material.SprucePlanks: case Material.BirchPlanks: case Material.JunglePlanks: case Material.AcaciaPlanks: case Material.DarkOakPlanks: case Material.OakSapling: case Material.SpruceSapling:
+                case Material.BirchSapling: case Material.JungleSapling: case Material.AcaciaSapling: case Material.DarkOakSapling: case Material.OakLog: case Material.SpruceLog: case Material.BirchLog: case Material.JungleLog:
+                case Material.AcaciaLog: case Material.DarkOakLog: case Material.StrippedOakLog: case Material.StrippedSpruceLog: case Material.StrippedBirchLog: case Material.StrippedJungleLog: case Material.StrippedAcaciaLog:
+                case Material.StrippedDarkOakLog: case Material.StrippedOakWood: case Material.StrippedSpruceWood: case Material.StrippedBirchWood: case Material.StrippedJungleWood: case Material.StrippedAcaciaWood: case Material.StrippedDarkOakWood:
+                case Material.OakWood: case Material.SpruceWood: case Material.BirchWood: case Material.JungleWood: case Material.AcaciaWood: case Material.DarkOakWood: case Material.NoteBlock: case Material.DeadBush: case Material.WhiteWool:
+                case Material.OrangeWool: case Material.MagentaWool: case Material.LightBlueWool: case Material.YellowWool: case Material.LimeWool: case Material.PinkWool: case Material.GrayWool: case Material.LightGrayWool: case Material.CyanWool:
+                case Material.PurpleWool: case Material.BlueWool: case Material.BrownWool: case Material.GreenWool: case Material.RedWool: case Material.BlackWool: case Material.Bamboo: case Material.OakSlab: case Material.SpruceSlab:
+                case Material.BirchSlab: case Material.JungleSlab: case Material.AcaciaSlab: case Material.DarkOakSlab: case Material.Bookshelf: case Material.OakStairs: case Material.Chest: case Material.CraftingTable: case Material.Ladder:
+                case Material.OakPressurePlate: case Material.SprucePressurePlate: case Material.BirchPressurePlate: case Material.JunglePressurePlate: case Material.AcaciaPressurePlate: case Material.DarkOakPressurePlate: case Material.Jukebox:
+                case Material.OakFence: case Material.SpruceFence: case Material.BirchFence: case Material.JungleFence: case Material.AcaciaFence: case Material.DarkOakFence: case Material.OakTrapdoor: case Material.SpruceTrapdoor: case Material.BirchTrapdoor:
+                case Material.JungleTrapdoor: case Material.AcaciaTrapdoor: case Material.DarkOakTrapdoor: case Material.OakFenceGate: case Material.SpruceFenceGate: case Material.BirchFenceGate: case Material.JungleFenceGate: case Material.AcaciaFenceGate:
+                case Material.DarkOakFenceGate: case Material.SpruceStairs: case Material.BirchStairs: case Material.JungleStairs: case Material.OakButton: case Material.SpruceButton: case Material.BirchButton: case Material.JungleButton: case Material.AcaciaButton:
+                case Material.DarkOakButton: case Material.TrappedChest: case Material.DaylightDetector: case Material.WhiteCarpet: case Material.OrangeCarpet: case Material.MagentaCarpet: case Material.LightBlueCarpet: case Material.YellowCarpet:
+                case Material.LimeCarpet: case Material.PinkCarpet: case Material.GrayCarpet: case Material.LightGrayCarpet: case Material.CyanCarpet: case Material.PurpleCarpet: case Material.BlueCarpet: case Material.BrownCarpet: case Material.GreenCarpet:
+                case Material.RedCarpet: case Material.BlackCarpet: case Material.CoalBlock: case Material.AcaciaStairs: case Material.DarkOakStairs: case Material.Scaffolding: case Material.OakDoor: case Material.SpruceDoor: case Material.BirchDoor: case Material.JungleDoor:
+                case Material.AcaciaDoor: case Material.DarkOakDoor: case Material.Bow: case Material.Coal: case Material.Charcoal: case Material.WoodenSword: case Material.WoodenShovel: case Material.WoodenPickaxe: case Material.WoodenAxe: case Material.WoodenHoe:
+                case Material.Stick: case Material.Bowl: case Material.OakSign: case Material.SpruceSign: case Material.BirchSign: case Material.JungleSign: case Material.AcaciaSign: case Material.DarkOakSign: case Material.LavaBucket: case Material.OakBoat:
+                case Material.DriedKelpBlock: case Material.FishingRod: case Material.BlazeRod: case Material.WhiteBanner: case Material.OrangeBanner: case Material.MagentaBanner: case Material.LightBlueBanner: case Material.YellowBanner: case Material.LimeBanner:
+                case Material.PinkBanner: case Material.GrayBanner: case Material.LightGrayBanner: case Material.CyanBanner: case Material.PurpleBanner: case Material.BlueBanner: case Material.BrownBanner: case Material.GreenBanner: case Material.RedBanner:
+                case Material.BlackBanner: case Material.SpruceBoat: case Material.BirchBoat: case Material.JungleBoat: case Material.DarkOakBoat: case Material.Crossbow: case Material.Loom: case Material.Composter: case Material.Barrel: case Material.CartographyTable:
+                case Material.FletchingTable: case Material.Lectern: case Material.SmithingTable:
+                    return true;
+            }
+
+            return false;
+        }
+
         public static string GetName(this Material m)
         {
             var origin = m.ToString();

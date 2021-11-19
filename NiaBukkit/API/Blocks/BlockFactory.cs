@@ -1,36 +1,38 @@
 ﻿using System;
+using NiaBukkit.API.Blocks.Data;
+using NiaBukkit.API.Sounds;
 using NiaBukkit.API.Util;
 
 namespace NiaBukkit.API.Blocks
 {
     public static class BlockFactory
     {
-        public static readonly BlockData Air;
-        public static readonly BlockData Stone;
-        public static readonly BlockData Granite;
-        public static readonly BlockData PolishedGranite;
-        public static readonly BlockData Diorite;
-        public static readonly BlockData PolishedDiorite;
-        public static readonly BlockData Andesite;
-        public static readonly BlockData PolishedAndesite;
-        public static readonly BlockData GrassBlock;
-        public static readonly BlockData Dirt;
-        public static readonly BlockData CoarseDirt;
-        public static readonly BlockData Podzol;
-        public static readonly BlockData Cobblestone;
-        public static readonly BlockData OakPlanks;
-        public static readonly BlockData SprucePlanks;
-        public static readonly BlockData BirchPlanks;
-        public static readonly BlockData JunglePlanks;
-        public static readonly BlockData AcaciaPlanks;
-        public static readonly BlockData DarkOakPlanks;
+        public static readonly BlockData Air = Init(new BlockData(Material.Air));
+        public static readonly BlockData Stone = Init(new BlockData(Material.Stone).SetBlockData(1.5F, 6));
+        public static readonly BlockData Granite = Init(new BlockData(Material.Granite).SetBlockData(1.5F, 6));
+        public static readonly BlockData PolishedGranite = Init(new BlockData(Material.PolishedGranite).SetBlockData(1.5F, 6));
+        public static readonly BlockData Diorite = Init(new BlockData(Material.Diorite).SetBlockData(1.5F, 6));
+        public static readonly BlockData PolishedDiorite = Init(new BlockData(Material.PolishedDiorite).SetBlockData(1.5F,6));
+        public static readonly BlockData Andesite = Init(new BlockData(Material.Andesite).SetBlockData(1.5F, 6));
+        public static readonly BlockData PolishedAndesite = Init(new BlockData(Material.PolishedAndesite).SetBlockData(1.5F, 6));
+        public static readonly BlockData GrassBlock = Init(new BlockGrass(Material.GrassBlock).SetDurability(.6F).SetSound(SoundEffectType.GrassEffect));
+        public static readonly BlockData Dirt = Init(new BlockData(Material.Dirt).SetDurability(.5F).SetSound(SoundEffectType.DirtEffect));
+        public static readonly BlockData CoarseDirt = Init(new BlockData(Material.CoarseDirt).SetDurability(.5F).SetSound(SoundEffectType.DirtEffect));
+        public static readonly BlockData Podzol = Init(new BlockDirtSnow(Material.Podzol).SetDurability(.5F).SetSound(SoundEffectType.DirtEffect));
+        public static readonly BlockData Cobblestone = Init(new BlockData(Material.Cobblestone).SetBlockData(2, 6));
+        public static readonly BlockData OakPlanks = Init(new BlockData(Material.OakPlanks).SetBlockData(2, 3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData SprucePlanks = Init(new BlockData(Material.SprucePlanks).SetBlockData(2, 3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData BirchPlanks = Init(new BlockData(Material.BirchPlanks).SetBlockData(2, 3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData JunglePlanks = Init(new BlockData(Material.JunglePlanks).SetBlockData(2, 3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData AcaciaPlanks = Init(new BlockData(Material.AcaciaPlanks).SetBlockData(2, 3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData DarkOakPlanks = Init(new BlockData(Material.DarkOakPlanks).SetBlockData(2, 3).SetSound(SoundEffectType.WoodEffect));
         public static readonly BlockData OakSapling;
         public static readonly BlockData SpruceSapling;
         public static readonly BlockData BirchSapling;
         public static readonly BlockData JungleSapling;
         public static readonly BlockData AcaciaSapling;
         public static readonly BlockData DarkOakSapling;
-        public static readonly BlockData Bedrock;
+        public static readonly BlockData Bedrock = Init(new BlockData(Material.Bedrock).SetBlockData(-1, 3600000));
         public static readonly BlockData Water;
         public static readonly BlockData Lava;
         public static readonly BlockData Sand;
@@ -72,13 +74,13 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData DarkOakLeaves;
         public static readonly BlockData Sponge;
         public static readonly BlockData WetSponge;
-        public static readonly BlockData Glass;
+        public static readonly BlockData Glass = Init(new BlockData(Material.Glass).SetDurability(.3F).SetSound(SoundEffectType.GlassEffect));
         public static readonly BlockData LapisOre;
         public static readonly BlockData LapisBlock;
         public static readonly BlockData Dispenser;
-        public static readonly BlockData Sandstone;
-        public static readonly BlockData ChiseledSandstone;
-        public static readonly BlockData CutSandstone;
+        public static readonly BlockData Sandstone = Init(new BlockData(Material.Sandstone).SetDurability(.8F));
+        public static readonly BlockData ChiseledSandstone = Init(new BlockData(Material.ChiseledSandstone).SetDurability(.8F));
+        public static readonly BlockData CutSandstone = Init(new BlockData(Material.CutSandStone).SetDurability(.8F));
         public static readonly BlockData NoteBlock;
         public static readonly BlockData WhiteBed;
         public static readonly BlockData OrangeBed;
@@ -107,22 +109,22 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData TallSeagrass;
         public static readonly BlockData Piston;
         public static readonly BlockData PistonHead;
-        public static readonly BlockData WhiteWool;
-        public static readonly BlockData OrangeWool;
-        public static readonly BlockData MagentaWool;
-        public static readonly BlockData LightBlueWool;
-        public static readonly BlockData YellowWool;
-        public static readonly BlockData LimeWool;
-        public static readonly BlockData PinkWool;
-        public static readonly BlockData GrayWool;
-        public static readonly BlockData LightGrayWool;
-        public static readonly BlockData CyanWool;
-        public static readonly BlockData PurpleWool;
-        public static readonly BlockData BlueWool;
-        public static readonly BlockData BrownWool;
-        public static readonly BlockData GreenWool;
-        public static readonly BlockData RedWool;
-        public static readonly BlockData BlackWool;
+        public static readonly BlockData WhiteWool = Init(new BlockData(Material.WhiteWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData OrangeWool = Init(new BlockData(Material.OrangeWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData MagentaWool = Init(new BlockData(Material.MagentaWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData LightBlueWool = Init(new BlockData(Material.LightBlueWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData YellowWool = Init(new BlockData(Material.YellowWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData LimeWool = Init(new BlockData(Material.LimeWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData PinkWool = Init(new BlockData(Material.PinkWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData GrayWool = Init(new BlockData(Material.GrayWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData LightGrayWool = Init(new BlockData(Material.LightGrayWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData CyanWool = Init(new BlockData(Material.CyanWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData PurpleWool = Init(new BlockData(Material.PurpleWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData BlueWool = Init(new BlockData(Material.BlueWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData BrownWool = Init(new BlockData(Material.BrownWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData GreenWool = Init(new BlockData(Material.GreenWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData RedWool = Init(new BlockData(Material.RedWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
+        public static readonly BlockData BlackWool = Init(new BlockData(Material.BlackWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
         public static readonly BlockData MovingPiston;
         public static readonly BlockData Dandelion;
         public static readonly BlockData Poppy;
@@ -348,22 +350,22 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData QuartzStairs;
         public static readonly BlockData ActivatorRail;
         public static readonly BlockData Dropper;
-        public static readonly BlockData WhiteTerracotta;
-        public static readonly BlockData OrangeTerracotta;
-        public static readonly BlockData MagentaTerracotta;
-        public static readonly BlockData LightBlueTerracotta;
-        public static readonly BlockData YellowTerracotta;
-        public static readonly BlockData LimeTerracotta;
-        public static readonly BlockData PinkTerracotta;
-        public static readonly BlockData GrayTerracotta;
-        public static readonly BlockData LightGrayTerracotta;
-        public static readonly BlockData CyanTerracotta;
-        public static readonly BlockData PurpleTerracotta;
-        public static readonly BlockData BlueTerracotta;
-        public static readonly BlockData BrownTerracotta;
-        public static readonly BlockData GreenTerracotta;
-        public static readonly BlockData RedTerracotta;
-        public static readonly BlockData BlackTerracotta;
+        public static readonly BlockData WhiteTerracotta = Init(new BlockData(Material.WhiteTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData OrangeTerracotta = Init(new BlockData(Material.OrangeTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData MagentaTerracotta = Init(new BlockData(Material.MagentaTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData LightBlueTerracotta = Init(new BlockData(Material.LightBlueTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData YellowTerracotta = Init(new BlockData(Material.YellowTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData LimeTerracotta = Init(new BlockData(Material.LimeTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData PinkTerracotta = Init(new BlockData(Material.PinkTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData GrayTerracotta = Init(new BlockData(Material.GrayTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData LightGrayTerracotta = Init(new BlockData(Material.LightGrayTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData CyanTerracotta = Init(new BlockData(Material.CyanTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData PurpleTerracotta = Init(new BlockData(Material.PurpleTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData BlueTerracotta = Init(new BlockData(Material.BlueTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData BrownTerracotta = Init(new BlockData(Material.BrownTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData GreenTerracotta = Init(new BlockData(Material.GreenTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData RedTerracotta = Init(new BlockData(Material.RedTerracotta).SetBlockData(1.25F, 4.2F));
+        public static readonly BlockData BlackTerracotta = Init(new BlockData(Material.BlackTerracotta).SetBlockData(1.25F, 4.2F));
         public static readonly BlockData WhiteStainedGlassPane;
         public static readonly BlockData OrangeStainedGlassPane;
         public static readonly BlockData MagentaStainedGlassPane;
@@ -503,7 +505,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData PurpurStairs;
         public static readonly BlockData EndStoneBricks;
         public static readonly BlockData Beetroots;
-        public static readonly BlockData GrassPath;
+        public static readonly BlockData GrassPath = Init(new BlockGrassPath(Material.GrassPath).SetDurability(.65F).SetSound(SoundEffectType.GrassEffect));
         public static readonly BlockData EndGateway;
         public static readonly BlockData RepeatingCommandBlock;
         public static readonly BlockData ChainCommandBlock;
@@ -770,13 +772,13 @@ namespace NiaBukkit.API.Blocks
 
         private static BlockData Init(BlockData blockData)
         {
-            BlockData.Materials.Add(blockData.Type.GetName(), blockData);
-
+            BlockData.Materials.Add($"minecraft:{blockData.Type.GetName()}", blockData);
             return blockData;
         }
 
         internal static void InitBlocks()
         {
+            Air.Update(null);
             foreach (var (_, blockData) in BlockData.Materials)
             {
                 var id = blockData.Type.GetLegacyId() << 4 | blockData.Type.GetLegacySubId();
