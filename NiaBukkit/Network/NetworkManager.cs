@@ -16,9 +16,7 @@ namespace NiaBukkit.Network
 {
     public class NetworkManager
     {
-        internal static readonly ConcurrentBag<NetworkManager> NetworkManagers = new ConcurrentBag<NetworkManager>();
-
-        internal long LastPacketMillis = 0;
+        internal long LastPacketMillis = TimeManager.CurrentTimeMillis;
         internal readonly TcpClient Client;
         
         public bool IsAvailable { get; private set; }
@@ -42,22 +40,15 @@ namespace NiaBukkit.Network
             IsAvailable = true;
             
             Client = client;
-            LastPacketMillis = TimeManager.CurrentTimeMillis;
-            
-            NetworkManagers.Add(this);
         }
 
         internal void Disconnect()
         {
             IsAvailable = false;
-            
-            NetworkManager manager = this;
-            NetworkManagers.Remove(manager);
 
             if (Player != null)
                 Bukkit.RemovePlayer(Player);
-
-            Bukkit.MinecraftServer.AddDestroySocket(this);
+            
             // TODO: Client Disconnected
         }
 
@@ -111,7 +102,7 @@ namespace NiaBukkit.Network
 
         private int TeleportAwaitUpdate()
         {
-            if (++_teleportAwait == Int32.MaxValue)
+            if (++_teleportAwait == int.MaxValue)
                 _teleportAwait = 0;
 
             return _teleportAwait;
@@ -224,10 +215,10 @@ namespace NiaBukkit.Network
         public void SendPacket(Packet packet)
         {
             if (Client is not {Connected: true}) return;
-            ByteBuf buf = new ByteBuf();
+            var buf = new ByteBuf();
             packet.Write(buf, Protocol);
 
-            byte[] data = buf.Flush();
+            var data = buf.Flush();
 
             try
             {

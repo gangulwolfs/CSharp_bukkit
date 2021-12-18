@@ -22,6 +22,18 @@
             SoundEffects.BlockGlassStep, SoundEffects.BlockGlassPlace, SoundEffects.BlockGlassHit,
             SoundEffects.BlockGlassFall);
 
+        public static readonly SoundEffectType MetalEffect = new(1, 1, SoundEffects.BlockMetalBreak,
+            SoundEffects.BlockMetalStep, SoundEffects.BlockMetalPlace, SoundEffects.BlockMetalHit,
+            SoundEffects.BlockMetalFall);
+
+        public static readonly SoundEffectType GravelEffect = new(1, 1, SoundEffects.BlockGravelBreak,
+            SoundEffects.BlockGravelStep, SoundEffects.BlockGravelPlace, SoundEffects.BlockGravelHit,
+            SoundEffects.BlockGravelFall);
+
+        public static readonly SoundEffectType NetherBricksEffect = new(1, 1, SoundEffects.BlockNetherBricksBreak,
+            SoundEffects.BlockNetherBricksStep, SoundEffects.BlockNetherBricksPlace, SoundEffects.BlockNetherBricksHit,
+            SoundEffects.BlockNetherBricksFall);
+
 
 
 

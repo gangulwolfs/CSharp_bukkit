@@ -12,7 +12,7 @@ namespace NiaBukkit.API.World.Chunks
         
         internal static Chunk GetChunk(World world, int x, int z)
         {
-            var buf = RegionFile.Load($"D:/마인크래프트/1.12.2/world/region/r.{x >> 5}.{z >> 5}.mca", x, z);
+            var buf = RegionFile.Load($"D:/마인크래프트/1.16.5/world/region/r.{x >> 5}.{z >> 5}.mca", x, z);
             if (buf == null)
                 return null;
 
@@ -91,13 +91,15 @@ namespace NiaBukkit.API.World.Chunks
             var blockStateList = nbtTagCompound.GetLongArray("BlockStates");
             
             var section = new ChunkSection(yPos);
-
-            var bits = blockStateList.Length * 64 / 4096;
+            var bits = blockStateList.Length * 64 / ChunkSection.Size;
 
             for (var i = 0; i < paletteList.Length; i++)
             {
                 if(paletteList[i] is not NBTTagCompound paletteCompound) continue;
-                section.GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(paletteCompound.GetString("Name")).Type);
+                // if(paletteCompound.HasKey("Properties"))
+                Bukkit.ConsoleSender.SendMessage(paletteCompound);
+                
+                section.GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(paletteCompound.GetString("Name")).GetBlockData(paletteCompound.GetCompound("Properties")).Type);
             }
             ChunkDataVersionUtil.IterateCompactArrayWithPadding(bits, ChunkSection.Size,
                 blockStateList, section.SetBlock);

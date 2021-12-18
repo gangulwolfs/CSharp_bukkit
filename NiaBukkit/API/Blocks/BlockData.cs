@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NiaBukkit.API.NBT;
 using NiaBukkit.API.Sounds;
 using NiaBukkit.API.Util;
 
@@ -20,7 +21,7 @@ namespace NiaBukkit.API.Blocks
         {
             Type = type;
         }
-        
+
         public static BlockData GetBlockDataById(int id, byte subId = 0)
         {
             LegacyMaterials.TryGetValue(id << 4 | subId, out var block);
@@ -56,6 +57,16 @@ namespace NiaBukkit.API.Blocks
 
         internal virtual void Update(BlockPosition position)
         {
+        }
+
+        internal virtual BlockData GetBlockData(NBTTagCompound properties)
+        {
+            return new BlockData(Type).SetBlockData(Speed, Durability).SetSound(SoundEffectType);
+        }
+
+        internal BlockData GetBlockData(BlockData blockData)
+        {
+            return blockData.SetBlockData(Speed, Durability).SetSound(SoundEffectType);
         }
     }
 }

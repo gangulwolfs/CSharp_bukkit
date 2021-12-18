@@ -106,10 +106,15 @@ namespace NiaBukkit.API.Entities
 			_currentChunkCoord = new ChunkCoord(World, (int) Location.X >> 4, (int) Location.Z >> 4);
 
 			var radius = ServerProperties.ViewDistance;
+			if(!_loadedChunk.Contains(_currentChunkCoord))
+				WorldThreadManager.AddRequireChunk(_currentChunkCoord, this);
+			
 			for (var x = -radius; x <= radius; x++)
 			{
 				for (var z = -radius; z <= radius; z++)
 				{
+					if(x == 0 && z == 0) continue;
+					
 					var target = new ChunkCoord(World, _currentChunkCoord.X + x, _currentChunkCoord.Z + z);
 					if(!_loadedChunk.Contains(target))
 						WorldThreadManager.AddRequireChunk(target, this);

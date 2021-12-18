@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
@@ -23,8 +24,10 @@ namespace NiaBukkit.Network
         private TcpListener _listener;
         private const int Timeout = 25000;
         
-        public bool IsAvilable { get; private set; }
-        private readonly ConcurrentQueue<NetworkManager> _destroySockets = new ConcurrentQueue<NetworkManager>();
+        internal static readonly ConcurrentBag<NetworkManager> NetworkManagers = new();
+        
+        public bool IsAvailable { get; private set; }
+        private readonly ConcurrentQueue<NetworkManager> _destroySockets = new();
 
         internal MinecraftServer()
         {
@@ -34,12 +37,17 @@ namespace NiaBukkit.Network
 		
 		private void Init()
 		{
-            IsAvilable = true;
+            IsAvailable = true;
 			
-            _listener = new TcpListener(IPAddress.Any, ServerProperties.Port);
-            _listener.Server.NoDelay = true;
-            _listener.Server.SendTimeout = 500;
-			
+            _listener = new TcpListener(IPAddress.Any, ServerProperties.Port)
+            {
+                Server =
+                {
+                    NoDelay = true,
+                    SendTimeout = 500
+                }
+            };
+
             ServerKey = SelfCryptography.GenerateKeyPair();
 		}
 		
@@ -63,16 +71,11 @@ namespace NiaBukkit.Network
             ThreadFactory.LaunchThread(new Thread(EntityThreadManager.Worker), false).Name = "Entity Thread";
         }
 
-        internal void AddDestroySocket(NetworkManager networkManager)
-        {
-            _destroySockets.Enqueue(networkManager);
-        }
-
         private void AcceptSocketWorker()
         {
-            while (IsAvilable)
+            while (IsAvailable)
             {
-                new NetworkManager(_listener.AcceptTcpClient());
+                NetworkManagers.Add(new NetworkManager(_listener.AcceptTcpClient()));
             }
         }
 
@@ -80,17 +83,22 @@ namespace NiaBukkit.Network
         [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.Network.NetworkManager[]")]
         private void ClientUpdateWorker()
         {
-            while (IsAvilable)
+            while (IsAvailable)
             {
-                long currentTimeMillis = TimeManager.CurrentTimeMillis;
-                foreach (var networkManager in NetworkManager.NetworkManagers)
+                var currentTimeMillis = TimeManager.CurrentTimeMillis;
+                foreach (var networkManager in NetworkManagers)
                 {
                     if (networkManager is not {IsAvailable: true})
+                    {
+                        if(!_destroySockets.Contains(networkManager))
+                            _destroySockets.Enqueue(networkManager);
                         continue;
-                    
+                    }
+
                     if (networkManager.Client is not {Connected: true} || currentTimeMillis - networkManager.LastPacketMillis > Timeout)
                     {
                         networkManager.Disconnect();
+                        _destroySockets.Enqueue(networkManager);
                         continue;
                     }
                     
@@ -101,15 +109,14 @@ namespace NiaBukkit.Network
 
         private void ClientDestroyWorker()
         {
-            while (IsAvilable)
+            while (IsAvailable)
             {
                 while(!_destroySockets.IsEmpty)
                 {
-                    NetworkManager networkManager;
-                    if(!_destroySockets.TryDequeue(out networkManager)) continue;
+                    if(!_destroySockets.TryDequeue(out var networkManager)) continue;
                     
-                    if(networkManager.Client != null && networkManager.Client.Connected) networkManager.Client.Close();
-                    NetworkManager.NetworkManagers.Remove(networkManager);
+                    if(networkManager.Client is {Connected: true}) networkManager.Client.Close();
+                    NetworkManagers.Remove(networkManager);
                 }
             }
         }
@@ -121,7 +128,7 @@ namespace NiaBukkit.Network
 
         internal static void BroadcastInWorld(Player sender, World world, Packet packet, bool me = true)
         {
-            foreach (Player player in world.Players)
+            foreach (var player in world.Players)
             {
                 if(player == sender && !me) continue;
                 ((EntityPlayer) player).NetworkManager.SendPacket(packet);
@@ -130,7 +137,7 @@ namespace NiaBukkit.Network
 
         internal static void Broadcast(Packet packet)
         {
-            foreach (Player player in Bukkit.OnlinePlayers)
+            foreach (var player in Bukkit.OnlinePlayers)
             {
                 ((EntityPlayer) player).NetworkManager.SendPacket(packet);
             }

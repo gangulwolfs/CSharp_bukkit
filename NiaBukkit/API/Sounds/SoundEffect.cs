@@ -16,6 +16,6 @@ namespace NiaBukkit.API.Sounds
         {
             SoundEffects.TryGetValue(name, out var effect);
             return effect;
-        } 
+        }
     }
 }

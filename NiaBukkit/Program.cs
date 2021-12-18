@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Text;
 using System.Threading;
 using NiaBukkit.API;
@@ -12,11 +11,11 @@ using NiaBukkit.Network;
 
 namespace NiaBukkit
 {
-    class Program
+    public static class Program
     {
         public const string Name = "MC";
-        
-        static void Main(string[] args)
+
+        private static void Main()
         {
             Console.WriteLine("Loading libraries, please wait...");
             Init();
@@ -30,8 +29,8 @@ namespace NiaBukkit
 
             Console.CancelKeyPress += ConsoleCloseEvent;
 
-            ChunkRegionManager.GetChunk(Bukkit.MainWorld, 0, 0);
-            // ChunkRegionManager.GetChunk(Bukkit.MainWorld, 0, -1);
+            // ChunkRegionManager.GetChunk(Bukkit.MainWorld, 0, 0);
+            ChunkRegionManager.GetChunk(Bukkit.MainWorld, 19, 4);
         }
 
         private static void Init()

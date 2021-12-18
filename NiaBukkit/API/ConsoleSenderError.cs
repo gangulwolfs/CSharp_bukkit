@@ -26,10 +26,7 @@ namespace NiaBukkit.API
         #nullable enable
         public override void WriteLine(object? value)
         {
-            if(value == null)
-                WriteLine("null");
-            else
-                WriteLine(value.ToString());
+            WriteLine(value == null ? "null" : value.ToString());
         }
 
         public override void WriteLine(StringBuilder? value)
@@ -42,8 +39,7 @@ namespace NiaBukkit.API
 
         public override void WriteLine(string? value)
         {
-            if (value == null)
-                value = "null";
+            value ??= "null";
             
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("{0}/ERROR]: ", ConsoleSender.GetInfo());

@@ -10,29 +10,22 @@ namespace NiaBukkit.API
         internal static string GetInfo()
         {
             Console.SetCursorPosition(0, Console.GetCursorPosition().Top);
-            string threadInfo;
-            
-            if(Thread.CurrentThread.Name != null)
-                threadInfo = Thread.CurrentThread.Name;
-            else
-                threadInfo = "Other Thread";
+
+            var threadInfo = Thread.CurrentThread.Name ?? "Other Thread";
             
             
-            return string.Format("[{0:HH:mm:ss}] [{1}", DateTime.Now, threadInfo);
+            return $"[{DateTime.Now:HH:mm:ss}] [{threadInfo}";
         }
 
-        public void SendMessage(object message)
+        #nullable enable
+        public void SendMessage(object? message)
         {
-            if (message == null)
-                message = "null";
-            
-            SendMessage(message.ToString());
+            SendMessage(message?.ToString() ?? "null");
         }
 		
-        public void SendMessage(string message)
+        public void SendMessage(string? message)
         {
-            if (message == null)
-                message = "null";
+            message ??= "null";
 
             Console.Write("{0}/INFO]: ", GetInfo());
             

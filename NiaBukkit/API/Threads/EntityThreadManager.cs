@@ -10,7 +10,7 @@ namespace NiaBukkit.API.Threads
         [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.Collections.Generic.List`1[NiaBukkit.API.Entities.Entity]")]
         internal static void Worker()
         {
-            while (Bukkit.MinecraftServer.IsAvilable)
+            while (Bukkit.MinecraftServer.IsAvailable)
             {
                 foreach (var entity in Bukkit.Entities.Values)
                     entity.Update();

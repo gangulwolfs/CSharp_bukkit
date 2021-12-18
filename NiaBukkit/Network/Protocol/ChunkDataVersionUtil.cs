@@ -57,7 +57,7 @@ namespace NiaBukkit.Network.Protocol
         internal static void IterateCompactArrayWithPadding(int bitsPerEntry, int entries, long[] data, Action<int, int> action)
         {
             var maxEntryValue = (1L << bitsPerEntry) - 1;
-            var valuesPerLong = 64 / bitsPerEntry;
+            var valuesPerLong = (char) (64 / bitsPerEntry);
             
             var magicIndex = 3 * (valuesPerLong - 1);
             var divideMul = (ulong) Magic[magicIndex];

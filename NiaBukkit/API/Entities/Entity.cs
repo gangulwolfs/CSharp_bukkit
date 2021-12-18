@@ -18,7 +18,8 @@ namespace NiaBukkit.API.Entities
         public Entity(Uuid uuid, World.World world, double x, double y, double z)
         {
             Uuid = uuid;
-            Location = new Location(world, 0, 5, 0);
+            Location = new Location(world, 306, 5, 64);
+            // Location = new Location(world, -104, 5, 105);
             Location.Changeable = false;
             EntityId = GenerateEntityId();
         }
@@ -28,14 +29,11 @@ namespace NiaBukkit.API.Entities
             Location = new Location(Location.World, x, y, z, yaw, pitch);
         }
 
-        private static int _currentEntityId = -1;
+        private static int _currentEntityId;
 
         public static int GenerateEntityId()
         {
-            if (_currentEntityId == Int32.MaxValue)
-                return _currentEntityId = 0;
-
-            return ++_currentEntityId;
+            return _currentEntityId++;
         }
 
         internal virtual void Update() { }
