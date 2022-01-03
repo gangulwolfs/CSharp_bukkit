@@ -16,6 +16,8 @@ namespace NiaBukkit.API.Blocks
         public float Durability { get; private set; }
 
         public SoundEffectType SoundEffectType { get; private set; }
+        
+        public int BlockLight { get; private set; }
 
         internal BlockData(Material type)
         {
@@ -67,6 +69,12 @@ namespace NiaBukkit.API.Blocks
         internal BlockData GetBlockData(BlockData blockData)
         {
             return blockData.SetBlockData(Speed, Durability).SetSound(SoundEffectType);
+        }
+
+        internal BlockData SetLight(int blockLight)
+        {
+            BlockLight = blockLight;
+            return this;
         }
     }
 }

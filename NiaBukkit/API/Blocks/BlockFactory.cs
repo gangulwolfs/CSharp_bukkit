@@ -147,8 +147,8 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData Tnt;
         public static readonly BlockData Bookshelf;
         public static readonly BlockData MossyCobblestone;
-        public static readonly BlockData Obsidian;
-        public static readonly BlockData Torch = Init(new BlockTorch(Material.Torch, Particles.Flame).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData Obsidian = Init(new BlockData(Material.Obsidian).SetBlockData(50, 1200));
+        public static readonly BlockData Torch = Init(new BlockTorch(Material.Torch, Particles.Flame).SetSound(SoundEffectType.WoodEffect).SetLight(14));
         public static readonly BlockData WallTorch;
         public static readonly BlockData Fire;
         public static readonly BlockData SoulFire;
@@ -205,9 +205,9 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData SoulSoil;
         public static readonly BlockData Basalt;
         public static readonly BlockData PolishedBasalt;
-        public static readonly BlockData SoulTorch = Init(new BlockTorch(Material.SoulTorch, Particles.SoulFireFlame).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData SoulTorch = Init(new BlockTorch(Material.SoulTorch, Particles.SoulFireFlame).SetSound(SoundEffectType.WoodEffect).SetLight(10));
         public static readonly BlockData SoulWallTorch;
-        public static readonly BlockData Glowstone = Init(new BlockData(Material.Glowstone).SetDurability(.3F).SetSound(SoundEffectType.GlassEffect));
+        public static readonly BlockData Glowstone = Init(new BlockData(Material.Glowstone).SetDurability(.3F).SetSound(SoundEffectType.GlassEffect).SetLight(15));
         public static readonly BlockData NetherPortal;
         public static readonly BlockData CarvedPumpkin;
         public static readonly BlockData JackOLantern;
@@ -271,7 +271,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData Cauldron;
         public static readonly BlockData EndPortal;
         public static readonly BlockData EndPortalFrame;
-        public static readonly BlockData EndStone;
+        public static readonly BlockData EndStone = Init(new BlockData(Material.EndStone).SetBlockData(3, 9));
         public static readonly BlockData DragonEgg;
         public static readonly BlockData RedstoneLamp;
         public static readonly BlockData Cocoa;
@@ -344,8 +344,8 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData RedstoneBlock;
         public static readonly BlockData NetherQuartzOre;
         public static readonly BlockData Hopper;
-        public static readonly BlockData QuartzBlock;
-        public static readonly BlockData ChiseledQuartzBlock;
+        public static readonly BlockData QuartzBlock = Init(new BlockData(Material.QuartzBlock).SetDurability(.8F));
+        public static readonly BlockData ChiseledQuartzBlock = Init(new BlockData(Material.ChiseledQuartzBlock).SetDurability(.8F));
         public static readonly BlockData QuartzPillar;
         public static readonly BlockData QuartzStairs;
         public static readonly BlockData ActivatorRail;
@@ -387,16 +387,16 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData SlimeBlock;
         public static readonly BlockData Barrier;
         public static readonly BlockData IronTrapdoor;
-        public static readonly BlockData Prismarine;
-        public static readonly BlockData PrismarineBricks;
-        public static readonly BlockData DarkPrismarine;
+        public static readonly BlockData Prismarine = Init(new BlockData(Material.Prismarine).SetBlockData(1.5F, 6));
+        public static readonly BlockData PrismarineBricks = Init(new BlockData(Material.PrismarineBricks).SetBlockData(1.5F, 6));
+        public static readonly BlockData DarkPrismarine = Init(new BlockData(Material.DarkPrismarine).SetBlockData(1.5F, 6));
         public static readonly BlockData PrismarineStairs;
         public static readonly BlockData PrismarineBrickStairs;
         public static readonly BlockData DarkPrismarineStairs;
         public static readonly BlockData PrismarineSlab;
         public static readonly BlockData PrismarineBrickSlab;
         public static readonly BlockData DarkPrismarineSlab;
-        public static readonly BlockData SeaLantern;
+        public static readonly BlockData SeaLantern = Init(new BlockData(Material.SeaLantern).SetDurability(.3F).SetSound(SoundEffectType.GlassEffect).SetLight(15));
         public static readonly BlockData HayBlock;
         public static readonly BlockData WhiteCarpet;
         public static readonly BlockData OrangeCarpet;
@@ -768,7 +768,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData PolishedBlackstoneWall;
         public static readonly BlockData ChiseledNetherBricks;
         public static readonly BlockData CrackedNetherBricks;
-        public static readonly BlockData QuartzBricks;
+        public static readonly BlockData QuartzBricks = Init(new BlockData(Material.QuartzBricks));
 
         private static BlockData Init(BlockData blockData)
         {
