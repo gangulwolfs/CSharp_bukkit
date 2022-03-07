@@ -47,6 +47,11 @@ namespace NiaBukkit.API.NBT
             return nbt?.NBTType == type;
         }
 
+        public bool Set(string tagName, NBTBase nbt)
+        {
+            return _data.TryAdd(tagName, nbt);
+        }
+
         public NBTBase Get(string tagName)
         {
             _data.TryGetValue(tagName, out var nbt);
@@ -115,8 +120,9 @@ namespace NiaBukkit.API.NBT
 
         public NBTTagCompound GetCompound(string tagName)
         {
-            _data.TryGetValue(tagName, out var nbt);
-            return nbt is not NBTTagCompound value ? new NBTTagCompound() : value;
+            if (!_data.TryGetValue(tagName, out var nbt))
+                _data.TryAdd(tagName, nbt = new NBTTagCompound());
+            return nbt is not NBTTagCompound value ? null : value;
         }
 
         public NBTTagList GetList(string tagName)

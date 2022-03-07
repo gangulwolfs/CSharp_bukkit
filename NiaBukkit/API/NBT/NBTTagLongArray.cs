@@ -1,5 +1,4 @@
-﻿using System;
-using NiaBukkit.Network;
+﻿using NiaBukkit.Network;
 
 namespace NiaBukkit.API.NBT
 {
@@ -20,10 +19,11 @@ namespace NiaBukkit.API.NBT
         internal override void Load(ByteBuf buf, int id)
         {
             var size = buf.ReadInt();
+            
             Data = new long[size];
             for (var i = 0; i < size; i++)
             {
-                Data[i] = BitConverter.ToInt64(buf.Read(8));
+                Data[i] = buf.ReadLong();
             }
         }
 

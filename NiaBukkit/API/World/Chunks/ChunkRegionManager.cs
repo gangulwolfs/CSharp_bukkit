@@ -1,8 +1,10 @@
 ﻿using System;
 using NiaBukkit.API.Blocks;
+using NiaBukkit.API.Blocks.Data;
 using NiaBukkit.API.NBT;
 using NiaBukkit.API.Util;
 using NiaBukkit.Network.Protocol;
+using NiaBukkit.Network.Protocol.Play;
 
 namespace NiaBukkit.API.World.Chunks
 {
@@ -89,20 +91,22 @@ namespace NiaBukkit.API.World.Chunks
         {
             var paletteList = nbtTagCompound.GetList("Palette");
             var blockStateList = nbtTagCompound.GetLongArray("BlockStates");
-            
+
             var section = new ChunkSection(yPos);
             var bits = blockStateList.Length * 64 / ChunkSection.Size;
 
             for (var i = 0; i < paletteList.Length; i++)
             {
                 if(paletteList[i] is not NBTTagCompound paletteCompound) continue;
-                // if(paletteCompound.HasKey("Properties"))
-                Bukkit.ConsoleSender.SendMessage(paletteCompound);
+                section.GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(paletteCompound.GetString("Name"))
+                    .GetBlockData(paletteCompound.GetCompound("Properties")));
                 
-                section.GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(paletteCompound.GetString("Name")).GetBlockData(paletteCompound.GetCompound("Properties")).Type);
+                Bukkit.ConsoleSender.SendMessage(paletteCompound);
+                Bukkit.ConsoleSender.SendMessage(BlockData.GetBlockDataByName(paletteCompound.GetString("Name"))
+                    .GetBlockData(paletteCompound.GetCompound("Properties")));
             }
-            ChunkDataVersionUtil.IterateCompactArrayWithPadding(bits, ChunkSection.Size,
-                blockStateList, section.SetBlock);
+
+            ChunkDataVersionUtil.IterateCompactArrayWithPadding(bits, blockStateList, section.SetBlock);
 
             return section;
         }

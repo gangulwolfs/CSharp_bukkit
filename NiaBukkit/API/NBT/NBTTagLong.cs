@@ -9,7 +9,7 @@ namespace NiaBukkit.API.NBT
         public override NBTType NBTType => NBTType.Long;
         internal override void Load(ByteBuf buf, int id)
         {
-            Data = BitConverter.ToInt64(buf.Read(8));
+            Data = buf.ReadLong();
         }
 
         public override string ToString()

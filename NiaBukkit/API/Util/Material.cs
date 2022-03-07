@@ -2601,17 +2601,7 @@ namespace NiaBukkit.API.Util
 
         public static string GetName(this Material m)
         {
-            var origin = m.ToString();
-            var builder = new StringBuilder();
-            builder.Append(origin[0]);
-            for (var i = 1; i < origin.Length; i++)
-            {
-                if (char.IsUpper(origin[i]))
-                    builder.Append('_');
-                builder.Append(origin[i]);
-            }
-
-            return builder.ToString().ToLower();
+            return m.ToString().Name2Minecraft();
         }
     }
 }

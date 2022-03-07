@@ -383,7 +383,7 @@ namespace NiaBukkit.Network
 
         private float NetworkToHostOrder(float host)
         {
-            byte[] data = BitConverter.GetBytes(host);
+            var data = BitConverter.GetBytes(host);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(data);
 
@@ -402,7 +402,7 @@ namespace NiaBukkit.Network
         public byte[] Flush()
         {
             _buf.InsertRange(0, GetVarInt(_buf.Count));
-            byte[] data = _buf.ToArray();
+            var data = _buf.ToArray();
 
             _readBuf = null;
             _buf.Clear();

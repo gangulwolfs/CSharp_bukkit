@@ -4,46 +4,43 @@ using NiaBukkit.API.Util;
 
 namespace NiaBukkit.API.Blocks.Data
 {
-    public class BlockRotatable : BlockData
+    public class BlockStonecutter : BlockData
     {
-        public Axis Axis { get; private set; }
-        
-        internal BlockRotatable(Material type) : base(type)
+        public Direction Facing { get; private set; }
+        internal BlockStonecutter(Material type) : base(type)
         {
         }
 
         internal override BlockData GetBlockData(NBTTagCompound properties)
         {
-            return GetBlockData(new BlockRotatable(Type), properties);
+            return GetBlockData(new BlockStonecutter(Type), properties);
         }
 
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
-            ((BlockRotatable) block).Axis = Enum.Parse<Axis>(properties.GetString("axis").ToUpper());
+            ((BlockStonecutter) block).Facing = Enum.Parse<Direction>(properties.GetString("facing").Minecraft2Name());
             return base.GetBlockData(block, properties);
         }
 
-        public static bool operator ==(BlockRotatable o1, BlockData o2)
+        public static bool operator ==(BlockStonecutter o1, BlockData o2)
         {
             if (o1 is null || o2 is null) return o1 is null && o2 is null;
-            
-            if (o2 is not BlockRotatable o) return false;
-            return o.Axis == o1.Axis && o.Type == o1.Type;
+            if (o2 is not BlockStonecutter o) return false;
+            return o1.Facing == o.Facing && o1.Type == o.Type;
         }
 
-        public static bool operator !=(BlockRotatable o1, BlockData o2) => !(o1 == o2);
+        public static bool operator !=(BlockStonecutter o1, BlockData o2) => !(o1 == o2);
 
         public override bool Equals(object obj)
         {
-            if (obj is not BlockRotatable data) return false;
+            if (obj is not BlockStonecutter data) return false;
             return this == data;
         }
 
         public override NBTTagCompound ToNBT()
         {
             var tag = base.ToNBT();
-            var properties = tag.GetCompound("Properties");
-            properties.Set("axis", new NBTTagString(Axis.ToString().ToLower()));
+            tag.GetCompound("Properties").Set("facing", new NBTTagString(Facing.ToString().ToLower()));
             
             return tag;
         }

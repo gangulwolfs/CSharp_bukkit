@@ -6,7 +6,6 @@ namespace NiaBukkit.Network.Protocol.Play
     public class PlayOutChunkData : Packet
     {
         private readonly Chunk _chunk;
-        private const byte MaxBitsBlock = 13;
         public PlayOutChunkData(Chunk chunk)
         {
             _chunk = chunk;
@@ -33,6 +32,7 @@ namespace NiaBukkit.Network.Protocol.Play
 
         private void Write_V_9(ByteBuf buf)
         {
+            const byte maxBitsBlock = 13;
             var mask = _chunk.GetBitMask();
             buf.WriteVarInt(mask);
 
@@ -42,11 +42,11 @@ namespace NiaBukkit.Network.Protocol.Play
                 if ((mask & 1 << i) == 0) continue;
                 var section = _chunk.ChunkSections[i];
 
-                var bitsPerBlock = GetBitsPerBlock(section);
-                // byte bitsPerBlock = MaxBitsBlock;
+                var bitsPerBlock = ChunkDataVersionUtil.GetBitsPerBlock(section.PaletteSize, maxBitsBlock);
+                // var bitsPerBlock = maxBitsBlock;
                 data.WriteByte(bitsPerBlock);
 
-                if (bitsPerBlock != MaxBitsBlock)
+                if (bitsPerBlock != maxBitsBlock)
                 {
                     data.WriteVarInt(section.PaletteSize);
                     for (var k = 0; k < section.PaletteSize; k++)
@@ -58,7 +58,7 @@ namespace NiaBukkit.Network.Protocol.Play
                     data.WriteVarInt(0);
                 
                 var chunkArray = ChunkDataVersionUtil.CreateCompactArray(bitsPerBlock,
-                    bitsPerBlock == MaxBitsBlock ? section.GetLegacyBlockData : section.GetPaletteIndex);
+                    bitsPerBlock == maxBitsBlock ? section.GetBlockData : section.GetPaletteIndex);
                 data.WriteVarInt(chunkArray.Length);
 
                 foreach (var d in chunkArray)
@@ -85,7 +85,7 @@ namespace NiaBukkit.Network.Protocol.Play
 
         private void WriteOld(ByteBuf buf)
         {
-            ushort mask = _chunk.GetBitMask();
+            var mask = _chunk.GetBitMask();
             buf.WriteUShort((ushort) ~mask);
             
             ByteBuf data = new ByteBuf();
@@ -117,18 +117,6 @@ namespace NiaBukkit.Network.Protocol.Play
             var chunkData = data.GetBytes();
             buf.WriteVarInt(chunkData.Length);
             buf.Write(chunkData);
-        }
-
-        private static byte GetBitsPerBlock(ChunkSection section)
-        {
-            byte bitsPerBlock = 4;
-            while (section.PaletteSize > 1 << bitsPerBlock)
-                bitsPerBlock++;
-
-            if (bitsPerBlock > 8)
-                bitsPerBlock = MaxBitsBlock;
-
-            return bitsPerBlock;
         }
 
         private static int GetPacketId(ProtocolVersion protocol)

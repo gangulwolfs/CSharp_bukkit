@@ -19,7 +19,8 @@ namespace NiaBukkit.API.NBT
 
         internal override void Load(ByteBuf buf, int id)
         {
-            Data = BitConverter.ToDouble(buf.Read(8));
+            // Data = BitConverter.ToDouble(buf.Read(8));
+            Data = buf.ReadDouble();
         }
 
         public override string ToString()

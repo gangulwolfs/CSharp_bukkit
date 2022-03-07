@@ -28,11 +28,15 @@ namespace NiaBukkit.API.World
 
         public readonly string Name;
 
+        public Location WorldSpawn { get; private set; }
+
         public World(string name)
         {
             Name = name;
             WorldType = WorldType.Flat;
             _provider = new WorldProviderFlat(this);
+            
+            WorldSpawn = new Location(this, 0, 5, 0);
         }
 
         internal Chunk GetChunk(int x, int z)

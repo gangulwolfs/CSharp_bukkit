@@ -29,8 +29,8 @@ namespace NiaBukkit
 
             Console.CancelKeyPress += ConsoleCloseEvent;
 
-            // ChunkRegionManager.GetChunk(Bukkit.MainWorld, 0, 0);
-            ChunkRegionManager.GetChunk(Bukkit.MainWorld, 19, 4);
+            Bukkit.MainWorld.WorldSpawn.Set(342, 5, 55);
+            ChunkRegionManager.GetChunk(Bukkit.MainWorld, 342 >> 4, 55 >> 4);
         }
 
         private static void Init()

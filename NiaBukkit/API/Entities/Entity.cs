@@ -12,14 +12,13 @@ namespace NiaBukkit.API.Entities
 
         public readonly Uuid Uuid;
 
-        public Entity(World.World world) : this(Uuid.RandomUuid(), world, 0, 0, 0) { }
-        public Entity(Uuid uuid, World.World world) : this(uuid, world, 0, 0, 0) { }
+        public Entity(World.World world) : this(Uuid.RandomUuid(), world) { }
+        public Entity(Uuid uuid, World.World world) : this(uuid, world, world.WorldSpawn.X, world.WorldSpawn.Y, world.WorldSpawn.Z) { }
 
         public Entity(Uuid uuid, World.World world, double x, double y, double z)
         {
             Uuid = uuid;
-            Location = new Location(world, 306, 5, 64);
-            // Location = new Location(world, -104, 5, 105);
+            Location = new Location(world, x, y, z);
             Location.Changeable = false;
             EntityId = GenerateEntityId();
         }

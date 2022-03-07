@@ -89,6 +89,20 @@ namespace NiaBukkit.API.Util
             Pitch = 0;
         }
 
+        public Location Set(double x, double y, double z) => Set(x, y, z, _yaw, _pitch);
+
+        public Location Set(double x, double y, double z, float yaw, float pitch)
+        {
+            if (!Changeable) return this;
+            _x = x;
+            _y = y;
+            _z = z;
+            _yaw = yaw;
+            _pitch = pitch;
+
+            return this;
+        }
+
         public object Clone()
         {
             return new Location(World, X, Y, Z, Yaw, Pitch);

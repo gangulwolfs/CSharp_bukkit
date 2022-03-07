@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -32,8 +31,10 @@ namespace NiaBukkit.Network
 		public Player Player { get; internal set; }
 
         private int _teleportAwait = 0;
-        
-        public const long KeepAliveTime = 50;
+
+        private const long KeepAliveTime = 50;
+
+        private NetworkBuf _networkBuf = new();
 
         internal NetworkManager(TcpClient client)
         {
@@ -68,29 +69,41 @@ namespace NiaBukkit.Network
 
         internal void Update()
         {
-            PacketUpdate();
+            ReceiveUpdate();
+            PacketHandleUpdate();
             KeepAliveUpdate();
         }
 
-        private void PacketUpdate()
+        private void ReceiveUpdate()
         {
             if (Client.Available == 0) return;
+            
             LastPacketMillis = TimeManager.CurrentTimeMillis;
             
-            byte[] bytes = new byte[GetPacketLength()];
-            Client.GetStream().Read(bytes, 0, bytes.Length);
+            _networkBuf.Buf ??= new byte[GetPacketLength()];
+
+            _networkBuf.Offset += Client.GetStream().Read(_networkBuf.Buf, _networkBuf.Offset,
+                _networkBuf.Buf.Length - _networkBuf.Offset);
+        }
+
+        private void PacketHandleUpdate()
+        {
+            if(_networkBuf.Buf == null || _networkBuf.Offset != _networkBuf.Buf.Length) return;
+            
+            var packet = _networkBuf.Buf;
+            _networkBuf.Clear();
+            
             //TODO: 압축 추가
 
             if (Decrypter != null)
             {
-                byte[] data = bytes;
-                bytes = new byte[data.Length];
-                Decrypter.TransformBlock(data, 0, data.Length, bytes, 0);
+                var data = packet;
+                packet = new byte[data.Length];
+                Decrypter.TransformBlock(data, 0, data.Length, packet, 0);
             }
 
-            ByteBuf buf = new ByteBuf(bytes);
+            var buf = new ByteBuf(packet);
             var packetId = buf.ReadVarInt();
-            // Bukkit.ConsoleSender.SendMessage(PacketMode +", " + packetId);
             PacketFactory.Handle(this, buf, packetId);
         }
 
@@ -224,7 +237,7 @@ namespace NiaBukkit.Network
             {
                 if (Encrypter != null)
                 {
-                    byte[] encrypt = data;
+                    var encrypt = data;
                     data = new byte[encrypt.Length];
 
                     Encrypter.TransformBlock(encrypt, 0, encrypt.Length, data, 0);
@@ -261,6 +274,18 @@ namespace NiaBukkit.Network
                     }
 
                 Disconnect();
+            }
+        }
+
+        private class NetworkBuf
+        {
+            public byte[] Buf;
+            public int Offset;
+
+            public void Clear()
+            {
+                Buf = null;
+                Offset = 0;
             }
         }
     }

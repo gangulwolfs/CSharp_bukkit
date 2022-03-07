@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NiaBukkit.API.Blocks;
 using NiaBukkit.API.Util;
 using NiaBukkit.Network;
 
@@ -9,21 +10,21 @@ namespace NiaBukkit.API.World.Chunks
     {
         public const int Size = 16 * 16 * 16;
         private readonly int[] _blocks = new int[Size];//Enumerable.Repeat<int>(-1, Size).ToArray();
-        private readonly List<Material> _palette = new List<Material>();
-        private readonly Dictionary<Material, int> _inversePalette = new Dictionary<Material, int>();
+        private readonly List<BlockData> _palette = new();
+        private readonly Dictionary<BlockData, int> _inversePalette = new();
 
-        private NibbleArray _blockLight = new NibbleArray(Size);
+        private NibbleArray _blockLight = new(Size);
         private NibbleArray _skyLight;
 
         public byte YPos { get; private set; }
         
-        internal static int Index(int x, int y, int z) => y << 8 | z << 4 | x;
+        internal static int Index(int x, int y, int z) => (y << 8) | (z << 4) | x;
 
         public int PaletteSize => _palette.Count;
 
         public ChunkSection()
         {
-            GetOrCreatePaletteIndex(Material.Air);
+            GetOrCreatePaletteIndex(BlockFactory.Air);
         }
 
         public ChunkSection(byte yPos) : this()
@@ -60,28 +61,26 @@ namespace NiaBukkit.API.World.Chunks
             _skyLight = new NibbleArray(data);
         }
 
-        public Material GetPalette(int index)
+        public BlockData GetPalette(int index)
         {
             return _palette[index];
         }
-        public int GetOldPaletteData(int i) => GetPalette(i).GetLegacyId() << 4 | GetPalette(i).GetLegacySubId();
+        public int GetOldPaletteData(int i) => GetPalette(i).Type.GetLegacyId() << 4 | GetPalette(i).Type.GetLegacySubId();
 
-        public int GetOrCreatePaletteIndex(Material block)
+        public int GetOrCreatePaletteIndex(BlockData block)
         {
-            int index = _inversePalette.GetValueOrDefault(block, -1);
-            if (index == -1)
-            {
-                index = _palette.Count;
-                _palette.Add(block);
-                _inversePalette.Add(block, index);
-            }
+            var index = _inversePalette.GetValueOrDefault(block, -1);
+            if (index != -1) return index;
+            index = _palette.Count;
+            _palette.Add(block);
+            _inversePalette.Add(block, index);
 
             return index;
         }
 
         public void SetBlock(int x, int y, int z, Material block)
         {
-            _blocks[Index(x, y, z)] = GetOrCreatePaletteIndex(block);
+            _blocks[Index(x, y, z)] = GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(block.GetName()));
         }
 
         internal void SetBlock(int x, int y, int z, int id)
@@ -94,23 +93,22 @@ namespace NiaBukkit.API.World.Chunks
             _blocks[index] = id;
         }
 
-        public Material GetBlock(int x, int y, int z)
+        public BlockData GetBlock(int x, int y, int z)
         {
             return GetBlock(Index(x, y, z));
         }
 
-        public Material GetBlock(int i)
+        public BlockData GetBlock(int i)
         {
-            int index = _blocks[i];
-            if (index == -1)
-                return Material.Air;
-            
-            return _palette[index];
+            var index = _blocks[i];
+            return index < 0 || index >= _palette.Count ? BlockFactory.Air : _palette[index];
         }
 
-        public int GetBlockData(int i) => GetBlock(i).GetId();
+        public int GetBlockData(int i) => GetBlock(i).Type.GetId();
 
-        public int GetLegacyBlockData(int i) => GetBlock(i).GetLegacyId() << 4 | GetBlock(i).GetLegacySubId();
+        public int GetLegacyBlockData(int i) => GetBlock(i).Type.GetLegacyId() << 4 | GetBlock(i).Type.GetLegacySubId();
+
+        public int GetPaletteIndex(int x, int y, int z) => GetPaletteIndex(Index(x, y, z));
 
         public int GetPaletteIndex(int i)
         {

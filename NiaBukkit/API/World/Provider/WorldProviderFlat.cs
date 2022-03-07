@@ -16,12 +16,12 @@ namespace NiaBukkit.API.World.Provider
         
         public Chunk GetChunk(int posX, int posZ)
         {
-            Chunk chunk = new Chunk(_world, posX, posZ);
-            for (int x = 0; x < 16; x++)
+            var chunk = new Chunk(_world, posX, posZ);
+            for (var x = 0; x < 16; x++)
             {
-                for (int z = 0; z < 16; z++)
+                for (var z = 0; z < 16; z++)
                 {
-                    for (int y = 0; y < 16; y++)
+                    for (var y = 0; y < 16; y++)
                     {
                         if (y == 0)
                             chunk.SetBlock(x, y, z, Material.Bedrock);

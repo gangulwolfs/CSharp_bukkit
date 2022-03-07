@@ -49,7 +49,7 @@ namespace NiaBukkit.API.World.Chunks
         public ushort GetBitMask()
         {
             ushort mask = 0;
-            for (int i = ChunkSections.Length - 1; i >= 0; i--)
+            for (var i = ChunkSections.Length - 1; i >= 0; i--)
             {
                 mask <<= 1;
                 

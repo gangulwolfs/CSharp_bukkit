@@ -3,13 +3,12 @@ using NiaBukkit.API.Util;
 
 namespace NiaBukkit.API.Blocks.Data
 {
-    public class BlockFence : BlockData
+    public class BlockFence : BlockWaterlogged
     {
         public bool East { get; private set; }
         public bool South { get; private set; }
         public bool North { get; private set; }
         public bool West { get; private set; }
-        public bool Waterlogged { get; private set; }
 
         internal BlockFence(Material type) : base(type)
         {
@@ -17,16 +16,18 @@ namespace NiaBukkit.API.Blocks.Data
 
         internal override BlockData GetBlockData(NBTTagCompound properties)
         {
-            var fence = new BlockFence(Type)
-            {
-                East = bool.Parse(properties.GetString("east")),
-                South = bool.Parse(properties.GetString("south")),
-                North = bool.Parse(properties.GetString("north")),
-                West = bool.Parse(properties.GetString("west")),
-                Waterlogged = bool.Parse(properties.GetString("waterlogged"))
-            };
+            return GetBlockData(new BlockFence(Type), properties);
+        }
 
-            return base.GetBlockData(fence);
+        internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
+        {
+            var fence = (BlockFence) block;
+            fence.East = bool.Parse(properties.GetString("east"));
+            fence.South = bool.Parse(properties.GetString("south"));
+            fence.North = bool.Parse(properties.GetString("north"));
+            fence.West = bool.Parse(properties.GetString("west"));
+            
+            return base.GetBlockData(block, properties);
         }
 
         public static bool operator ==(BlockFence o1, BlockData o2)
@@ -39,5 +40,29 @@ namespace NiaBukkit.API.Blocks.Data
         }
 
         public static bool operator !=(BlockFence o1, BlockData o2) => !(o1 == o2);
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not BlockFence data) return false;
+            return this == data;
+        }
+
+        public override NBTTagCompound ToNBT()
+        {
+            var tag = base.ToNBT();
+            var properties = tag.GetCompound("Properties");
+            properties.Set("east", new NBTTagString(East.ToString().ToLower()));
+            properties.Set("south", new NBTTagString(South.ToString().ToLower()));
+            properties.Set("north", new NBTTagString(North.ToString().ToLower()));
+            properties.Set("west", new NBTTagString(West.ToString().ToLower()));
+            properties.Set("waterlogged", new NBTTagString(Waterlogged.ToString().ToLower()));
+            
+            return tag;
+        }
+
+        public override string ToString()
+        {
+            return ToNBT().ToString();
+        }
     }
 }

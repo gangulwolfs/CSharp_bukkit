@@ -8,7 +8,7 @@ namespace NiaBukkit.API.Config
     public class ServerProperties
     {
         private const string Name = "server.properties";
-        public static GameMode GameMode { get; private set; } = GameMode.Survival;
+        public static GameMode GameMode { get; private set; } = GameMode.Creative;
         public static bool EnableCommandBlock { get; private set; } = false;
         public static string Motd { get; private set; } = "§b§lA Minecraft Server";
         public static bool Pvp { get; private set; } = false;

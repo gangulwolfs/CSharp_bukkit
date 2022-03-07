@@ -41,7 +41,7 @@ namespace NiaBukkit.Network.Protocol
                 var value = func.Invoke(i);
                 var bitIndex = i * bitsPerBlock;
                 var start = bitIndex / 64;
-                var end = ((i + 1) * bitsPerBlock - 1) / 64;
+                var end = (bitIndex + bitsPerBlock - 1) / 64;
                 var startBitSub = bitIndex % 64;
                 data[start] = data[start] & ~(maxEntryValue << startBitSub) | (value & maxEntryValue) << startBitSub;
                 if (start == end) continue;
@@ -54,7 +54,26 @@ namespace NiaBukkit.Network.Protocol
             return data;
         }
 
-        internal static void IterateCompactArrayWithPadding(int bitsPerEntry, int entries, long[] data, Action<int, int> action)
+        internal static void IterateCompactArray(int bitsPerBlock, long[] data, Action<int, int> action)
+        {
+            var maxEntryValue = (1L << bitsPerBlock) - 1;
+            for (var i = 0; i < ChunkSection.Size; i++) {
+                var bitIndex = i * bitsPerBlock;
+                var start = bitIndex / 64;
+                var end = (bitIndex + bitsPerBlock - 1) / 64;
+                var startBitSub = bitIndex % 64;
+                int value;
+                if (start == end) {
+                    value = (int) ((data[start] >> startBitSub) & maxEntryValue);
+                } else {
+                    var endBitSubIndex = 64 - startBitSub;
+                    value = (int) (((data[start] >> startBitSub) | (data[end] << endBitSubIndex)) & maxEntryValue);
+                }
+                action.Invoke(i, value);
+            }
+        }
+
+        internal static void IterateCompactArrayWithPadding(int bitsPerEntry, long[] data, Action<int, int> action)
         {
             var maxEntryValue = (1L << bitsPerEntry) - 1;
             var valuesPerLong = (char) (64 / bitsPerEntry);
@@ -64,13 +83,25 @@ namespace NiaBukkit.Network.Protocol
             var divideAdd = (ulong) Magic[magicIndex + 1];
             var divideShift = Magic[magicIndex + 2];
 
-            for (var i = 0; i < entries; i++) {
+            for (var i = 0; i < ChunkSection.Size; i++) {
                 var cellIndex = (int) ((ulong) i * divideMul + divideAdd >> 32 >> divideShift);
                 var bitIndex = (i - cellIndex * valuesPerLong) * bitsPerEntry;
                 var value = (int) (data[cellIndex] >> bitIndex & maxEntryValue);
 
                 action.Invoke(i, value);
             }
+        }
+
+        public static byte GetBitsPerBlock(int paletteSize, byte max)
+        {
+            byte bitsPerBlock = 4;
+            while (paletteSize > 1 << bitsPerBlock)
+                bitsPerBlock++;
+
+            if (bitsPerBlock > 8)
+                bitsPerBlock = max;
+
+            return bitsPerBlock;
         }
     }
 }

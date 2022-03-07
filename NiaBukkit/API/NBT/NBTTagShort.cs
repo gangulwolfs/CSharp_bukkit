@@ -19,7 +19,7 @@ namespace NiaBukkit.API.NBT
 
         internal override void Load(ByteBuf buf, int id)
         {
-            Data = BitConverter.ToInt16(buf.Read(2));
+            Data = buf.ReadShort();
         }
 
         public override string ToString()

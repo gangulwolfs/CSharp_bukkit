@@ -34,6 +34,10 @@
             SoundEffects.BlockNetherBricksStep, SoundEffects.BlockNetherBricksPlace, SoundEffects.BlockNetherBricksHit,
             SoundEffects.BlockNetherBricksFall);
 
+        public static readonly SoundEffectType WartEffect = new(1, 1, SoundEffects.BlockWartBlockBreak,
+            SoundEffects.BlockWartBlockStep, SoundEffects.BlockWartBlockPlace, SoundEffects.BlockWartBlockHit,
+            SoundEffects.BlockWartBlockFall);
+
 
 
 

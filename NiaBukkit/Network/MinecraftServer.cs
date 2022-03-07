@@ -17,8 +17,9 @@ namespace NiaBukkit.Network
 {
     public class MinecraftServer
     {
-        public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v15w33b;
-        // public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_12_2;
+        public const string MinecraftKey = "minecraft:";
+        // public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v15w33b;
+        public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_12_2;
 		internal RSAParameters ServerKey;
         
         private TcpListener _listener;
