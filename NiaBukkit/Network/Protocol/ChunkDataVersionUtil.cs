@@ -80,8 +80,8 @@ namespace NiaBukkit.Network.Protocol
             
             var magicIndex = 3 * (valuesPerLong - 1);
             
-            var divideMul = Magic[magicIndex] & 0b11111111111111111111111111111111; // 10000000000000000000000000000000 bit
-            var divideAdd = Magic[magicIndex + 1] & 0b11111111111111111111111111111111;
+            long divideMul = (uint) Magic[magicIndex]; // msb
+            long divideAdd = (uint) Magic[magicIndex + 1];
             var divideShift = Magic[magicIndex + 2];
 
             for (var i = 0; i < ChunkSection.Size; i++)
