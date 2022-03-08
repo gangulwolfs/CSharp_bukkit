@@ -4,343 +4,381 @@ namespace NiaBukkit.API.Util
 {
     public enum Material
     {
-        [MaterialAttribute(9648, 0, 0)]
+        [MaterialAttribute(0, 0)]
         Air,
-        [MaterialAttribute(22948,1)]
+        [MaterialAttribute(1)]
         Stone,
-        [MaterialAttribute(21091,1, 1)]
+        [MaterialAttribute(1, 1)]
         Granite,
-        [MaterialAttribute(5477,1, 2)]
+        [MaterialAttribute(1, 2)]
         PolishedGranite,
-        [MaterialAttribute(24688,1, 3)]
+        [MaterialAttribute(1, 3)]
         Diorite,
-        [MaterialAttribute(31615,1, 4)]
+        [MaterialAttribute(1, 4)]
         PolishedDiorite,
-        [MaterialAttribute(25975,1, 5)]
+        [MaterialAttribute(1, 5)]
         Andesite,
-        [MaterialAttribute(8335,1, 6)]
+        [MaterialAttribute(1, 6)]
         PolishedAndesite,
-        [MaterialAttribute(28346,2)]
+        [MaterialAttribute(2)]
         GrassBlock,
-        [MaterialAttribute(10580,3)]
+        [MaterialAttribute(3)]
         Dirt,
-        [MaterialAttribute(15411,3, 1)]
+        [MaterialAttribute(3, 1)]
         CoarseDirt,
-        [MaterialAttribute(24068,3, 2)]
+        [MaterialAttribute(3, 2)]
         Podzol,
+        
+        //TODO : WHAT?
         [MaterialAttribute(18139)]
         CrimsonNylium,
         [MaterialAttribute(26396)]
         WarpedNylium,
-        [MaterialAttribute(32147,4)]
+        
+        [MaterialAttribute(4)]
         Cobblestone,
-        [MaterialAttribute(14905,5)]
+        [MaterialAttribute(5)]
         OakPlanks,
-        [MaterialAttribute(14593,5, 1)]
+        [MaterialAttribute(5, 1)]
         SprucePlanks,
-        [MaterialAttribute(29322,5, 2)]
+        [MaterialAttribute(5, 2)]
         BirchPlanks,
-        [MaterialAttribute(26445,5, 3)]
+        [MaterialAttribute(5, 3)]
         JunglePlanks,
-        [MaterialAttribute(31312,5, 4)]
+        [MaterialAttribute(5, 4)]
         AcaciaPlanks,
-        [MaterialAttribute(20869,5, 5)]
+        [MaterialAttribute(5, 5)]
         DarkOakPlanks,
-        [MaterialAttribute(18812, 5)]
+        [MaterialAttribute( 5)]
         CrimsonPlanks,
-        [MaterialAttribute(16045,5)]
+        [MaterialAttribute(5)]
         WarpedPlanks,
-        [MaterialAttribute(9636,6)]
+        [MaterialAttribute(6)]
         OakSapling,
-        [MaterialAttribute(19874,6, 1)]
+        [MaterialAttribute(6, 1)]
         SpruceSapling,
-        [MaterialAttribute(31533,6, 2)]
+        [MaterialAttribute(6, 2)]
         BirchSapling,
-        [MaterialAttribute(17951,6, 3)]
+        [MaterialAttribute(6, 3)]
         JungleSapling,
-        [MaterialAttribute(20806,6, 4)]
+        [MaterialAttribute(6, 4)]
         AcaciaSapling,
-        [MaterialAttribute(14933,6, 5)]
+        [MaterialAttribute(6, 5)]
         DarkOakSapling,
-        [MaterialAttribute(23130,7)]
+        [MaterialAttribute(7)]
         Bedrock,
-        [MaterialAttribute(11542,12)]
+        [MaterialAttribute(12)]
         Sand,
-        [MaterialAttribute(16279,12, 1)]
+        [MaterialAttribute(12, 1)]
         RedSand,
-        [MaterialAttribute(7804,13)]
+        [MaterialAttribute(13)]
         Gravel,
-        [MaterialAttribute(32625,14)]
+        [MaterialAttribute(14)]
         GoldOre,
-        [MaterialAttribute(19834,15)]
+        [MaterialAttribute(15)]
         IronOre,
-        [MaterialAttribute(30965,16)]
+        [MaterialAttribute(16)]
         CoalOre,
-        [MaterialAttribute(4185,14)]
+        
+        //TODO : WHAT?
+        [MaterialAttribute(14)]
         NetherGoldOre,
-        [MaterialAttribute(26723,17)]
+        
+        [MaterialAttribute(17)]
         OakLog,
-        [MaterialAttribute(9726,17, 1)]
+        [MaterialAttribute(17, 1)]
         SpruceLog,
-        [MaterialAttribute(26727,17, 2)]
+        [MaterialAttribute(17, 2)]
         BirchLog,
-        [MaterialAttribute(20721,17, 3)]
+        [MaterialAttribute(17, 3)]
         JungleLog,
-        [MaterialAttribute(8385,162)]
+        [MaterialAttribute(162)]
         AcaciaLog,
-        [MaterialAttribute(14831,162, 1)]
+        [MaterialAttribute(162, 1)]
         DarkOakLog,
-        [MaterialAttribute(27920,17)]
+        
+        //TODO : WHAT?
+        [MaterialAttribute(17)]
         CrimsonStem,
-        [MaterialAttribute(28920,17)]
+        [MaterialAttribute(17)]
         WarpedStem,
-        [MaterialAttribute(20523,17)]
+        [MaterialAttribute(17)]
         StrippedOakLog,
-        [MaterialAttribute(6140,17, 1)]
+        [MaterialAttribute(17, 1)]
         StrippedSpruceLog,
-        [MaterialAttribute(8838,17, 2)]
+        [MaterialAttribute(17, 2)]
         StrippedBirchLog,
-        [MaterialAttribute(15476,17, 3)]
+        [MaterialAttribute(17, 3)]
         StrippedJungleLog,
-        [MaterialAttribute(18167,162)]
+        [MaterialAttribute(162)]
         StrippedAcaciaLog,
-        [MaterialAttribute(6492,162, 1)]
+        [MaterialAttribute(162, 1)]
         StrippedDarkOakLog,
-        [MaterialAttribute(16882,17)]
+        [MaterialAttribute(17)]
         StrippedCrimsonStem,
-        [MaterialAttribute(15627,17)]
+        [MaterialAttribute(17)]
         StrippedWarpedStem,
-        [MaterialAttribute(31455,17)]
+        [MaterialAttribute(17)]
         StrippedOakWood,
-        [MaterialAttribute(6467,17, 1)]
+        [MaterialAttribute(17, 1)]
         StrippedSpruceWood,
-        [MaterialAttribute(22350,17, 2)]
+        [MaterialAttribute(17, 2)]
         StrippedBirchWood,
-        [MaterialAttribute(30315,17, 3)]
+        [MaterialAttribute(17, 3)]
         StrippedJungleWood,
-        [MaterialAttribute(27193,162)]
+        [MaterialAttribute(162)]
         StrippedAcaciaWood,
-        [MaterialAttribute(16000,162, 1)]
+        [MaterialAttribute(162, 1)]
         StrippedDarkOakWood,
-        [MaterialAttribute(27488,17)]
+        [MaterialAttribute(17)]
         StrippedCrimsonHyphae,
-        [MaterialAttribute(7422,17)]
+        [MaterialAttribute(17)]
         StrippedWarpedHyphae,
-        [MaterialAttribute(7378,17)]
+        [MaterialAttribute(17)]
         OakWood,
-        [MaterialAttribute(32328,17, 1)]
+        [MaterialAttribute(17, 1)]
         SpruceWood,
-        [MaterialAttribute(20913,17, 2)]
+        [MaterialAttribute(17, 2)]
         BirchWood,
-        [MaterialAttribute(10341,17, 3)]
+        [MaterialAttribute(17, 3)]
         JungleWood,
-        [MaterialAttribute(9541,162)]
+        [MaterialAttribute(162)]
         AcaciaWood,
-        [MaterialAttribute(16995,162, 1)]
+        [MaterialAttribute(162, 1)]
         DarkOakWood,
-        [MaterialAttribute(6550,17)]
+        [MaterialAttribute(17)]
         CrimsonHyphae,
-        [MaterialAttribute(18439,17)]
+        [MaterialAttribute(17)]
         WarpedHyphae,
-        [MaterialAttribute(4385,18)]
+        
+        [MaterialAttribute(18)]
         OakLeaves,
-        [MaterialAttribute(20039,18, 1)]
+        [MaterialAttribute(18, 1)]
         SpruceLeaves,
-        [MaterialAttribute(12601,18, 2)]
+        [MaterialAttribute(18, 2)]
         BirchLeaves,
-        [MaterialAttribute(5133,18, 3)]
+        [MaterialAttribute(18, 3)]
         JungleLeaves,
-        [MaterialAttribute(16606,161)]
+        [MaterialAttribute(161)]
         AcaciaLeaves,
-        [MaterialAttribute(22254,161, 1)]
+        [MaterialAttribute(161, 1)]
         DarkOakLeaves,
-        [MaterialAttribute(15860,19)]
+        [MaterialAttribute(19)]
         Sponge,
-        [MaterialAttribute(9043,19, 1)]
+        [MaterialAttribute(19, 1)]
         WetSponge,
-        [MaterialAttribute(6195,10)]
+        [MaterialAttribute(20)]
         Glass,
-        [MaterialAttribute(22934,21)]
+        [MaterialAttribute(21)]
         LapisOre,
-        [MaterialAttribute(14485,22)]
+        [MaterialAttribute(22)]
         LapisBlock,
-        [MaterialAttribute(20871,23)]
+        [MaterialAttribute(23)]
         Dispenser,
-        [MaterialAttribute(13141,24)]
+        [MaterialAttribute(24)]
         Sandstone,
-        [MaterialAttribute(31763,24, 1)]
+        [MaterialAttribute(24, 1)]
         ChiseledSandstone,
-        [MaterialAttribute(6118,24, 2)]
+        [MaterialAttribute(24, 2)]
         CutSandStone,
-        [MaterialAttribute(20979,25)]
+        [MaterialAttribute(25)]
         NoteBlock,
-        [MaterialAttribute(11064,27)]
+        [MaterialAttribute(26)]
+        Bed,
+        [MaterialAttribute(27)]
         PoweredRail,
-        [MaterialAttribute(13475,28)]
+        [MaterialAttribute(28)]
         DetectorRail,
-        [MaterialAttribute(18127,29)]
+        [MaterialAttribute(29)]
         StickyPiston,
-        [MaterialAttribute(9469,30)]
+        [MaterialAttribute(30)]
         Cobweb,
-        [MaterialAttribute(6155,31, 1)]
+        [MaterialAttribute(31, 1)]
         Grass,
-        [MaterialAttribute(15794,31, 2)]
+        [MaterialAttribute(31, 2)]
         Fern,
-        [MaterialAttribute(22888,32)]
+        [MaterialAttribute(32)]
         DeadBush,
-        [MaterialAttribute(23942,31, 1)]
+        
+        //TODO: WHAT?
+        [MaterialAttribute(31)]
         Seagrass,
-        [MaterialAttribute(19562,31, 2)]
+        [MaterialAttribute(31, 2)]
         SeaPickle,
-        [MaterialAttribute(21130,33)]
+        
+        [MaterialAttribute(33)]
         Piston,
-        [MaterialAttribute(8624,35)]
+        [MaterialAttribute(34)]
+        PistonExtension,
+        [MaterialAttribute(35)]
         WhiteWool,
-        [MaterialAttribute(23957,35, 1)]
+        [MaterialAttribute(35, 1)]
         OrangeWool,
-        [MaterialAttribute(11853,35, 2)]
+        [MaterialAttribute(35, 2)]
         MagentaWool,
-        [MaterialAttribute(21073,35, 3)]
+        [MaterialAttribute(35, 3)]
         LightBlueWool,
-        [MaterialAttribute(29507,35, 4)]
+        [MaterialAttribute(35, 4)]
         YellowWool,
-        [MaterialAttribute(10443,35, 5)]
+        [MaterialAttribute(35, 5)]
         LimeWool,
-        [MaterialAttribute(7611,35, 6)]
+        [MaterialAttribute(35, 6)]
         PinkWool,
-        [MaterialAttribute(27209,35, 7)]
+        [MaterialAttribute(35, 7)]
         GrayWool,
-        [MaterialAttribute(22936,35, 8)]
+        [MaterialAttribute(35, 8)]
         LightGrayWool,
-        [MaterialAttribute(12221,35, 9)]
+        [MaterialAttribute(35, 9)]
         CyanWool,
-        [MaterialAttribute(11922,35, 10)]
+        [MaterialAttribute(35, 10)]
         PurpleWool,
-        [MaterialAttribute(15738,35, 11)]
+        [MaterialAttribute(35, 11)]
         BlueWool,
-        [MaterialAttribute(32638,35, 12)]
+        [MaterialAttribute(35, 12)]
         BrownWool,
-        [MaterialAttribute(25085,35, 13)]
+        [MaterialAttribute(35, 13)]
         GreenWool,
-        [MaterialAttribute(11621,35, 14)]
+        [MaterialAttribute(35, 14)]
         RedWool,
-        [MaterialAttribute(16693,35, 15)]
+        [MaterialAttribute(35, 15)]
         BlackWool,
-        [MaterialAttribute(30558, 37)]
+        [MaterialAttribute(36)]
+        PistonMoved,
+        [MaterialAttribute( 37)]
         Dandelion,
-        [MaterialAttribute(12851, 38)]
+        [MaterialAttribute( 38)]
         Poppy,
-        [MaterialAttribute(13432, 38, 1)]
+        [MaterialAttribute( 38, 1)]
         BlueOrchid,
-        [MaterialAttribute(6871,38, 2)]
+        [MaterialAttribute(38, 2)]
         Allium,
-        [MaterialAttribute(17608,38, 3)]
+        [MaterialAttribute(38, 3)]
         AzureBluet,
-        [MaterialAttribute(16781,38, 4)]
+        [MaterialAttribute(38, 4)]
         RedTulip,
-        [MaterialAttribute(26038,38, 5)]
+        [MaterialAttribute(38, 5)]
         OrangeTulip,
-        [MaterialAttribute(31495,38, 6)]
+        [MaterialAttribute(38, 6)]
         WhiteTulip,
-        [MaterialAttribute(27319,38, 7)]
+        [MaterialAttribute(38, 7)]
         PinkTulip,
-        [MaterialAttribute(11709,38, 8)]
+        [MaterialAttribute(38, 8)]
         OxeyeDaisy,
-        [MaterialAttribute(15405,38, 1)]
+        
+        //TODO: WHAT?
+        [MaterialAttribute(38, 1)]
         Cornflower,
-        [MaterialAttribute(7185, 38, 8)]
+        [MaterialAttribute( 38, 8)]
         LilyOfTheValley,
-        [MaterialAttribute(8619,38)]
+        [MaterialAttribute(38)]
         WitherRose,
-        [MaterialAttribute(9665,39)]
+        
+        [MaterialAttribute(39)]
         BrownMushroom,
-        [MaterialAttribute(19728,40)]
+        [MaterialAttribute(40)]
         RedMushRoom,
-        [MaterialAttribute(26268, 38)]
+        
+        //TODO: WHAT?
+        [MaterialAttribute( 38)]
         CrimsonFungus,
-        [MaterialAttribute(19799, 38, 3)]
+        [MaterialAttribute( 38, 3)]
         WarpedFungus,
-        [MaterialAttribute(14064, 31, 1)]
+        [MaterialAttribute( 31, 1)]
         CrimsonRoots,
-        [MaterialAttribute(13932,31, 1)]
+        [MaterialAttribute(31, 1)]
         WarpedRoots,
-        [MaterialAttribute(10431, 31, 1)]
+        [MaterialAttribute( 31, 1)]
         NetherSprouts,
-        [MaterialAttribute(29267, 106)]
+        [MaterialAttribute( 106)]
         WeepingVines,
-        [MaterialAttribute(27283,106)]
+        [MaterialAttribute(106)]
         TwistingVines,
-        [MaterialAttribute(7726,338)]
+        [MaterialAttribute(338)]
         SugarCane,
-        [MaterialAttribute(21916, 338)]
+        
+        //TODO: What
+        [MaterialAttribute( 338)]
         Kelp,
-        [MaterialAttribute(18728, 338)]
+        [MaterialAttribute( 338)]
         Bamboo,
-        [MaterialAttribute(27392, 41)]
+        
+        [MaterialAttribute( 41)]
         GoldBlock,
-        [MaterialAttribute(24754,42)]
+        [MaterialAttribute(42)]
         IronBlock,
-        [MaterialAttribute(12002,126)]
+        [MaterialAttribute(126)]
         OakSlab,
-        [MaterialAttribute(28798,126, 1)]
+        [MaterialAttribute(126, 1)]
         SpruceSlab,
-        [MaterialAttribute(13807,126, 2)]
+        [MaterialAttribute(126, 2)]
         BirchSlab,
-        [MaterialAttribute(19117,126, 3)]
+        [MaterialAttribute(126, 3)]
         JungleSlab,
-        [MaterialAttribute(23730,126, 4)]
+        [MaterialAttribute(126, 4)]
         AcaciaSlab,
-        [MaterialAttribute(28852,126, 5)]
+        [MaterialAttribute(126, 5)]
         DarkOakSlab,
-        [MaterialAttribute(4691,126)]
+        
+        //TODO: What?
+        [MaterialAttribute(126)]
         CrimsonSlab,
-        [MaterialAttribute(27150,126)]
+        [MaterialAttribute(126)]
         WarpedSlab,
-        [MaterialAttribute(19838,44)]
+        [MaterialAttribute(44)]
         StoneSlab,
-        [MaterialAttribute(24129,44)]
+        [MaterialAttribute(44)]
         SmoothStoneSlab,
-        [MaterialAttribute(29830,44, 1)]
+        
+        [MaterialAttribute(44, 1)]
         SandstoneSlab,
-        [MaterialAttribute(30944, 44, 1)]
+        
+        //TODO: What?
+        [MaterialAttribute( 44, 1)]
         CutSandstoneSlab,
-        [MaterialAttribute(18658, 126)]
+        [MaterialAttribute( 126)]
         PetrifiedOakSlab,
-        [MaterialAttribute(6340,44, 3)]
+        
+        [MaterialAttribute(44, 3)]
         CobblestoneSlab,
-        [MaterialAttribute(26333,44, 4)]
+        [MaterialAttribute(44, 4)]
         BrickSlab,
-        [MaterialAttribute(19676,44, 5)]
+        [MaterialAttribute(44, 5)]
         StoneBrickSlab,
-        [MaterialAttribute(26586,44, 6)]
+        [MaterialAttribute(44, 6)]
         NetherBrickSlab,
-        [MaterialAttribute(4423,44, 7)]
+        [MaterialAttribute(44, 7)]
         QuartzSlab,
-        [MaterialAttribute(17550, 182)]
+        [MaterialAttribute(182)]
         RedSandstoneSlab,
-        [MaterialAttribute(7220,182)]
+        [MaterialAttribute(182)]
         CutRedSandstoneSlab,
-        [MaterialAttribute(11487,205)]
+        [MaterialAttribute(205)]
         PurpurSlab,
-        [MaterialAttribute(31323,44, 3)]
+        
+        //TODO: What?
+        [MaterialAttribute(44, 3)]
         PrismarineSlab,
-        [MaterialAttribute(25624,44, 3)]
+        [MaterialAttribute(44, 3)]
         PrismarineBrickSlab,
-        [MaterialAttribute(7577,44, 3)]
+        [MaterialAttribute(44, 3)]
         DarkPrismarineSlab,
-        [MaterialAttribute(14415, 155)]
+        
+        [MaterialAttribute(155)]
         SmoothQuartz,
-        [MaterialAttribute(25180,179, 2)]
+        [MaterialAttribute(179, 2)]
         SmoothRedSandstone,
-        [MaterialAttribute(30039,179)]
+        [MaterialAttribute(179)]
         SmoothSandstone,
-        [MaterialAttribute(21910,1)]
+        
+        //TODO: What?
+        [MaterialAttribute(1)]
         SmoothStone,
-        [MaterialAttribute(14165,45)]
+        
+        [MaterialAttribute(45)]
         Bricks,
-        [MaterialAttribute(7896,46)]
+        [MaterialAttribute(46)]
         Tnt,
-        [MaterialAttribute(10069,47)]
+        [MaterialAttribute(47)]
         Bookshelf,
         [MaterialAttribute(21900, 48)]
         MossyCobblestone,

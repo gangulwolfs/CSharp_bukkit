@@ -46,16 +46,25 @@ namespace NiaBukkit.Network.Protocol.Play
                 // var bitsPerBlock = maxBitsBlock;
                 data.WriteByte(bitsPerBlock);
 
-                if (bitsPerBlock != maxBitsBlock)
-                {
-                    data.WriteVarInt(section.PaletteSize);
-                    for (var k = 0; k < section.PaletteSize; k++)
-                    {
-                        data.WriteVarInt(section.GetOldPaletteData(k));
-                    }
-                }
-                else
-                    data.WriteVarInt(0);
+                data.WriteVarInt(3);
+                data.WriteVarInt(0);
+                data.WriteVarInt(7 << 4);
+                data.WriteVarInt(31 << 4 | 3);
+                // data.WriteVarInt(163 << 4 | 1);
+                // data.WriteVarInt(163 << 4 | 2);
+                // data.WriteVarInt(163 << 4 | 3);
+                // data.WriteVarInt(163 << 4 | 4);
+                // data.WriteVarInt(163 << 4 | 5);
+                // if (bitsPerBlock != maxBitsBlock)
+                // {
+                //     data.WriteVarInt(section.PaletteSize);
+                //     for (var k = 0; k < section.PaletteSize; k++)
+                //     {
+                //         data.WriteVarInt(section.GetOldPaletteData(k));
+                //     }
+                // }
+                // else
+                //     data.WriteVarInt(0);
                 
                 var chunkArray = ChunkDataVersionUtil.CreateCompactArray(bitsPerBlock,
                     bitsPerBlock == maxBitsBlock ? section.GetBlockData : section.GetPaletteIndex);
