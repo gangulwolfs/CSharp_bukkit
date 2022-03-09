@@ -26,7 +26,7 @@ namespace NiaBukkit.API.Blocks.Data
         {
             if (o1 is null || o2 is null) return o1 is null && o2 is null;
             if (o2 is not BlockStonecutter o) return false;
-            return o1.Facing == o.Facing && o1.Type == o.Type;
+            return o1.Facing == o.Facing && (BlockData) o1 == o;
         }
 
         public static bool operator !=(BlockStonecutter o1, BlockData o2) => !(o1 == o2);
@@ -40,14 +40,9 @@ namespace NiaBukkit.API.Blocks.Data
         public override NBTTagCompound ToNBT()
         {
             var tag = base.ToNBT();
-            tag.GetCompound("Properties").Set("facing", new NBTTagString(Facing.ToString().ToLower()));
+            tag.GetOrCreateCompound("Properties").Set("facing", new NBTTagString(Facing.ToString().ToLower()));
             
             return tag;
-        }
-
-        public override string ToString()
-        {
-            return ToNBT().ToString();
         }
     }
 }

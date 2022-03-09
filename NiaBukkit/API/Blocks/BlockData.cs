@@ -90,14 +90,6 @@ namespace NiaBukkit.API.Blocks
             return this;
         }
 
-        public static bool operator ==(BlockData o1, BlockData o2)
-        {
-            if (o1 is null || o2 is null) return o1 is null && o2 is null;
-            return o1.Type == o2.Type;
-        }
-
-        public static bool operator !=(BlockData o1, BlockData o2) => !(o1 == o2);
-
         public virtual NBTTagCompound ToNBT()
         {
             var tag = new NBTTagCompound();
@@ -105,6 +97,16 @@ namespace NiaBukkit.API.Blocks
             
             return tag;
         }
+
+        public virtual int GetFlatId() => Type.GetBlockId() << 4 | Type.GetMetaData();
+
+        public static bool operator ==(BlockData o1, BlockData o2)
+        {
+            if (o1 is null || o2 is null) return o1 is null && o2 is null;
+            return o1.Type == o2.Type;
+        }
+
+        public static bool operator !=(BlockData o1, BlockData o2) => !(o1 == o2);
 
         public override string ToString()
         {

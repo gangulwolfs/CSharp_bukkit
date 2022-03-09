@@ -25,7 +25,7 @@ namespace NiaBukkit.API.Blocks.Data
         {
             if (o1 is null || o2 is null) return o1 is null && o2 is null;
             if (o2 is not BlockDirtSnow o) return false;
-            return o1.Snowy == o.Snowy && o1.Type == o.Type;
+            return o1.Snowy == o.Snowy && (BlockData) o1 == o;
         }
 
         public static bool operator !=(BlockDirtSnow o1, BlockData o2) => !(o1 == o2);
@@ -39,14 +39,9 @@ namespace NiaBukkit.API.Blocks.Data
         public override NBTTagCompound ToNBT()
         {
             var tag = base.ToNBT();
-            tag.GetCompound("Properties").Set("snowy", new NBTTagString(Snowy.ToString().ToLower()));
+            tag.GetOrCreateCompound("Properties").Set("snowy", new NBTTagString(Snowy.ToString().ToLower()));
             
             return tag;
-        }
-
-        public override string ToString()
-        {
-            return ToNBT().ToString();
         }
     }
 }

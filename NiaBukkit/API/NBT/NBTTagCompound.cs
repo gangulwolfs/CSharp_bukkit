@@ -97,7 +97,7 @@ namespace NiaBukkit.API.NBT
         public string GetString(string tagName)
         {
             _data.TryGetValue(tagName, out var nbt);
-            return nbt is not NBTTagString value ? "" : value.Data;
+            return nbt is not NBTTagString value ? null : value.Data;
         }
 
         public byte[] GetByteArray(string tagName)
@@ -118,10 +118,16 @@ namespace NiaBukkit.API.NBT
             return nbt is not NBTTagLongArray value ? Array.Empty<long>() : value.Data;
         }
 
-        public NBTTagCompound GetCompound(string tagName)
+        public NBTTagCompound GetOrCreateCompound(string tagName)
         {
             if (!_data.TryGetValue(tagName, out var nbt))
                 _data.TryAdd(tagName, nbt = new NBTTagCompound());
+            return nbt is not NBTTagCompound value ? null : value;
+        }
+
+        public NBTTagCompound GetCompound(string tagName)
+        {
+            _data.TryGetValue(tagName, out var nbt);
             return nbt is not NBTTagCompound value ? null : value;
         }
 

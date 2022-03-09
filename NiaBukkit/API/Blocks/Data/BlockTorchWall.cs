@@ -24,11 +24,21 @@ namespace NiaBukkit.API.Blocks.Data
             return base.GetBlockData(block, properties);
         }
 
+        public override NBTTagCompound ToNBT()
+        {
+            var tag = base.ToNBT();
+            tag.GetOrCreateCompound("Properties").Set("facing", new NBTTagString(Facing.ToString().ToLower()));
+            
+            return tag;
+        }
+
+        public override int GetFlatId() => Type.GetBlockId() << 4 | Facing.GetMeta4() + 1;
+
         public static bool operator ==(BlockTorchWall o1, BlockData o2)
         {
             if (o1 is null || o2 is null) return o1 is null && o2 is null;
             if (o2 is not BlockTorchWall o) return false;
-            return o1.ParticleType == o.ParticleType && o1.Facing == o.Facing && o1.Type == o.Type;
+            return o1.Facing == o.Facing && (BlockTorch) o1 == o;
         }
 
         public static bool operator !=(BlockTorchWall o1, BlockData o2) => !(o1 == o2);
@@ -37,19 +47,6 @@ namespace NiaBukkit.API.Blocks.Data
         {
             if (obj is not BlockTorchWall data) return false;
             return this == data;
-        }
-
-        public override NBTTagCompound ToNBT()
-        {
-            var tag = base.ToNBT();
-            tag.GetCompound("Properties").Set("facing", new NBTTagString(Facing.ToString().ToLower()));
-            
-            return tag;
-        }
-
-        public override string ToString()
-        {
-            return ToNBT().ToString();
         }
     }
 }

@@ -9,7 +9,8 @@ namespace NiaBukkit.Network.Protocol
 {
     public static class ChunkDataVersionUtil
     {
-        private static readonly int[] Magic = {
+        private static readonly int[] Magic =
+        {
             -1, -1, 0, int.MinValue, 0, 0, 1431655765, 1431655765, 0, int.MinValue,
             0, 1, 858993459, 858993459, 0, 715827882, 715827882, 0, 613566756, 613566756,
             0, int.MinValue, 0, 2, 477218588, 477218588, 0, 429496729, 429496729, 0,
@@ -29,7 +30,9 @@ namespace NiaBukkit.Network.Protocol
             79536431, 0, 78090314, 78090314, 0, 76695844, 76695844, 0, 75350303, 75350303,
             0, 74051160, 74051160, 0, 72796055, 72796055, 0, 71582788, 71582788, 0,
             70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, int.MinValue,
-            0, 5};
+            70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, int.MinValue,
+            0, 5
+        };
 
         internal static long[] CreateCompactArray(int bitsPerBlock, Func<int, int> func)
         {
@@ -86,19 +89,12 @@ namespace NiaBukkit.Network.Protocol
 
             for (var i = 0; i < ChunkSection.Size; i++)
             {
-                var cellIndex = (int) ((i * divideMul + divideAdd) >> 32 >> divideShift);
-                try
-                {
-                    var bitIndex = (i - cellIndex * valuesPerLong) * bitsPerEntry;
-                    var value = (int) (data[cellIndex] >> bitIndex & maxEntryValue);
+                var cellIndex = (int) (i * divideMul + divideAdd >> 32 >> divideShift);
+                
+                var bitIndex = (i - cellIndex * valuesPerLong) * bitsPerEntry;
+                var value = (int) (data[cellIndex] >> bitIndex & maxEntryValue);
 
-                    action.Invoke(i, value);
-                }
-                catch
-                {
-                    Bukkit.ConsoleSender.SendMessage(cellIndex +", " + i + "," + magicIndex);
-                    throw;
-                }
+                action.Invoke(i, value);
             }
         }
 

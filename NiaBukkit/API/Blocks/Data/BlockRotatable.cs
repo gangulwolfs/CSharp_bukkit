@@ -23,12 +23,23 @@ namespace NiaBukkit.API.Blocks.Data
             return base.GetBlockData(block, properties);
         }
 
+        public override NBTTagCompound ToNBT()
+        {
+            var tag = base.ToNBT();
+            var properties = tag.GetOrCreateCompound("Properties");
+            properties.Set("axis", new NBTTagString(Axis.ToString().ToLower()));
+            
+            return tag;
+        }
+
+        public override int GetFlatId() => base.GetFlatId() | Axis.GetMeta() << 2;
+
         public static bool operator ==(BlockRotatable o1, BlockData o2)
         {
             if (o1 is null || o2 is null) return o1 is null && o2 is null;
             
             if (o2 is not BlockRotatable o) return false;
-            return o.Axis == o1.Axis && o.Type == o1.Type;
+            return o.Axis == o1.Axis && (BlockData) o1 == o;
         }
 
         public static bool operator !=(BlockRotatable o1, BlockData o2) => !(o1 == o2);
@@ -37,20 +48,6 @@ namespace NiaBukkit.API.Blocks.Data
         {
             if (obj is not BlockRotatable data) return false;
             return this == data;
-        }
-
-        public override NBTTagCompound ToNBT()
-        {
-            var tag = base.ToNBT();
-            var properties = tag.GetCompound("Properties");
-            properties.Set("axis", new NBTTagString(Axis.ToString().ToLower()));
-            
-            return tag;
-        }
-
-        public override string ToString()
-        {
-            return ToNBT().ToString();
         }
     }
 }

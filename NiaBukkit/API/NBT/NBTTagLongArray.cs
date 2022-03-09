@@ -1,4 +1,5 @@
-﻿using NiaBukkit.Network;
+﻿using System;
+using NiaBukkit.Network;
 
 namespace NiaBukkit.API.NBT
 {
@@ -24,6 +25,7 @@ namespace NiaBukkit.API.NBT
             for (var i = 0; i < size; i++)
             {
                 Data[i] = buf.ReadLong();
+                // Data[i] = BitConverter.ToInt64(buf.Read(8));
             }
         }
 

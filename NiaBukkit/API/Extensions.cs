@@ -27,6 +27,7 @@ namespace NiaBukkit.API
 
         public static string Minecraft2Name(this string data)
         {
+            if (data.Length == 0) return null;
             var builder = new StringBuilder();
             builder.Append(char.ToUpper(data[0]));
             for (var i = 1; i < data.Length; i++)
@@ -51,5 +52,7 @@ namespace NiaBukkit.API
 
             return builder.ToString().ToLower();
         }
+
+        public static int ToInt(this bool data) => data ? 1 : 0;
     }
 }

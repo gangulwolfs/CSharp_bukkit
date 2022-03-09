@@ -1,4 +1,7 @@
 ﻿using System;
+using NiaBukkit.API;
+using NiaBukkit.API.Blocks;
+using NiaBukkit.API.NBT;
 using NiaBukkit.API.World.Chunks;
 
 namespace NiaBukkit.Network.Protocol.Play
@@ -46,28 +49,24 @@ namespace NiaBukkit.Network.Protocol.Play
                 // var bitsPerBlock = maxBitsBlock;
                 data.WriteByte(bitsPerBlock);
 
-                data.WriteVarInt(3);
-                data.WriteVarInt(0);
-                data.WriteVarInt(7 << 4);
-                data.WriteVarInt(31 << 4 | 3);
-                // data.WriteVarInt(163 << 4 | 1);
-                // data.WriteVarInt(163 << 4 | 2);
-                // data.WriteVarInt(163 << 4 | 3);
-                // data.WriteVarInt(163 << 4 | 4);
-                // data.WriteVarInt(163 << 4 | 5);
-                // if (bitsPerBlock != maxBitsBlock)
-                // {
-                //     data.WriteVarInt(section.PaletteSize);
-                //     for (var k = 0; k < section.PaletteSize; k++)
-                //     {
-                //         data.WriteVarInt(section.GetOldPaletteData(k));
-                //     }
-                // }
-                // else
-                //     data.WriteVarInt(0);
+                // data.WriteVarInt(3);
+                // data.WriteVarInt(0);
+                // data.WriteVarInt(7 << 4);
+                // data.WriteVarInt(64 << 4 | 3);
+                
+                if (bitsPerBlock != maxBitsBlock)
+                {
+                    data.WriteVarInt(section.PaletteSize);
+                    for (var k = 0; k < section.PaletteSize; k++)
+                    {
+                        data.WriteVarInt(section.GetFlatIdFromPalette(k));
+                    }
+                }
+                else
+                    data.WriteVarInt(0);
                 
                 var chunkArray = ChunkDataVersionUtil.CreateCompactArray(bitsPerBlock,
-                    bitsPerBlock == maxBitsBlock ? section.GetBlockData : section.GetPaletteIndex);
+                    bitsPerBlock == maxBitsBlock ? section.GetFlatId : section.GetPaletteIndex);
                 data.WriteVarInt(chunkArray.Length);
 
                 foreach (var d in chunkArray)
@@ -97,14 +96,14 @@ namespace NiaBukkit.Network.Protocol.Play
             var mask = _chunk.GetBitMask();
             buf.WriteUShort((ushort) ~mask);
             
-            ByteBuf data = new ByteBuf();
+            var data = new ByteBuf();
 
-            for (int i = 0; i < _chunk.ChunkSections.Length; i++)
+            for (var i = 0; i < _chunk.ChunkSections.Length; i++)
             {
                 if ((mask & 1 << i) == 0) continue;
                 
-                for(int k = 0; k < ChunkSection.Size; k++)
-                    data.WriteUShort((ushort) _chunk.ChunkSections[i].GetLegacyBlockData(k));
+                for(var k = 0; k < ChunkSection.Size; k++)
+                    data.WriteUShort((ushort) _chunk.ChunkSections[i].GetFlatId(k));
             }
             
             for (var i = 0; i < _chunk.ChunkSections.Length; i++)

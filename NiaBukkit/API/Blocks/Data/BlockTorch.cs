@@ -21,7 +21,7 @@ namespace NiaBukkit.API.Blocks.Data
         {
             if (o1 is null || o2 is null) return o1 is null && o2 is null;
             if (o2 is not BlockTorch o) return false;
-            return o1.ParticleType == o.ParticleType && o1.Type == o.Type;
+            return o1.ParticleType == o.ParticleType && (BlockData) o1 == o;
         }
 
         public static bool operator !=(BlockTorch o1, BlockData o2) => !(o1 == o2);

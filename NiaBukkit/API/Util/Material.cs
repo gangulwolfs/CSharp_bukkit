@@ -180,7 +180,12 @@ namespace NiaBukkit.API.Util
         [MaterialAttribute(24, 1)]
         ChiseledSandstone,
         [MaterialAttribute(24, 2)]
+        SmoothSandstone,
+        
+        //TODO: What?
+        [MaterialAttribute(24, 2)]
         CutSandStone,
+        
         [MaterialAttribute(25)]
         NoteBlock,
         [MaterialAttribute(26)]
@@ -293,7 +298,7 @@ namespace NiaBukkit.API.Util
         WeepingVines,
         [MaterialAttribute(106)]
         TwistingVines,
-        [MaterialAttribute(338)]
+        [MaterialAttribute(83)]
         SugarCane,
         
         //TODO: What
@@ -348,10 +353,12 @@ namespace NiaBukkit.API.Util
         NetherBrickSlab,
         [MaterialAttribute(44, 7)]
         QuartzSlab,
+        [MaterialAttribute(181)]
+        DoubleRedSandstoneSlab,
         [MaterialAttribute(182)]
         RedSandstoneSlab,
-        [MaterialAttribute(182)]
-        CutRedSandstoneSlab,
+        [MaterialAttribute(204)]
+        PurpurDoubleSlab,
         [MaterialAttribute(205)]
         PurpurSlab,
         
@@ -362,13 +369,15 @@ namespace NiaBukkit.API.Util
         PrismarineBrickSlab,
         [MaterialAttribute(44, 3)]
         DarkPrismarineSlab,
+        [MaterialAttribute(182)]
+        CutRedSandstoneSlab,
+        [MaterialAttribute(182)]
+        SmoothRedSandstoneSlab,
         
         [MaterialAttribute(155)]
         SmoothQuartz,
         [MaterialAttribute(179, 2)]
         SmoothRedSandstone,
-        [MaterialAttribute(179)]
-        SmoothSandstone,
         
         //TODO: What?
         [MaterialAttribute(1)]
@@ -380,660 +389,730 @@ namespace NiaBukkit.API.Util
         Tnt,
         [MaterialAttribute(47)]
         Bookshelf,
-        [MaterialAttribute(21900, 48)]
+        [MaterialAttribute(48)]
         MossyCobblestone,
-        [MaterialAttribute(32723,49)]
+        [MaterialAttribute(49)]
         Obsidian,
-        [MaterialAttribute(6063, 50)]
+        [MaterialAttribute(50, 5)]
         Torch,
-        [MaterialAttribute(24832, 50)]
+        [MaterialAttribute(198)]
         EndRod,
-        [MaterialAttribute(28243, 28243)]
+        
+        //TODO: What?
+        [MaterialAttribute(199)]
         ChorusPlant,
-        [MaterialAttribute(28542,28542)]
+        [MaterialAttribute(200)]
         ChorusFlower,
-        [MaterialAttribute(7538,201)]
+        
+        [MaterialAttribute(201)]
         PurpurBlock,
-        [MaterialAttribute(26718,202)]
+        [MaterialAttribute(202)]
         PurpurPillar,
-        [MaterialAttribute(8921,203)]
+        [MaterialAttribute(203)]
         PurpurStairs,
-        [MaterialAttribute(7018,52)]
+        [MaterialAttribute(52)]
         Spawner,
-        [MaterialAttribute(5449,53)]
+        [MaterialAttribute(53)]
         OakStairs,
-        [MaterialAttribute(22969, 54)]
+        [MaterialAttribute(54)]
         Chest,
-        [MaterialAttribute(9292,56)]
+        [MaterialAttribute(56)]
         DiamondOre,
-        [MaterialAttribute(5944, 57)]
+        [MaterialAttribute(57)]
         DiamondBlock,
-        [MaterialAttribute(20706, 58)]
+        [MaterialAttribute(58)]
         CraftingTable,
-        [MaterialAttribute(31166, 60)]
+        [MaterialAttribute( 60)]
         Farmland,
-        [MaterialAttribute(8133,61)]
+        [MaterialAttribute(61)]
         Furnace,
-        [MaterialAttribute(23599,65)]
+        [MaterialAttribute(65)]
         Ladder,
-        [MaterialAttribute(13285,66)]
+        [MaterialAttribute(66)]
         Rail,
-        [MaterialAttribute(24715,67)]
+        [MaterialAttribute(67)]
         CobblestoneStairs,
-        [MaterialAttribute(15319,69)]
+        [MaterialAttribute(69)]
         Lever,
-        [MaterialAttribute(22591,70)]
+        [MaterialAttribute(70)]
         StonePressurePlate,
-        [MaterialAttribute(20108,72)]
+        [MaterialAttribute(72)]
         OakPressurePlate,
-        [MaterialAttribute(15932,72)]
+        [MaterialAttribute(72)]
         SprucePressurePlate,
-        [MaterialAttribute(9664,72)]
+        [MaterialAttribute(72)]
         BirchPressurePlate,
-        [MaterialAttribute(11376,72)]
+        [MaterialAttribute(72)]
         JunglePressurePlate,
-        [MaterialAttribute(17586,72)]
+        [MaterialAttribute(72)]
         AcaciaPressurePlate,
-        [MaterialAttribute(31375,72)]
+        [MaterialAttribute(72)]
         DarkOakPressurePlate,
-        [MaterialAttribute(18316,72)]
+        
+        //TODO: What?
+        [MaterialAttribute(72)]
         CrimsonPressurePlate,
-        [MaterialAttribute(29516,72)]
+        [MaterialAttribute(72)]
         WarpedPressurePlate,
-        [MaterialAttribute(32340,70)]
+        [MaterialAttribute(70)]
         PolishedBlackstonePressurePlate,
-        [MaterialAttribute(10887,73)]
+        
+        [MaterialAttribute(73)]
         RedstoneOre,
-        [MaterialAttribute(22547,76)]
+        [MaterialAttribute(76)]
         RedstoneTorch,
-        [MaterialAttribute(14146,78)]
+        [MaterialAttribute(78)]
         Snow,
-        [MaterialAttribute(30428,79)]
+        [MaterialAttribute(79)]
         Ice,
-        [MaterialAttribute(19913, 80)]
+        [MaterialAttribute( 80)]
         SnowBlock,
-        [MaterialAttribute(12191,81)]
+        [MaterialAttribute(81)]
         Cactus,
-        [MaterialAttribute(27880,82)]
+        [MaterialAttribute(82)]
         Clay,
-        [MaterialAttribute(19264,84)]
+        [MaterialAttribute(84)]
         Jukebox,
-        [MaterialAttribute(6442,85)]
+        [MaterialAttribute(85)]
         OakFence,
-        [MaterialAttribute(25416,188)]
+        [MaterialAttribute(188)]
         SpruceFence,
-        [MaterialAttribute(17347,189)]
+        [MaterialAttribute(189)]
         BirchFence,
-        [MaterialAttribute(14358,190)]
+        [MaterialAttribute(190)]
         JungleFence,
-        [MaterialAttribute(4569,192)]
+        [MaterialAttribute(192)]
         AcaciaFence,
-        [MaterialAttribute(21767,191)]
+        [MaterialAttribute(191)]
         DarkOakFence,
-        [MaterialAttribute(21075,85)]
+        
+        //TODO: What?
+        [MaterialAttribute(85)]
         CrimsonFence,
-        [MaterialAttribute(18438,85)]
+        [MaterialAttribute(85)]
         WarpedFence,
-        [MaterialAttribute(19170, 86)]
+        [MaterialAttribute(86)]
         Pumpkin,
-        [MaterialAttribute(25833,86)]
+        [MaterialAttribute(86)]
         CarvedPumpkin,
-        [MaterialAttribute(23425,87)]
+        
+        [MaterialAttribute(87)]
         NetherRack,
-        [MaterialAttribute(16841,88)]
+        [MaterialAttribute(88)]
         SoulSand,
-        [MaterialAttribute(31140,88)]
+        
+        //TODO: What?
+        [MaterialAttribute(88)]
         SoulSoil,
-        [MaterialAttribute(28478, 1)]
+        [MaterialAttribute(1)]
         Basalt,
-        [MaterialAttribute(11659,1, 6)]
+        [MaterialAttribute(1, 6)]
         PolishedBasalt,
-        [MaterialAttribute(14292,50)]
+        [MaterialAttribute(50)]
         SoulTorch,
-        [MaterialAttribute(32713, 89)]
+        
+        [MaterialAttribute(89)]
         Glowstone,
-        [MaterialAttribute(13758,91)]
+        [MaterialAttribute(91)]
         JackOLantern,
-        [MaterialAttribute(16927, 96)]
+        [MaterialAttribute(96)]
         OakTrapdoor,
-        [MaterialAttribute(10289,96)]
+        
+        //TODO: What?
+        [MaterialAttribute(96)]
         SpruceTrapdoor,
-        [MaterialAttribute(32585,96)]
+        [MaterialAttribute(96)]
         BirchTrapdoor,
-        [MaterialAttribute(8626,96)]
+        [MaterialAttribute(96)]
         JungleTrapdoor,
-        [MaterialAttribute(18343,96)]
+        [MaterialAttribute(96)]
         AcaciaTrapdoor,
-        [MaterialAttribute(10355,96)]
+        [MaterialAttribute(96)]
         DarkOakTrapdoor,
-        [MaterialAttribute(25056,96)]
+        [MaterialAttribute(96)]
         CrimsonTrapdoor,
         [MaterialAttribute(7708,96)]
         WarpedTrapdoor,
-        [MaterialAttribute(18440, 97)]
+        
+        [MaterialAttribute(97)]
         InfestedStone,
-        [MaterialAttribute(4348,97, 1)]
+        [MaterialAttribute(97, 1)]
         InfestedCobblestone,
-        [MaterialAttribute(19749,97, 2)]
+        [MaterialAttribute(97, 2)]
         InfestedStoneBricks,
-        [MaterialAttribute(9850,97, 3)]
+        [MaterialAttribute(97, 3)]
         InfestedMossyStoneBricks,
-        [MaterialAttribute(7476,97, 4)]
+        [MaterialAttribute(97, 4)]
         InfestedCrackedStoneBricks,
-        [MaterialAttribute(4728,97, 5)]
+        [MaterialAttribute(97, 5)]
         InfestedChiseledStoneBricks,
-        [MaterialAttribute(6962,98)]
+        [MaterialAttribute(98)]
         StoneBricks,
-        [MaterialAttribute(16415,98, 1)]
+        [MaterialAttribute(98, 1)]
         MossyStoneBricks,
-        [MaterialAttribute(27869,98, 2)]
+        [MaterialAttribute(98, 2)]
         CrackedStoneBricks,
-        [MaterialAttribute(9087,98, 3)]
+        [MaterialAttribute(98, 3)]
         ChiseledStoneBricks,
-        [MaterialAttribute(6291,99)]
+        [MaterialAttribute(99)]
         BrownMushroomBlock,
-        [MaterialAttribute(20766,100)]
+        [MaterialAttribute(100)]
         RedMushroomBlock,
-        [MaterialAttribute(16543,99)]
+        [MaterialAttribute(99, 10)]
         MushroomStem,
-        [MaterialAttribute(9378,101)]
+        [MaterialAttribute(101)]
         IronBars,
+        
+        //TODO: What?
         [MaterialAttribute(28265,101)]
         Chain,
-        [MaterialAttribute(5709,102)]
+        
+        [MaterialAttribute(102)]
         GlassPane,
-        [MaterialAttribute(25172,103)]
+        [MaterialAttribute(103)]
         Melon,
-        [MaterialAttribute(14564,106)]
+        [MaterialAttribute(106)]
         Vine,
-        [MaterialAttribute(16689,107)]
+        [MaterialAttribute(107)]
         OakFenceGate,
-        [MaterialAttribute(26423,183)]
+        [MaterialAttribute(183)]
         SpruceFenceGate,
-        [MaterialAttribute(6322,184)]
+        [MaterialAttribute(184)]
         BirchFenceGate,
-        [MaterialAttribute(21360,185)]
+        [MaterialAttribute(185)]
         JungleFenceGate,
-        [MaterialAttribute(14145,187)]
+        [MaterialAttribute(187)]
         AcaciaFenceGate,
-        [MaterialAttribute(10679,186)]
+        [MaterialAttribute(186)]
         DarkOakFenceGate,
-        [MaterialAttribute(15602,107)]
+        
+        //TODO: What?
+        [MaterialAttribute(107)]
         CrimsonFenceGate,
-        [MaterialAttribute(11115,107)]
+        [MaterialAttribute(107)]
         WarpedFenceGate,
-        [MaterialAttribute(21534,108)]
+        
+        [MaterialAttribute(108)]
         BrickStairs,
-        [MaterialAttribute(27032,109)]
+        [MaterialAttribute(109)]
         StoneBrickStairs,
-        [MaterialAttribute(9913,110)]
+        [MaterialAttribute(110)]
         Mycelium,
-        [MaterialAttribute(19271,111)]
+        [MaterialAttribute(111)]
         LilyPad,
-        [MaterialAttribute(27802,112)]
+        [MaterialAttribute(112)]
         NetherBricks,
-        [MaterialAttribute(10888,112)]
+        
+        //TODO: What?
+        [MaterialAttribute(112)]
         CrackedNetherBricks,
-        [MaterialAttribute(21613,112)]
+        [MaterialAttribute(112)]
         ChiseledNetherBricks,
-        [MaterialAttribute(5286,113)]
+        
+        [MaterialAttribute(113)]
         NetherBrickFence,
-        [MaterialAttribute(12085,114)]
+        [MaterialAttribute(114)]
         NetherBrickStairs,
-        [MaterialAttribute(16255,116)]
+        [MaterialAttribute(115)]
+        NetherWart,
+        [MaterialAttribute(116)]
         EnchantingTable,
-        [MaterialAttribute(15480,120)]
+        [MaterialAttribute(117)]
+        BrewingStand,
+        [MaterialAttribute(118)]
+        Cauldron,
+        [MaterialAttribute(120)]
         EndPortalFrame,
-        [MaterialAttribute(29686,121)]
+        [MaterialAttribute(121)]
         EndStone,
-        [MaterialAttribute(20314,121)]
+        
+        //TODO: What?
+        [MaterialAttribute(206)]
         EndStoneBricks,
-        [MaterialAttribute(29946,122)]
+        
+        [MaterialAttribute(122)]
         DragonEgg,
-        [MaterialAttribute(8217,123)]
+        [MaterialAttribute(123)]
         RedstoneLamp,
-        [MaterialAttribute(18474,128)]
+        [MaterialAttribute(128)]
         SandstoneStairs,
-        [MaterialAttribute(16630,129)]
+        [MaterialAttribute(129)]
         EmeraldOre,
-        [MaterialAttribute(32349,130)]
+        [MaterialAttribute(130)]
         EnderChest,
-        [MaterialAttribute(8130,131)]
+        [MaterialAttribute(131)]
         TripwireHook,
-        [MaterialAttribute(9914,133)]
+        [MaterialAttribute(133)]
         EmeraldBlock,
-        [MaterialAttribute(11192,134)]
+        [MaterialAttribute(134)]
         SpruceStairs,
-        [MaterialAttribute(7657,135)]
+        [MaterialAttribute(135)]
         BirchStairs,
-        [MaterialAttribute(20636,136)]
+        [MaterialAttribute(136)]
         JungleStairs,
+        
+        //TODO: What?
         [MaterialAttribute(32442,53)]
         CrimsonStairs,
         [MaterialAttribute(17721,53)]
         WarpedStairs,
-        [MaterialAttribute(4355, 137)]
+        
+        [MaterialAttribute(137)]
         CommandBlock,
-        [MaterialAttribute(6608,138)]
+        [MaterialAttribute(138)]
         Beacon,
-        [MaterialAttribute(12616,139)]
+        [MaterialAttribute(139)]
         CobblestoneWall,
-        [MaterialAttribute(11536,139, 1)]
+        [MaterialAttribute(139, 1)]
         MossyCobblestoneWall,
-        [MaterialAttribute(18995,139)]
+        
+        //TODO: What?
+        [MaterialAttribute(139)]
         BrickWall,
-        [MaterialAttribute(18184,139)]
+        [MaterialAttribute(139)]
         PrismarineWall,
-        [MaterialAttribute(4753,139)]
+        [MaterialAttribute(139)]
         RedSandstoneWall,
-        [MaterialAttribute(18259,139)]
+        [MaterialAttribute(139)]
         MossyStoneBrickWall,
-        [MaterialAttribute(23279,139)]
+        [MaterialAttribute(139)]
         GraniteWall,
-        [MaterialAttribute(29073,139)]
+        [MaterialAttribute(139)]
         StoneBrickWall,
-        [MaterialAttribute(10398,139)]
+        [MaterialAttribute(139)]
         NetherBrickWall,
-        [MaterialAttribute(14938,139)]
+        [MaterialAttribute(139)]
         AndesiteWall,
-        [MaterialAttribute(4580,139)]
+        [MaterialAttribute(139)]
         RedNetherBrickWall,
-        [MaterialAttribute(18470,139)]
+        [MaterialAttribute(139)]
         SandstoneWall,
-        [MaterialAttribute(27225,139)]
+        [MaterialAttribute(139)]
         EndStoneBrickWall,
-        [MaterialAttribute(17412,139)]
+        [MaterialAttribute(139)]
         DioriteWall,
-        [MaterialAttribute(17327,139)]
+        [MaterialAttribute(139)]
         BlackstoneWall,
-        [MaterialAttribute(15119,139)]
+        [MaterialAttribute(139)]
         PolishedBlackstoneWall,
-        [MaterialAttribute(9540,139)]
+        [MaterialAttribute(139)]
         PolishedBlackstoneBrickWall,
-        [MaterialAttribute(12279,77)]
+        
+        [MaterialAttribute(77)]
         StoneButton,
-        [MaterialAttribute(13510,148)]
+        [MaterialAttribute(143)]
         OakButton,
-        [MaterialAttribute(23281,148)]
+        
+        //TODO: What?
+        [MaterialAttribute(143)]
         SpruceButton,
-        [MaterialAttribute(26934,148)]
+        [MaterialAttribute(143)]
         BirchButton,
-        [MaterialAttribute(25317,148)]
+        [MaterialAttribute(143)]
         JungleButton,
-        [MaterialAttribute(13993,148)]
+        [MaterialAttribute(143)]
         AcaciaButton,
-        [MaterialAttribute(6214,148)]
+        [MaterialAttribute(143)]
         DarkOakButton,
-        [MaterialAttribute(26799,148)]
+        [MaterialAttribute(143)]
         CrimsonButton,
-        [MaterialAttribute(25264,148)]
+        [MaterialAttribute(143)]
         WarpedButton,
-        [MaterialAttribute(20760,148)]
+        [MaterialAttribute(77)]
         PolishedBlackstoneButton,
-        [MaterialAttribute(18718,145)]
+        
+        
+        [MaterialAttribute(144)]
+        SkeletonSkull,
+        [MaterialAttribute(144, 1)]
+        WitherSkeletonSkull,
+        [MaterialAttribute(144, 2)]
+        PlayerHead,
+        [MaterialAttribute(144, 3)]
+        ZombieHead,
+        [MaterialAttribute(144, 4)]
+        CreeperHead,
+        [MaterialAttribute(144, 5)]
+        DragonHead,
+        [MaterialAttribute(145)]
         Anvil,
-        [MaterialAttribute(10623,145, 1)]
+        [MaterialAttribute(145, 1)]
         ChippedAnvil,
-        [MaterialAttribute(10274,145, 2)]
+        [MaterialAttribute(145, 2)]
         DamagedAnvil,
-        [MaterialAttribute(18970,146)]
+        [MaterialAttribute(146)]
         TrappedChest,
-        [MaterialAttribute(14875,147)]
+        [MaterialAttribute(147)]
         LightWeightedPressurePlate,
-        [MaterialAttribute(16970,148)]
+        [MaterialAttribute(148)]
         HeavyWeightedPressurePlate,
-        [MaterialAttribute(8864,151)]
+        [MaterialAttribute(151)]
         DaylightDetector,
-        [MaterialAttribute(19496,152)]
+        [MaterialAttribute(178)]
+        DaylightDetectorInverted,
+        [MaterialAttribute(152)]
         RedstoneBlock,
-        [MaterialAttribute(4807,153)]
+        [MaterialAttribute(153)]
         NetherQuartzOre,
-        [MaterialAttribute(31974,154)]
+        [MaterialAttribute(154)]
         Hopper,
-        [MaterialAttribute(30964,155, 1)]
+        [MaterialAttribute(155, 1)]
         ChiseledQuartzBlock,
-        [MaterialAttribute(11987,155)]
+        [MaterialAttribute(155)]
         QuartzBlock,
-        [MaterialAttribute(23358,155)]
+        
+        //TODO: What?
+        [MaterialAttribute(155)]
         QuartzBricks,
-        [MaterialAttribute(16452,155, 2)]
+        
+        [MaterialAttribute(155, 2)]
         QuartzPillar,
-        [MaterialAttribute(24079,156)]
+        [MaterialAttribute(156)]
         QuartzStairs,
-        [MaterialAttribute(5834,157)]
+        [MaterialAttribute(157)]
         ActivatorRail,
-        [MaterialAttribute(31273,158)]
+        [MaterialAttribute(158)]
         Dropper,
-        [MaterialAttribute(20975,159)]
+        [MaterialAttribute(159)]
         WhiteTerracotta,
-        [MaterialAttribute(18684,159, 1)]
+        [MaterialAttribute(159, 1)]
         OrangeTerracotta,
-        [MaterialAttribute(25900,159, 2)]
+        [MaterialAttribute(159, 2)]
         MagentaTerracotta,
-        [MaterialAttribute(31779,159, 3)]
+        [MaterialAttribute(159, 3)]
         LightBlueTerracotta,
-        [MaterialAttribute(32129,159, 4)]
+        [MaterialAttribute(159, 4)]
         YellowTerracotta,
-        [MaterialAttribute(24013,159, 5)]
+        [MaterialAttribute(159, 5)]
         LimeTerracotta,
-        [MaterialAttribute(23727,159, 6)]
+        [MaterialAttribute(159, 6)]
         PinkTerracotta,
-        [MaterialAttribute(18004,159, 7)]
+        [MaterialAttribute(159, 7)]
         GrayTerracotta,
-        [MaterialAttribute(26388,159, 8)]
+        [MaterialAttribute(159, 8)]
         LightGrayTerracotta,
-        [MaterialAttribute(25940,159, 9)]
+        [MaterialAttribute(159, 9)]
         CyanTerracotta,
-        [MaterialAttribute(10387,159, 10)]
+        [MaterialAttribute(159, 10)]
         PurpleTerracotta,
-        [MaterialAttribute(5236,159, 11)]
+        [MaterialAttribute(159, 11)]
         BlueTerracotta,
-        [MaterialAttribute(23664,159, 12)]
+        [MaterialAttribute(159, 12)]
         BrownTerracotta,
-        [MaterialAttribute(4105,159, 13)]
+        [MaterialAttribute(159, 13)]
         GreenTerracotta,
-        [MaterialAttribute(5086,159, 14)]
+        [MaterialAttribute(159, 14)]
         RedTerracotta,
-        [MaterialAttribute(26691,159, 15)]
+        [MaterialAttribute(159, 15)]
         BlackTerracotta,
-        [MaterialAttribute(26453,166)]
+        [MaterialAttribute(166)]
         Barrier,
-        [MaterialAttribute(17095,167)]
+        [MaterialAttribute(167)]
         IronTrapdoor,
-        [MaterialAttribute(17461,170)]
+        [MaterialAttribute(170)]
         HayBlock,
-        [MaterialAttribute(15117,171)]
+        [MaterialAttribute(171)]
         WhiteCarpet,
-        [MaterialAttribute(24752,171, 1)]
+        [MaterialAttribute(171, 1)]
         OrangeCarpet,
-        [MaterialAttribute(6180,171, 2)]
+        [MaterialAttribute(171, 2)]
         MagentaCarpet,
-        [MaterialAttribute(21194,171, 3)]
+        [MaterialAttribute(171, 3)]
         LightBlueCarpet,
-        [MaterialAttribute(18149,171, 4)]
+        [MaterialAttribute(171, 4)]
         YellowCarpet,
-        [MaterialAttribute(15443,171, 5)]
+        [MaterialAttribute(171, 5)]
         LimeCarpet,
-        [MaterialAttribute(27381,171, 6)]
+        [MaterialAttribute(171, 6)]
         PinkCarpet,
-        [MaterialAttribute(26991,171, 7)]
+        [MaterialAttribute(171, 7)]
         GrayCarpet,
-        [MaterialAttribute(11317,171, 8)]
+        [MaterialAttribute(171, 8)]
         LightGrayCarpet,
-        [MaterialAttribute(9742,171, 9)]
+        [MaterialAttribute(171, 9)]
         CyanCarpet,
-        [MaterialAttribute(5574,171, 10)]
+        [MaterialAttribute(171, 10)]
         PurpleCarpet,
-        [MaterialAttribute(13292,171, 11)]
+        [MaterialAttribute(171, 11)]
         BlueCarpet,
-        [MaterialAttribute(23352,171, 12)]
+        [MaterialAttribute(171, 12)]
         BrownCarpet,
-        [MaterialAttribute(7780,171, 13)]
+        [MaterialAttribute(171, 13)]
         GreenCarpet,
-        [MaterialAttribute(5424,171, 14)]
+        [MaterialAttribute(171, 14)]
         RedCarpet,
-        [MaterialAttribute(6056,171, 15)]
+        [MaterialAttribute(171, 15)]
         BlackCarpet,
-        [MaterialAttribute(16544, 172)]
+        [MaterialAttribute(172)]
         Terracotta,
-        [MaterialAttribute(27968,173)]
+        [MaterialAttribute(173)]
         CoalBlock,
-        [MaterialAttribute(28993,174)]
+        [MaterialAttribute(174)]
         PackedIce,
-        [MaterialAttribute(17453,163)]
+        [MaterialAttribute(163)]
         AcaciaStairs,
-        [MaterialAttribute(22921,164)]
+        [MaterialAttribute(164)]
         DarkOakStairs,
-        [MaterialAttribute(31892,165)]
+        [MaterialAttribute(165)]
         SlimeBlock,
-        [MaterialAttribute(8604,208)]
+        [MaterialAttribute(208)]
         GrassPath,
         [MaterialAttribute(7408,175)]
         Sunflower,
-        [MaterialAttribute(22837,175, 1)]
+        [MaterialAttribute(175, 1)]
         Lilac,
-        [MaterialAttribute(6080,175, 4)]
+        [MaterialAttribute(175, 4)]
         RoseBush,
-        [MaterialAttribute(21155,175, 5)]
+        [MaterialAttribute(175, 5)]
         Peony,
-        [MaterialAttribute(21559,175, 2)]
+        [MaterialAttribute(175, 2)]
         TallGrass,
-        [MaterialAttribute(30177,175, 3)]
+        [MaterialAttribute(175, 3)]
         LargeFern,
         [MaterialAttribute(31190,95)]
         WhiteStainedGlass,
-        [MaterialAttribute(25142,95, 1)]
+        [MaterialAttribute(95, 1)]
         OrangeStainedGlass,
-        [MaterialAttribute(26814,95, 2)]
+        [MaterialAttribute(95, 2)]
         MagentaStainedGlass,
-        [MaterialAttribute(17162,95, 3)]
+        [MaterialAttribute(95, 3)]
         LightBlueStainedGlass,
-        [MaterialAttribute(12182,95, 4)]
+        [MaterialAttribute(95, 4)]
         YellowStainedGlass,
-        [MaterialAttribute(24266,95, 5)]
+        [MaterialAttribute(95, 5)]
         LimeStainedGlass,
-        [MaterialAttribute(16164,95, 6)]
+        [MaterialAttribute(95, 6)]
         PinkStainedGlass,
-        [MaterialAttribute(29979,95, 7)]
+        [MaterialAttribute(95, 7)]
         GrayStainedGlass,
-        [MaterialAttribute(5843,95, 8)]
+        [MaterialAttribute(95, 8)]
         LightGrayStainedGlass,
-        [MaterialAttribute(30604,95, 9)]
+        [MaterialAttribute(95, 9)]
         CyanStainedGlass,
-        [MaterialAttribute(21845,95, 10)]
+        [MaterialAttribute(95, 10)]
         PurpleStainedGlass,
-        [MaterialAttribute(7107,95, 11)]
+        [MaterialAttribute(95, 11)]
         BlueStainedGlass,
-        [MaterialAttribute(20945,95, 12)]
+        [MaterialAttribute(95, 12)]
         BrownStainedGlass,
-        [MaterialAttribute(22503,95, 13)]
+        [MaterialAttribute(95, 13)]
         GreenStainedGlass,
-        [MaterialAttribute(9717,95, 14)]
+        [MaterialAttribute(95, 14)]
         RedStainedGlass,
-        [MaterialAttribute(13941,95, 15)]
+        [MaterialAttribute(95, 15)]
         BlackStainedGlass,
-        [MaterialAttribute(10557,160)]
+        [MaterialAttribute(160)]
         WhiteStainedGlassPane,
-        [MaterialAttribute(21089,160, 1)]
+        [MaterialAttribute(160, 1)]
         OrangeStainedGlassPane,
-        [MaterialAttribute(14082, 160, 2)]
+        [MaterialAttribute(160, 2)]
         MagentaStainedGlassPane,
-        [MaterialAttribute(18721,160, 3)]
+        [MaterialAttribute(160, 3)]
         LightBlueStainedGlassPane,
-        [MaterialAttribute(20298,160, 4)]
+        [MaterialAttribute(160, 4)]
         YellowStainedGlassPane,
-        [MaterialAttribute(10610,160, 5)]
+        [MaterialAttribute(160, 5)]
         LimeStainedGlassPane,
-        [MaterialAttribute(24637,160, 6)]
+        [MaterialAttribute(160, 6)]
         PinkStainedGlassPane,
-        [MaterialAttribute(25272,160, 7)]
+        [MaterialAttribute(160, 7)]
         GrayStainedGlassPane,
-        [MaterialAttribute(19008,160, 8)]
+        [MaterialAttribute(160, 8)]
         LightGrayStainedGlassPane,
-        [MaterialAttribute(11784,160, 9)]
+        [MaterialAttribute(160, 9)]
         CyanStainedGlassPane,
-        [MaterialAttribute(10948,160, 10)]
+        [MaterialAttribute(160, 10)]
         PurpleStainedGlassPane,
-        [MaterialAttribute(28484,160, 11)]
+        [MaterialAttribute(160, 11)]
         BlueStainedGlassPane,
-        [MaterialAttribute(17557,160, 12)]
+        [MaterialAttribute(160, 12)]
         BrownStainedGlassPane,
-        [MaterialAttribute(4767,160, 13)]
+        [MaterialAttribute(160, 13)]
         GreenStainedGlassPane,
-        [MaterialAttribute(8630,160, 14)]
+        [MaterialAttribute(160, 14)]
         RedStainedGlassPane,
-        [MaterialAttribute(13201,160, 15)]
+        [MaterialAttribute(160, 15)]
         BlackStainedGlassPane,
-        [MaterialAttribute(7539,168)]
+        [MaterialAttribute(168)]
         Prismarine,
-        [MaterialAttribute(29118,168, 1)]
+        [MaterialAttribute(168, 1)]
         PrismarineBricks,
-        [MaterialAttribute(19940,168, 2)]
+        [MaterialAttribute(168, 2)]
         DarkPrismarine,
-        [MaterialAttribute(19217,67)]
+        
+        //TODO: What?
+        [MaterialAttribute(67)]
         PrismarineStairs,
-        [MaterialAttribute(15445,67)]
+        [MaterialAttribute(67)]
         PrismarineBrickStairs,
-        [MaterialAttribute(26511,67)]
+        [MaterialAttribute(67)]
         DarkPrismarineStairs,
-        [MaterialAttribute(20780,169)]
+        [MaterialAttribute(169)]
         SeaLantern,
-        [MaterialAttribute(9092,179)]
+        [MaterialAttribute(179)]
         RedSandstone,
-        [MaterialAttribute(15529,179, 1)]
+        [MaterialAttribute(179, 1)]
         ChiseledRedSandstone,
-        [MaterialAttribute(26842,179)]
+        
+        //TODO: What?
+        [MaterialAttribute(179)]
         CutRedSandstone,
-        [MaterialAttribute(25466,180)]
+        
+        [MaterialAttribute(180)]
         RedSandstoneStairs,
-        [MaterialAttribute(12405,210)]
+        [MaterialAttribute(210)]
         RepeatingCommandBlock,
-        [MaterialAttribute(26798,211)]
+        [MaterialAttribute(211)]
         ChainCommandBlock,
-        [MaterialAttribute(25927,113)]
+        [MaterialAttribute(213)]
         MagmaBlock,
-        [MaterialAttribute(15486,214)]
+        [MaterialAttribute(214)]
         NetherWartBlock,
-        [MaterialAttribute(15463,214)]
+        
+        //TODO: What?
+        [MaterialAttribute(214)]
         WarpedWartBlock,
-        [MaterialAttribute(18056,215)]
+        
+        [MaterialAttribute(215)]
         RedNetherBricks,
-        [MaterialAttribute(17312,216)]
+        [MaterialAttribute(216)]
         BoneBlock,
-        [MaterialAttribute(30806,217)]
+        [MaterialAttribute(217)]
         StructureVoid,
-        [MaterialAttribute(10726, 218)]
+        [MaterialAttribute(218)]
         Observer,
-        [MaterialAttribute(7776, 229)]
+        [MaterialAttribute(229)]
         ShulkerBox,
-        [MaterialAttribute(31750,219)]
+        [MaterialAttribute(219)]
         WhiteShulkerBox,
-        [MaterialAttribute(21673,220)]
+        [MaterialAttribute(220)]
         OrangeShulkerBox,
-        [MaterialAttribute(21566,221)]
+        [MaterialAttribute(221)]
         MagentaShulkerBox,
-        [MaterialAttribute(18226,222)]
+        [MaterialAttribute(222)]
         LightBlueShulkerBox,
-        [MaterialAttribute(28700,223)]
+        [MaterialAttribute(223)]
         YellowShulkerBox,
-        [MaterialAttribute(28360,224)]
+        [MaterialAttribute(224)]
         LimeShulkerBox,
-        [MaterialAttribute(24968,225)]
+        [MaterialAttribute(225)]
         PinkShulkerBox,
-        [MaterialAttribute(12754,226)]
+        [MaterialAttribute(226)]
         GrayShulkerBox,
-        [MaterialAttribute(21345,227)]
+        [MaterialAttribute(227)]
         LightGrayShulkerBox,
-        [MaterialAttribute(28123,228)]
+        [MaterialAttribute(228)]
         CyanShulkerBox,
-        [MaterialAttribute(10373,229)]
+        [MaterialAttribute(229)]
         PurpleShulkerBox,
-        [MaterialAttribute(11476,230)]
+        [MaterialAttribute(230)]
         BlueShulkerBox,
-        [MaterialAttribute(24230,231)]
+        [MaterialAttribute(231)]
         BrownShulkerBox,
-        [MaterialAttribute(9377,232)]
+        [MaterialAttribute(232)]
         GreenShulkerBox,
-        [MaterialAttribute(32448,233)]
+        [MaterialAttribute(233)]
         RedShulkerBox,
-        [MaterialAttribute(24076,234)]
+        [MaterialAttribute(234)]
         BlackShulkerBox,
-        [MaterialAttribute(11326,235)]
+        [MaterialAttribute(235)]
         WhiteGlazedTerracotta,
-        [MaterialAttribute(27451,236)]
+        [MaterialAttribute(236)]
         OrangeGlazedTerracotta,
-        [MaterialAttribute(8067,237)]
+        [MaterialAttribute(237)]
         MagentaGlazedTerracotta,
-        [MaterialAttribute(4336,238)]
+        [MaterialAttribute(238)]
         LightBlueGlazedTerracotta,
-        [MaterialAttribute(10914,239)]
+        [MaterialAttribute(239)]
         YellowGlazedTerracotta,
-        [MaterialAttribute(13861,240)]
+        [MaterialAttribute(240)]
         LimeGlazedTerracotta,
-        [MaterialAttribute(10260,241)]
+        [MaterialAttribute(241)]
         PinkGlazedTerracotta,
-        [MaterialAttribute(6256,242)]
+        [MaterialAttribute(242)]
         GrayGlazedTerracotta,
-        [MaterialAttribute(10707,243)]
+        [MaterialAttribute(243)]
         LightGrayGlazedTerracotta,
-        [MaterialAttribute(9550,244)]
+        [MaterialAttribute(244)]
         CyanGlazedTerracotta,
-        [MaterialAttribute(4818,245)]
+        [MaterialAttribute(245)]
         PurpleGlazedTerracotta,
-        [MaterialAttribute(23823,246)]
+        [MaterialAttribute(246)]
         BlueGlazedTerracotta,
-        [MaterialAttribute(5655,247)]
+        [MaterialAttribute(247)]
         BrownGlazedTerracotta,
-        [MaterialAttribute(6958,248)]
+        [MaterialAttribute(248)]
         GreenGlazedTerracotta,
-        [MaterialAttribute(24989,249)]
+        [MaterialAttribute(249)]
         RedGlazedTerracotta,
-        [MaterialAttribute(29678,250)]
+        [MaterialAttribute(250)]
         BlackGlazedTerracotta,
-        [MaterialAttribute(6281,251)]
+        [MaterialAttribute(251)]
         WhiteConcrete,
-        [MaterialAttribute(19914,251, 1)]
+        [MaterialAttribute(251, 1)]
         OrangeConcrete,
-        [MaterialAttribute(20591,251, 2)]
+        [MaterialAttribute(251, 2)]
         MagentaConcrete,
-        [MaterialAttribute(29481,251, 3)]
+        [MaterialAttribute(251, 3)]
         LightBlueConcrete,
-        [MaterialAttribute(15722,251, 4)]
+        [MaterialAttribute(251, 4)]
         YellowConcrete,
-        [MaterialAttribute(5863,251, 5)]
+        [MaterialAttribute(251, 5)]
         LimeConcrete,
-        [MaterialAttribute(5227,251, 6)]
+        [MaterialAttribute(251, 6)]
         PinkConcrete,
-        [MaterialAttribute(13959,251, 7)]
+        [MaterialAttribute(251, 7)]
         GrayConcrete,
-        [MaterialAttribute(14453,251, 8)]
+        [MaterialAttribute(251, 8)]
         LightGrayConcrete,
-        [MaterialAttribute(26522,251, 9)]
+        [MaterialAttribute(251, 9)]
         CyanConcrete,
-        [MaterialAttribute(20623,251, 10)]
+        [MaterialAttribute(251, 10)]
         PurpleConcrete,
-        [MaterialAttribute(18756,251, 11)]
+        [MaterialAttribute(251, 11)]
         BlueConcrete,
-        [MaterialAttribute(19006,251, 12)]
+        [MaterialAttribute(251, 12)]
         BrownConcrete,
-        [MaterialAttribute(17949,251, 13)]
+        [MaterialAttribute(251, 13)]
         GreenConcrete,
-        [MaterialAttribute(8032,251, 14)]
+        [MaterialAttribute(251, 14)]
         RedConcrete,
-        [MaterialAttribute(13338,251, 15)]
+        [MaterialAttribute(251, 15)]
         BlackConcrete,
-        [MaterialAttribute(10363,252)]
+        [MaterialAttribute(252)]
         WhiteConcretePowder,
-        [MaterialAttribute(30159,252, 1)]
+        [MaterialAttribute(252, 1)]
         OrangeConcretePowder,
-        [MaterialAttribute(8272,252, 2)]
+        [MaterialAttribute(252, 2)]
         MagentaConcretePowder,
-        [MaterialAttribute(31206,252, 3)]
+        [MaterialAttribute(252, 3)]
         LightBlueConcretePowder,
-        [MaterialAttribute(10655,252, 4)]
+        [MaterialAttribute(252, 4)]
         YellowConcretePowder,
-        [MaterialAttribute(28859,252, 5)]
+        [MaterialAttribute(252, 5)]
         LimeConcretePowder,
-        [MaterialAttribute(6421,252, 6)]
+        [MaterialAttribute(252, 6)]
         PinkConcretePowder,
-        [MaterialAttribute(13031,252, 7)]
+        [MaterialAttribute(252, 7)]
         GrayConcretePowder,
-        [MaterialAttribute(21589,252, 8)]
+        [MaterialAttribute(252, 8)]
         LightGrayConcretePowder,
-        [MaterialAttribute(15734,252, 9)]
+        [MaterialAttribute(252, 9)]
         CyanConcretePowder,
-        [MaterialAttribute(26808,252, 10)]
+        [MaterialAttribute(252, 10)]
         PurpleConcretePowder,
-        [MaterialAttribute(17773,252, 11)]
+        [MaterialAttribute(252, 11)]
         BlueConcretePowder,
-        [MaterialAttribute(21485,252, 12)]
+        [MaterialAttribute(252, 12)]
         BrownConcretePowder,
-        [MaterialAttribute(6904,252, 13)]
+        [MaterialAttribute(252, 13)]
         GreenConcretePowder,
-        [MaterialAttribute(13286,252, 14)]
+        [MaterialAttribute(252, 14)]
         RedConcretePowder,
-        [MaterialAttribute(16150,252, 15)]
+        [MaterialAttribute(252, 15)]
         BlackConcretePowder,
+        
+        //TODO: What?
         [MaterialAttribute(32101)]
         TurtleEgg,
         [MaterialAttribute(28350)]
@@ -1096,45 +1175,43 @@ namespace NiaBukkit.API.Util
         DeadFireCoralFan,
         [MaterialAttribute(11387)]
         DeadHornCoralFan,
-        [MaterialAttribute(22449,174)]
+        [MaterialAttribute(22449)]
         BlueIce,
         [MaterialAttribute(5148)]
         Conduit,
-        [MaterialAttribute(29588,67)]
+        [MaterialAttribute(29588)]
         PolishedGraniteStairs,
-        [MaterialAttribute(17561,180)]
+        [MaterialAttribute(17561)]
         SmoothRedSandstoneStairs,
-        [MaterialAttribute(27578,109)]
+        [MaterialAttribute(27578)]
         MossyStoneBrickStairs,
-        [MaterialAttribute(4625,67)]
+        [MaterialAttribute(4625)]
         PolishedDioriteStairs,
-        [MaterialAttribute(29210,67)]
+        [MaterialAttribute(67)]
         MossyCobblestoneStairs,
-        [MaterialAttribute(28831,67)]
+        [MaterialAttribute(67)]
         EndStoneBrickStairs,
-        [MaterialAttribute(23784,67)]
+        [MaterialAttribute(67)]
         StoneStairs,
-        [MaterialAttribute(21183, 128)]
+        [MaterialAttribute(128)]
         SmoothSandstoneStairs,
-        [MaterialAttribute(19560,156)]
+        [MaterialAttribute(156)]
         SmoothQuartzStairs,
-        [MaterialAttribute(21840,67)]
+        [MaterialAttribute(67)]
         GraniteStairs,
-        [MaterialAttribute(17747,67)]
+        [MaterialAttribute(67)]
         AndesiteStairs,
-        [MaterialAttribute(26374,114)]
+        [MaterialAttribute(114)]
         RedNetherBrickStairs,
-        [MaterialAttribute(7573,67)]
+        [MaterialAttribute(67)]
         PolishedAndesiteStairs,
-        [MaterialAttribute(13134,67)]
+        [MaterialAttribute(67)]
         DioriteStairs,
-        [MaterialAttribute(4521, 44, 3)]
+        [MaterialAttribute(44, 3)]
         PolishedGraniteSlab,
-        [MaterialAttribute(16304,182)]
-        SmoothRedSandstoneSlab,
-        [MaterialAttribute(14002, 44, 5)]
+        [MaterialAttribute(44, 5)]
         MossyStoneBrickSlab,
-        [MaterialAttribute(18303, 44, 3)]
+        [MaterialAttribute(44, 3)]
         PolishedDioriteSlab,
         [MaterialAttribute(12139,44, 3)]
         MossyCobblestoneSlab,
@@ -1156,29 +1233,33 @@ namespace NiaBukkit.API.Util
         DioriteSlab,
         [MaterialAttribute(15757)]
         Scaffolding,
-        [MaterialAttribute(4788,330)]
+        
+        [MaterialAttribute(71)]
         IronDoor,
-        [MaterialAttribute(20341, 324)]
+        [MaterialAttribute(64)]
         OakDoor,
-        [MaterialAttribute(10642,427)]
+        [MaterialAttribute(193)]
         SpruceDoor,
-        [MaterialAttribute(14759,428)]
+        [MaterialAttribute(194)]
         BirchDoor,
-        [MaterialAttribute(28163,429)]
+        [MaterialAttribute(195)]
         JungleDoor,
-        [MaterialAttribute(23797,430)]
+        [MaterialAttribute(196)]
         AcaciaDoor,
-        [MaterialAttribute(10669,431)]
+        [MaterialAttribute(197)]
         DarkOakDoor,
-        [MaterialAttribute(19544,324)]
+        
+        //TODO: What?
+        [MaterialAttribute(324)]
         CrimsonDoor,
-        [MaterialAttribute(15062,324)]
+        [MaterialAttribute(324)]
         WarpedDoor,
-        [MaterialAttribute(28823,356)]
+        
+        [MaterialAttribute(93)]
         Repeater,
-        [MaterialAttribute(18911,404)]
+        [MaterialAttribute(149)]
         Comparator,
-        [MaterialAttribute(26831,255)]
+        [MaterialAttribute(255)]
         StructureBlock,
         [MaterialAttribute(17398)]
         Jigsaw,
@@ -1186,703 +1267,685 @@ namespace NiaBukkit.API.Util
         TurtleHelmet,
         [MaterialAttribute(11914)]
         Scute,
-        [MaterialAttribute(28620,259)]
+        [MaterialAttribute(259)]
         FlintAndSteel,
-        [MaterialAttribute(7720,260)]
+        [MaterialAttribute(260)]
         Apple,
-        [MaterialAttribute(8745,261)]
+        [MaterialAttribute(261)]
         Bow,
-        [MaterialAttribute(31091,262)]
+        [MaterialAttribute(262)]
         Arrow,
-        [MaterialAttribute(29067,263)]
+        [MaterialAttribute(263)]
         Coal,
-        [MaterialAttribute(5390,263, 1)]
+        [MaterialAttribute(263, 1)]
         Charcoal,
-        [MaterialAttribute(20865,264)]
+        [MaterialAttribute(264)]
         Diamond,
-        [MaterialAttribute(24895,265)]
+        [MaterialAttribute(265)]
         IronIngot,
-        [MaterialAttribute(28927,266)]
+        [MaterialAttribute(266)]
         GoldIngot,
         [MaterialAttribute(32457)]
         NetheriteIngot,
         [MaterialAttribute(29331)]
         NetheriteScrap,
-        [MaterialAttribute(7175,268)]
+        [MaterialAttribute(268)]
         WoodenSword,
-        [MaterialAttribute(28432,269)]
+        [MaterialAttribute(269)]
         WoodenShovel,
-        [MaterialAttribute(12792,270)]
+        [MaterialAttribute(270)]
         WoodenPickaxe,
-        [MaterialAttribute(6292,271)]
+        [MaterialAttribute(271)]
         WoodenAxe,
-        [MaterialAttribute(16043,290)]
+        [MaterialAttribute(290)]
         WoodenHoe,
-        [MaterialAttribute(25084,272)]
+        [MaterialAttribute(272)]
         StoneSword,
-        [MaterialAttribute(9520,273)]
+        [MaterialAttribute(273)]
         StoneShovel,
-        [MaterialAttribute(14611,274)]
+        [MaterialAttribute(274)]
         StonePickaxe,
-        [MaterialAttribute(6338,275)]
+        [MaterialAttribute(275)]
         StoneAxe,
-        [MaterialAttribute(22855,291)]
+        [MaterialAttribute(291)]
         StoneHoe,
-        [MaterialAttribute(10505,283)]
+        [MaterialAttribute(283)]
         GoldenSword,
-        [MaterialAttribute(15597,284)]
+        [MaterialAttribute(284)]
         GoldenShovel,
-        [MaterialAttribute(25898,285)]
+        [MaterialAttribute(285)]
         GoldenPickaxe,
-        [MaterialAttribute(4878,286)]
+        [MaterialAttribute(286)]
         GoldenAxe,
-        [MaterialAttribute(19337,294)]
+        [MaterialAttribute(294)]
         GoldenHoe,
-        [MaterialAttribute(10904,267)]
+        [MaterialAttribute(267)]
         IronSword,
-        [MaterialAttribute(30045,256)]
+        [MaterialAttribute(256)]
         IronShovel,
-        [MaterialAttribute(8842,257)]
+        [MaterialAttribute(257)]
         IronPickaxe,
-        [MaterialAttribute(15894,258)]
+        [MaterialAttribute(58)]
         IronAxe,
-        [MaterialAttribute(11339,292)]
+        [MaterialAttribute(292)]
         IronHoe,
-        [MaterialAttribute(27707,276)]
+        [MaterialAttribute(276)]
         DiamondSword,
-        [MaterialAttribute(25415,277)]
+        [MaterialAttribute(277)]
         DiamondShovel,
-        [MaterialAttribute(24291,278)]
+        [MaterialAttribute(278)]
         DiamondPickaxe,
-        [MaterialAttribute(27277,279)]
+        [MaterialAttribute(279)]
         DiamondAxe,
-        [MaterialAttribute(24050,293)]
+        [MaterialAttribute(293)]
         DiamondHoe,
-        [MaterialAttribute(23871,276)]
+        [MaterialAttribute(276)]
         NetheriteSword,
-        [MaterialAttribute(29728,277)]
+        [MaterialAttribute(277)]
         NetheriteShovel,
-        [MaterialAttribute(9930,278)]
+        [MaterialAttribute(278)]
         NetheritePickaxe,
-        [MaterialAttribute(29533,279)]
+        [MaterialAttribute(279)]
         NetheriteAxe,
-        [MaterialAttribute(27385,293)]
+        [MaterialAttribute(293)]
         NetheriteHoe,
-        [MaterialAttribute(9773,280)]
+        [MaterialAttribute(280)]
         Stick,
-        [MaterialAttribute(32661,281)]
+        [MaterialAttribute(281)]
         Bowl,
-        [MaterialAttribute(16336,282)]
+        [MaterialAttribute(282)]
         MushroomStew,
-        [MaterialAttribute(12806,287)]
+        [MaterialAttribute(287)]
         String,
-        [MaterialAttribute(30548,288)]
+        [MaterialAttribute(288)]
         Feather,
-        [MaterialAttribute(29974,289)]
+        [MaterialAttribute(289)]
         Gunpowder,
-        [MaterialAttribute(28742,295)]
+        [MaterialAttribute(295)]
         WheatSeeds,
-        [MaterialAttribute(27709,296)]
+        [MaterialAttribute(296)]
         Wheat,
-        [MaterialAttribute(32049,297)]
+        [MaterialAttribute(297)]
         Bread,
-        [MaterialAttribute(11624,298)]
+        [MaterialAttribute(298)]
         LeatherHelmet,
-        [MaterialAttribute(29275,299)]
+        [MaterialAttribute(299)]
         LeatherChestplate,
-        [MaterialAttribute(28210, 300)]
+        [MaterialAttribute(300)]
         LeatherLeggings,
-        [MaterialAttribute(15282,301)]
+        [MaterialAttribute(301)]
         LeatherBoots,
-        [MaterialAttribute(26114,302)]
+        [MaterialAttribute(302)]
         ChainmailHelmet,
-        [MaterialAttribute(23602,303)]
+        [MaterialAttribute(303)]
         ChainmailChestplate,
-        [MaterialAttribute(19087,304)]
+        [MaterialAttribute(304)]
         ChainmailLeggings,
-        [MaterialAttribute(17953,305)]
+        [MaterialAttribute(305)]
         ChainmailBoots,
-        [MaterialAttribute(12025,306)]
+        [MaterialAttribute(306)]
         IronHelmet,
-        [MaterialAttribute(28112,307)]
+        [MaterialAttribute(307)]
         IronChestplate,
-        [MaterialAttribute(18951,308)]
+        [MaterialAttribute(308)]
         IronLeggings,
-        [MaterialAttribute(8531,309)]
+        [MaterialAttribute(309)]
         IronBoots,
-        [MaterialAttribute(10755,310)]
+        [MaterialAttribute(310)]
         DiamondHelmet,
-        [MaterialAttribute(32099,311)]
+        [MaterialAttribute(311)]
         DiamondChestplate,
-        [MaterialAttribute(11202,312)]
+        [MaterialAttribute(312)]
         DiamondLeggings,
-        [MaterialAttribute(16522,313)]
+        [MaterialAttribute(313)]
         DiamondBoots,
-        [MaterialAttribute(7945,314)]
+        [MaterialAttribute(314)]
         GoldenHelmet,
-        [MaterialAttribute(4507,315)]
+        [MaterialAttribute(315)]
         GoldenChestplate,
-        [MaterialAttribute(21002,316)]
+        [MaterialAttribute(316)]
         GoldenLeggings,
-        [MaterialAttribute(7859,317)]
+        [MaterialAttribute(317)]
         GoldenBoots,
-        [MaterialAttribute(15907,310)]
+        [MaterialAttribute(310)]
         NetheriteHelmet,
-        [MaterialAttribute(6106,311)]
+        [MaterialAttribute(311)]
         NetheriteChestplate,
-        [MaterialAttribute(25605,312)]
+        [MaterialAttribute(312)]
         NetheriteLeggings,
-        [MaterialAttribute(8923,313)]
+        [MaterialAttribute(313)]
         NetheriteBoots,
-        [MaterialAttribute(23596,318)]
+        [MaterialAttribute(318)]
         Flint,
-        [MaterialAttribute(30896,319)]
+        [MaterialAttribute(319)]
         Porkchop,
-        [MaterialAttribute(27231,320)]
+        [MaterialAttribute(320)]
         CookedPorkchop,
-        [MaterialAttribute(23945,321)]
+        [MaterialAttribute(321)]
         Painting,
-        [MaterialAttribute(27732,322)]
+        [MaterialAttribute(322)]
         GoldenApple,
-        [MaterialAttribute(8280,322, 1)]
+        [MaterialAttribute(322, 1)]
         EnchantedGoldenApple,
-        [MaterialAttribute(8192,323)]
+        [MaterialAttribute(323)]
         OakSign,
-        [MaterialAttribute(21502,323)]
+        [MaterialAttribute(323)]
         SpruceSign,
-        [MaterialAttribute(11351,323)]
+        [MaterialAttribute(323)]
         BirchSign,
-        [MaterialAttribute(24717,323)]
+        [MaterialAttribute(323)]
         JungleSign,
-        [MaterialAttribute(29808,323)]
+        [MaterialAttribute(323)]
         AcaciaSign,
-        [MaterialAttribute(15127,323)]
+        [MaterialAttribute(323)]
         DarkOakSign,
-        [MaterialAttribute(12162,323)]
+        [MaterialAttribute(323)]
         CrimsonSign,
-        [MaterialAttribute(10407,323)]
+        [MaterialAttribute(323)]
         WarpedSign,
-        [MaterialAttribute(15215,325)]
+        [MaterialAttribute(325)]
         Bucket,
-        [MaterialAttribute(8802,326)]
+        [MaterialAttribute(326)]
         WaterBucket,
-        [MaterialAttribute(9228,327)]
+        [MaterialAttribute(327)]
         LavaBucket,
-        [MaterialAttribute(14352,328)]
+        [MaterialAttribute(328)]
         Minecart,
-        [MaterialAttribute(30206,329)]
+        [MaterialAttribute(329)]
         Saddle,
-        [MaterialAttribute(11233,331)]
+        [MaterialAttribute(331)]
         Redstone,
-        [MaterialAttribute(19487,332)]
+        [MaterialAttribute(332)]
         Snowball,
-        [MaterialAttribute(17570,333)]
+        [MaterialAttribute(333)]
         OakBoat,
-        [MaterialAttribute(16414,334)]
+        [MaterialAttribute(334)]
         Leather,
-        [MaterialAttribute(9680,335)]
+        [MaterialAttribute(335)]
         MilkBucket,
-        [MaterialAttribute(8861,326)]
+        [MaterialAttribute(326)]
         PufferfishBucket,
-        [MaterialAttribute(31427,326)]
+        [MaterialAttribute(326)]
         SalmonBucket,
-        [MaterialAttribute(28601,326)]
+        [MaterialAttribute(326)]
         CodBucket,
-        [MaterialAttribute(29995,326)]
+        [MaterialAttribute(326)]
         TropicalFishBucket,
-        [MaterialAttribute(6820,336)]
+        [MaterialAttribute(336)]
         Brick,
-        [MaterialAttribute(24603,337)]
+        [MaterialAttribute(337)]
         ClayBall,
         [MaterialAttribute(12966)]
         DriedKelpBlock,
-        [MaterialAttribute(9923,339)]
+        [MaterialAttribute(339)]
         Paper,
-        [MaterialAttribute(23097,340)]
+        [MaterialAttribute(340)]
         Book,
-        [MaterialAttribute(5242,341)]
+        [MaterialAttribute(341)]
         SlimeBall,
-        [MaterialAttribute(4497,342)]
+        [MaterialAttribute(342)]
         ChestMinecart,
-        [MaterialAttribute(14196,343)]
+        [MaterialAttribute(343)]
         FurnaceMinecart,
-        [MaterialAttribute(21603,344)]
+        [MaterialAttribute(344)]
         Egg,
-        [MaterialAttribute(24139,345)]
+        [MaterialAttribute(345)]
         Compass,
-        [MaterialAttribute(4167,346)]
+        [MaterialAttribute(346)]
         FishingRod,
-        [MaterialAttribute(14980,347)]
+        [MaterialAttribute(347)]
         Clock,
-        [MaterialAttribute(6665,348)]
+        [MaterialAttribute(348)]
         GlowstoneDust,
-        [MaterialAttribute(24691,349)]
+        [MaterialAttribute(349)]
         Cod,
-        [MaterialAttribute(18516,349, 1)]
+        [MaterialAttribute(349, 1)]
         Salmon,
-        [MaterialAttribute(24879,349, 2)]
+        [MaterialAttribute(349, 2)]
         TropicalFish,
-        [MaterialAttribute(8115,349, 3)]
+        [MaterialAttribute(349, 3)]
         Pufferfish,
-        [MaterialAttribute(9681,350)]
+        [MaterialAttribute(350)]
         CookedCod,
-        [MaterialAttribute(5615,350, 1)]
+        [MaterialAttribute(350, 1)]
         CookedSalmon,
-        [MaterialAttribute(7184,351)]
+        [MaterialAttribute(351)]
         InkSac,
-        [MaterialAttribute(30186, 351, 3)]
+        [MaterialAttribute(351, 3)]
         CocoaBeans,
-        [MaterialAttribute(11075,351, 4)]
+        [MaterialAttribute(351, 4)]
         LapisLazuli,
-        [MaterialAttribute(10758, 351, 15)]
+        [MaterialAttribute(351, 15)]
         WhiteDye,
-        [MaterialAttribute(13866, 351, 14)]
+        [MaterialAttribute(351, 14)]
         OrangeDye,
-        [MaterialAttribute(11788,351, 13)]
+        [MaterialAttribute(351, 13)]
         MagentaDye,
-        [MaterialAttribute(28738,351, 12)]
+        [MaterialAttribute(351, 12)]
         LightBlueDye,
-        [MaterialAttribute(5952,351, 11)]
+        [MaterialAttribute(351, 11)]
         YellowDye,
-        [MaterialAttribute(6147,351, 10)]
+        [MaterialAttribute(351, 10)]
         LimeDye,
-        [MaterialAttribute(31151,351, 9)]
+        [MaterialAttribute(351, 9)]
         PinkDye,
-        [MaterialAttribute(9184,351, 8)]
+        [MaterialAttribute(351, 8)]
         GrayDye,
-        [MaterialAttribute(27643,351, 7)]
+        [MaterialAttribute(351, 7)]
         LightGrayDye,
-        [MaterialAttribute(8043,351, 6)]
+        [MaterialAttribute(351, 6)]
         CyanDye,
-        [MaterialAttribute(6347,351, 5)]
+        [MaterialAttribute(351, 5)]
         PurpleDye,
-        [MaterialAttribute(11588,351, 4)]
+        [MaterialAttribute(351, 4)]
         BlueDye,
-        [MaterialAttribute(7648,351, 3)]
+        [MaterialAttribute(351, 3)]
         BrownDye,
-        [MaterialAttribute(23215,351, 2)]
+        [MaterialAttribute(351, 2)]
         GreenDye,
-        [MaterialAttribute(5728,351, 1)]
+        [MaterialAttribute(351, 1)]
         RedDye,
-        [MaterialAttribute(6202,351)]
+        [MaterialAttribute(351)]
         BlackDye,
-        [MaterialAttribute(32458,351, 15)]
+        [MaterialAttribute(351, 15)]
         BoneMeal,
-        [MaterialAttribute(5686,352)]
+        [MaterialAttribute(352)]
         Bone,
-        [MaterialAttribute(30638,353)]
+        [MaterialAttribute(353)]
         Sugar,
-        [MaterialAttribute(27048,354)]
+        [MaterialAttribute(92)]
         Cake,
-        [MaterialAttribute(8185,355)]
+        [MaterialAttribute(355)]
         WhiteBed,
-        [MaterialAttribute(11194,355, 1)]
+        [MaterialAttribute(355, 1)]
         OrangeBed,
-        [MaterialAttribute(20061,355, 2)]
+        [MaterialAttribute(355, 2)]
         MagentaBed,
-        [MaterialAttribute(20957,355, 3)]
+        [MaterialAttribute(355, 3)]
         LightBlueBed,
-        [MaterialAttribute(30410,355, 4)]
+        [MaterialAttribute(355, 4)]
         YellowBed,
-        [MaterialAttribute(27860,355, 5)]
+        [MaterialAttribute(355, 5)]
         LimeBed,
-        [MaterialAttribute(13795,355, 6)]
+        [MaterialAttribute(355, 6)]
         PinkBed,
-        [MaterialAttribute(15745,355, 7)]
+        [MaterialAttribute(355, 7)]
         GrayBed,
-        [MaterialAttribute(5090,355, 8)]
+        [MaterialAttribute(355, 8)]
         LightGrayBed,
-        [MaterialAttribute(16746,355, 9)]
+        [MaterialAttribute(355, 9)]
         CyanBed,
-        [MaterialAttribute(29755,355, 10)]
+        [MaterialAttribute(355, 10)]
         PurpleBed,
-        [MaterialAttribute(12714,355, 11)]
+        [MaterialAttribute(355, 11)]
         BlueBed,
-        [MaterialAttribute(26672,355, 12)]
+        [MaterialAttribute(355, 12)]
         BrownBed,
-        [MaterialAttribute(13797,355, 13)]
+        [MaterialAttribute(355, 13)]
         GreenBed,
-        [MaterialAttribute(30910,355, 14)]
+        [MaterialAttribute(355, 14)]
         RedBed,
-        [MaterialAttribute(20490,355, 15)]
+        [MaterialAttribute(355, 15)]
         BlackBed,
-        [MaterialAttribute(27431,357)]
+        [MaterialAttribute(357)]
         Cookie,
-        [MaterialAttribute(23504,358)]
+        [MaterialAttribute(358)]
         FilledMap,
-        [MaterialAttribute(27971,359)]
+        [MaterialAttribute(359)]
         Shears,
-        [MaterialAttribute(5347,360)]
+        [MaterialAttribute(360)]
         MelonSlice,
         [MaterialAttribute(21042)]
         DriedKelp,
-        [MaterialAttribute(28985,361)]
+        [MaterialAttribute(361)]
         PumpkinSeeds,
-        [MaterialAttribute(18340,362)]
+        [MaterialAttribute(362)]
         MelonSeeds,
-        [MaterialAttribute(4803,363)]
+        [MaterialAttribute(363)]
         Beef,
-        [MaterialAttribute(21595,364)]
+        [MaterialAttribute(364)]
         CookedBeef,
-        [MaterialAttribute(17281,365)]
+        [MaterialAttribute(365)]
         Chicken,
-        [MaterialAttribute(16984,366)]
+        [MaterialAttribute(366)]
         CookedChicken,
-        [MaterialAttribute(21591,367)]
+        [MaterialAttribute(367)]
         RottenFlesh,
-        [MaterialAttribute(5259,368)]
+        [MaterialAttribute(368)]
         EnderPearl,
-        [MaterialAttribute(8289,369)]
+        [MaterialAttribute(369)]
         BlazeRod,
-        [MaterialAttribute(18222,370)]
+        [MaterialAttribute(370)]
         GhastTear,
-        [MaterialAttribute(28814,371)]
+        [MaterialAttribute(371)]
         GoldNugget,
-        [MaterialAttribute(29227,372)]
-        NetherWart,
-        [MaterialAttribute(24020,373)]
+        [MaterialAttribute(373)]
         Potion,
-        [MaterialAttribute(6116,374)]
+        [MaterialAttribute(374)]
         GlassBottle,
-        [MaterialAttribute(9318,375)]
+        [MaterialAttribute(375)]
         SpiderEye,
-        [MaterialAttribute(19386,376)]
+        [MaterialAttribute(376)]
         FermentedSpiderEye,
-        [MaterialAttribute(18941,377)]
+        [MaterialAttribute(377)]
         BlazePowder,
-        [MaterialAttribute(25097,378)]
+        [MaterialAttribute(378)]
         MagmaCream,
-        [MaterialAttribute(14539,379)]
-        BrewingStand,
-        [MaterialAttribute(26531,380)]
-        Cauldron,
-        [MaterialAttribute(24860,381)]
+        [MaterialAttribute(381)]
         EnderEye,
-        [MaterialAttribute(20158,382)]
+        [MaterialAttribute(382)]
         GlisteringMelonSlice,
-        [MaterialAttribute(14607,383)]
+        [MaterialAttribute(383)]
         BatSpawnEgg,
-        [MaterialAttribute(22924,383)]
+        [MaterialAttribute(383)]
         BeeSpawnEgg,
-        [MaterialAttribute(4759,383)]
+        [MaterialAttribute(383)]
         BlazeSpawnEgg,
-        [MaterialAttribute(29583,383)]
+        [MaterialAttribute(383)]
         CatSpawnEgg,
-        [MaterialAttribute(23341,383)]
+        [MaterialAttribute(383)]
         CaveSpiderSpawnEgg,
-        [MaterialAttribute(5462,383)]
+        [MaterialAttribute(383)]
         ChickenSpawnEgg,
-        [MaterialAttribute(27248,383)]
+        [MaterialAttribute(383)]
         CodSpawnEgg,
-        [MaterialAttribute(14761,383)]
+        [MaterialAttribute(383)]
         CowSpawnEgg,
-        [MaterialAttribute(9653,383)]
+        [MaterialAttribute(383)]
         CreeperSpawnEgg,
-        [MaterialAttribute(20787,383)]
+        [MaterialAttribute(383)]
         DolphinSpawnEgg,
-        [MaterialAttribute(14513,383)]
+        [MaterialAttribute(383)]
         DonkeySpawnEgg,
-        [MaterialAttribute(19368,383)]
+        [MaterialAttribute(383)]
         DrownedSpawnEgg,
-        [MaterialAttribute(11418,383)]
+        [MaterialAttribute(383)]
         ElderGuardianSpawnEgg,
-        [MaterialAttribute(29488,383)]
+        [MaterialAttribute(383)]
         EndermanSpawnEgg,
-        [MaterialAttribute(16617,383)]
+        [MaterialAttribute(383)]
         EndermiteSpawnEgg,
-        [MaterialAttribute(21271,383)]
+        [MaterialAttribute(383)]
         EvokerSpawnEgg,
-        [MaterialAttribute(22376,383)]
+        [MaterialAttribute(383)]
         FoxSpawnEgg,
-        [MaterialAttribute(9970,383)]
+        [MaterialAttribute(383)]
         GhastSpawnEgg,
-        [MaterialAttribute(20113,383)]
+        [MaterialAttribute(383)]
         GuardianSpawnEgg,
-        [MaterialAttribute(14088,383)]
+        [MaterialAttribute(383)]
         HoglinSpawnEgg,
-        [MaterialAttribute(25981,383)]
+        [MaterialAttribute(383)]
         HorseSpawnEgg,
-        [MaterialAttribute(20178,383)]
+        [MaterialAttribute(383)]
         HuskSpawnEgg,
-        [MaterialAttribute(23640,383)]
+        [MaterialAttribute(383)]
         LlamaSpawnEgg,
-        [MaterialAttribute(26638,383)]
+        [MaterialAttribute(383)]
         MagmaCubeSpawnEgg,
-        [MaterialAttribute(22125,383)]
+        [MaterialAttribute(383)]
         MooshroomSpawnEgg,
-        [MaterialAttribute(11229,383)]
+        [MaterialAttribute(383)]
         MuleSpawnEgg,
-        [MaterialAttribute(30080,383)]
+        [MaterialAttribute(383)]
         OcelotSpawnEgg,
-        [MaterialAttribute(23759,383)]
+        [MaterialAttribute(383)]
         PandaSpawnEgg,
-        [MaterialAttribute(23614,383)]
+        [MaterialAttribute(383)]
         ParrotSpawnEgg,
-        [MaterialAttribute(24648, 383)]
+        [MaterialAttribute(383)]
         PhantomSpawnEgg,
-        [MaterialAttribute(22584,383)]
+        [MaterialAttribute(383)]
         PigSpawnEgg,
-        [MaterialAttribute(16193,383)]
+        [MaterialAttribute(383)]
         PiglinSpawnEgg,
-        [MaterialAttribute(30230,383)]
+        [MaterialAttribute(383)]
         PiglinBruteSpawnEgg,
-        [MaterialAttribute(28659,383)]
+        [MaterialAttribute(383)]
         PillagerSpawnEgg,
-        [MaterialAttribute(17015,383)]
+        [MaterialAttribute(383)]
         PolarBearSpawnEgg,
-        [MaterialAttribute(24570,383)]
+        [MaterialAttribute(383)]
         PufferfishSpawnEgg,
-        [MaterialAttribute(26496,383)]
+        [MaterialAttribute(383)]
         RabbitSpawnEgg,
-        [MaterialAttribute(8726,383)]
+        [MaterialAttribute(383)]
         RavagerSpawnEgg,
-        [MaterialAttribute(18739,383)]
+        [MaterialAttribute(383)]
         SalmonSpawnEgg,
-        [MaterialAttribute(24488,383)]
+        [MaterialAttribute(383)]
         SheepSpawnEgg,
-        [MaterialAttribute(31848,383)]
+        [MaterialAttribute(383)]
         ShulkerSpawnEgg,
-        [MaterialAttribute(14537,383)]
+        [MaterialAttribute(383)]
         SilverfishSpawnEgg,
-        [MaterialAttribute(15261,383)]
+        [MaterialAttribute(383)]
         SkeletonSpawnEgg,
-        [MaterialAttribute(21356,383)]
+        [MaterialAttribute(383)]
         SkeletonHorseSpawnEgg,
-        [MaterialAttribute(17196,383)]
+        [MaterialAttribute(383)]
         SlimeSpawnEgg,
-        [MaterialAttribute(14984,383)]
+        [MaterialAttribute(383)]
         SpiderSpawnEgg,
-        [MaterialAttribute(10682,383)]
+        [MaterialAttribute(383)]
         SquidSpawnEgg,
-        [MaterialAttribute(30153,383)]
+        [MaterialAttribute(383)]
         StraySpawnEgg,
-        [MaterialAttribute(6203,383)]
+        [MaterialAttribute(383)]
         StriderSpawnEgg,
-        [MaterialAttribute(8439,383)]
+        [MaterialAttribute(383)]
         TraderLlamaSpawnEgg,
-        [MaterialAttribute(19713, 383)]
+        [MaterialAttribute(383)]
         TropicalFishSpawnEgg,
-        [MaterialAttribute(17324,383)]
+        [MaterialAttribute(383)]
         TurtleSpawnEgg,
-        [MaterialAttribute(27751,383)]
+        [MaterialAttribute(383)]
         VexSpawnEgg,
-        [MaterialAttribute(30348,383)]
+        [MaterialAttribute(383)]
         VillagerSpawnEgg,
-        [MaterialAttribute(25324,383)]
+        [MaterialAttribute(383)]
         VindicatorSpawnEgg,
-        [MaterialAttribute(17904,383)]
+        [MaterialAttribute(383)]
         WanderingTraderSpawnEgg,
-        [MaterialAttribute(11837,383)]
+        [MaterialAttribute(383)]
         WitchSpawnEgg,
-        [MaterialAttribute(10073,383)]
+        [MaterialAttribute(383)]
         WitherSkeletonSpawnEgg,
-        [MaterialAttribute(21692,383)]
+        [MaterialAttribute(383)]
         WolfSpawnEgg,
-        [MaterialAttribute(7442,383)]
+        [MaterialAttribute(383)]
         ZoglinSpawnEgg,
-        [MaterialAttribute(5814,383)]
+        [MaterialAttribute(383)]
         ZombieSpawnEgg,
-        [MaterialAttribute(4275,383)]
+        [MaterialAttribute(383)]
         ZombieHorseSpawnEgg,
-        [MaterialAttribute(10311, 383)]
+        [MaterialAttribute(383)]
         ZombieVillagerSpawnEgg,
-        [MaterialAttribute(6626,383)]
+        [MaterialAttribute(383)]
         ZombifiedPiglinSpawnEgg,
-        [MaterialAttribute(12858, 384)]
+        [MaterialAttribute(384)]
         ExperienceBottle,
-        [MaterialAttribute(4842,385)]
+        [MaterialAttribute(385)]
         FireCharge,
-        [MaterialAttribute(13393,386)]
+        [MaterialAttribute(386)]
         WritableBook,
-        [MaterialAttribute(24164,387)]
+        [MaterialAttribute(387)]
         WrittenBook,
-        [MaterialAttribute(5654,388)]
+        [MaterialAttribute(388)]
         Emerald,
-        [MaterialAttribute(27318,389)]
+        [MaterialAttribute(389)]
         ItemFrame,
-        [MaterialAttribute(30567,390)]
+        [MaterialAttribute(390)]
         FlowerPot,
-        [MaterialAttribute(22824,391)]
+        [MaterialAttribute(391)]
         Carrot,
-        [MaterialAttribute(21088,392)]
+        [MaterialAttribute(392)]
         Potato,
-        [MaterialAttribute(14624,393)]
+        [MaterialAttribute(393)]
         BakedPotato,
-        [MaterialAttribute(32640,394)]
+        [MaterialAttribute(394)]
         PoisonousPotato,
-        [MaterialAttribute(21655,395)]
+        [MaterialAttribute(395)]
         Map,
-        [MaterialAttribute(5300,396)]
+        [MaterialAttribute(396)]
         GoldenCarrot,
-        [MaterialAttribute(13270,397)]
-        SkeletonSkull,
-        [MaterialAttribute(31487,397, 1)]
-        WitherSkeletonSkull,
-        [MaterialAttribute(21174,397, 2)]
-        PlayerHead,
-        [MaterialAttribute(9304,397, 3)]
-        ZombieHead,
-        [MaterialAttribute(29146,397, 4)]
-        CreeperHead,
-        [MaterialAttribute(20084,397, 5)]
-        DragonHead,
-        [MaterialAttribute(27809,398)]
+        [MaterialAttribute(398)]
         CarrotOnAStick,
-        [MaterialAttribute(11706, 398)]
+        [MaterialAttribute(398)]
         WarpedFungusOnAStick,
-        [MaterialAttribute(12469,399)]
+        [MaterialAttribute(399)]
         NetherStar,
-        [MaterialAttribute(28725,400)]
+        [MaterialAttribute(400)]
         PumpkinPie,
-        [MaterialAttribute(23841,401)]
+        [MaterialAttribute(401)]
         FireworkRocket,
-        [MaterialAttribute(12190,402)]
+        [MaterialAttribute(402)]
         FireworkStar,
-        [MaterialAttribute(11741,403)]
+        [MaterialAttribute(403)]
         EnchantedBook,
-        [MaterialAttribute(19996,405)]
+        [MaterialAttribute(405)]
         NetherBrick,
-        [MaterialAttribute(23608,406)]
+        [MaterialAttribute(406)]
         Quartz,
-        [MaterialAttribute(4277,407)]
+        [MaterialAttribute(407)]
         TntMinecart,
-        [MaterialAttribute(19024,408)]
+        [MaterialAttribute(408)]
         HopperMinecart,
-        [MaterialAttribute(10993,409)]
+        [MaterialAttribute(409)]
         PrismarineShard,
-        [MaterialAttribute(31546,410)]
+        [MaterialAttribute(410)]
         PrismarineCrystals,
-        [MaterialAttribute(23068,411)]
+        [MaterialAttribute(411)]
         Rabbit,
-        [MaterialAttribute(4454,412)]
+        [MaterialAttribute(412)]
         CookedRabbit,
-        [MaterialAttribute(10611,413)]
+        [MaterialAttribute(413)]
         RabbitStew,
-        [MaterialAttribute(13864,414)]
+        [MaterialAttribute(414)]
         RabbitFoot,
-        [MaterialAttribute(12467,415)]
+        [MaterialAttribute(415)]
         RabbitHide,
-        [MaterialAttribute(12852,416)]
+        [MaterialAttribute(416)]
         ArmorStand,
-        [MaterialAttribute(30108,417)]
+        [MaterialAttribute(417)]
         IronHorseArmor,
-        [MaterialAttribute(7996,418)]
+        [MaterialAttribute(418)]
         GoldenHorseArmor,
-        [MaterialAttribute(10321,419)]
+        [MaterialAttribute(419)]
         DiamondHorseArmor,
-        [MaterialAttribute(30667,418)]
+        [MaterialAttribute(418)]
         LeatherHorseArmor,
-        [MaterialAttribute(29539,420)]
+        [MaterialAttribute(420)]
         Lead,
-        [MaterialAttribute(30731,421)]
+        [MaterialAttribute(421)]
         NameTag,
-        [MaterialAttribute(7992,422)]
+        [MaterialAttribute(422)]
         CommandBlockMinecart,
-        [MaterialAttribute(4792,423)]
+        [MaterialAttribute(423)]
         Mutton,
-        [MaterialAttribute(31447,424)]
+        [MaterialAttribute(424)]
         CookedMutton,
-        [MaterialAttribute(17562,425, 15)]
+        [MaterialAttribute(176, 15)]
         WhiteBanner,
-        [MaterialAttribute(4839,425, 14)]
+        [MaterialAttribute(176, 14)]
         OrangeBanner,
-        [MaterialAttribute(15591,425, 13)]
+        [MaterialAttribute(176, 13)]
         MagentaBanner,
-        [MaterialAttribute(18060,425, 12)]
+        [MaterialAttribute(176, 12)]
         LightBlueBanner,
-        [MaterialAttribute(30382,425, 11)]
+        [MaterialAttribute(176, 11)]
         YellowBanner,
-        [MaterialAttribute(18887,425, 10)]
+        [MaterialAttribute(176, 10)]
         LimeBanner,
-        [MaterialAttribute(19439,425, 9)]
+        [MaterialAttribute(176, 9)]
         PinkBanner,
-        [MaterialAttribute(12053,425, 8)]
+        [MaterialAttribute(176, 8)]
         GrayBanner,
-        [MaterialAttribute(11417,425, 7)]
+        [MaterialAttribute(176, 7)]
         LightGrayBanner,
-        [MaterialAttribute(9839,425, 6)]
+        [MaterialAttribute(176, 6)]
         CyanBanner,
-        [MaterialAttribute(29027,425, 5)]
+        [MaterialAttribute(176, 5)]
         PurpleBanner,
-        [MaterialAttribute(18481,425, 4)]
+        [MaterialAttribute(176, 4)]
         BlueBanner,
-        [MaterialAttribute(11481,425, 3)]
+        [MaterialAttribute(176, 3)]
         BrownBanner,
-        [MaterialAttribute(10698,425, 2)]
+        [MaterialAttribute(176, 2)]
         GreenBanner,
-        [MaterialAttribute(26961,425, 1)]
+        [MaterialAttribute(176, 1)]
         RedBanner,
-        [MaterialAttribute(9365,425)]
+        [MaterialAttribute(176)]
         BlackBanner,
-        [MaterialAttribute(19090,426)]
+        [MaterialAttribute(426)]
         EndCrystal,
-        [MaterialAttribute(7652,432)]
+        [MaterialAttribute(432)]
         ChorusFruit,
-        [MaterialAttribute(27844,433)]
+        [MaterialAttribute(433)]
         PoppedChorusFruit,
-        [MaterialAttribute(23305,434)]
+        [MaterialAttribute(434)]
         Beetroot,
-        [MaterialAttribute(21282,435)]
+        [MaterialAttribute(435)]
         BeetrootSeeds,
-        [MaterialAttribute(16036,436)]
+        [MaterialAttribute(436)]
         BeetrootSoup,
-        [MaterialAttribute(20154,437)]
+        [MaterialAttribute(437)]
         DragonBreath,
-        [MaterialAttribute(30248,438)]
+        [MaterialAttribute(438)]
         SplashPotion,
-        [MaterialAttribute(4568, 439)]
+        [MaterialAttribute(439)]
         SpectralArrow,
-        [MaterialAttribute(25164,440)]
+        [MaterialAttribute(440)]
         TippedArrow,
-        [MaterialAttribute(25857,441)]
+        [MaterialAttribute(441)]
         LingeringPotion,
-        [MaterialAttribute(29943,442)]
+        [MaterialAttribute(442)]
         Shield,
-        [MaterialAttribute(23829,443)]
+        [MaterialAttribute(443)]
         Elytra,
-        [MaterialAttribute(9606,444)]
+        [MaterialAttribute(444)]
         SpruceBoat,
-        [MaterialAttribute(28104,445)]
+        [MaterialAttribute(445)]
         BirchBoat,
-        [MaterialAttribute(4495,446)]
+        [MaterialAttribute(446)]
         JungleBoat,
-        [MaterialAttribute(27326,447)]
+        [MaterialAttribute(447)]
         AcaciaBoat,
-        [MaterialAttribute(28618,448)]
+        [MaterialAttribute(448)]
         DarkOakBoat,
-        [MaterialAttribute(10139,449)]
+        [MaterialAttribute(449)]
         TotemOfUndying,
-        [MaterialAttribute(27848,450)]
+        [MaterialAttribute(450)]
         ShulkerShell,
-        [MaterialAttribute(13715,452)]
+        [MaterialAttribute(452)]
         IronNugget,
-        [MaterialAttribute(12646, 453)]
+        [MaterialAttribute(453)]
         KnowledgeBook,
-        [MaterialAttribute(24562, 280)]
+        [MaterialAttribute(280)]
         DebugStick,
-        [MaterialAttribute(16359,2256)]
+        [MaterialAttribute(2256)]
         MusicDisc13,
-        [MaterialAttribute(16246,2257)]
+        [MaterialAttribute(2257)]
         MusicDiscCat,
-        [MaterialAttribute(26667,2258)]
+        [MaterialAttribute(2258)]
         MusicDiscBlocks,
-        [MaterialAttribute(19436,2259)]
+        [MaterialAttribute(2259)]
         MusicDiscChirp,
-        [MaterialAttribute(13823,2260)]
+        [MaterialAttribute(2260)]
         MusicDiscFar,
-        [MaterialAttribute(11517,2261)]
+        [MaterialAttribute(2261)]
         MusicDiscMall,
-        [MaterialAttribute(26117,2262)]
+        [MaterialAttribute(2262)]
         MusicDiscMellohi,
-        [MaterialAttribute(14989,2263)]
+        [MaterialAttribute(2263)]
         MusicDiscStal,
-        [MaterialAttribute(16785,2264)]
+        [MaterialAttribute(2264)]
         MusicDiscStrad,
-        [MaterialAttribute(24026, 2265)]
+        [MaterialAttribute(2265)]
         MusicDiscWard,
-        [MaterialAttribute(27426,2266)]
+        [MaterialAttribute(2266)]
         MusicDisc11,
-        [MaterialAttribute(26499,2267)]
+        [MaterialAttribute(2267)]
         MusicDiscWait,
         [MaterialAttribute(21323)]
         MusicDiscPigstep,
@@ -1894,9 +1957,9 @@ namespace NiaBukkit.API.Util
         NautilusShell,
         [MaterialAttribute(11807)]
         HeartOfTheSea,
-        [MaterialAttribute(4340, 261)]
+        [MaterialAttribute(261)]
         Crossbow,
-        [MaterialAttribute(8173,282)]
+        [MaterialAttribute(282)]
         SuspiciousStew,
         [MaterialAttribute(14276)]
         Loom,
@@ -2008,7 +2071,7 @@ namespace NiaBukkit.API.Util
         PistonHead,
         [MaterialAttribute(13831)]
         MovingPiston,
-        [MaterialAttribute(25890, 50)]
+        [MaterialAttribute(50)]
         WallTorch,
         [MaterialAttribute(16396,51)]
         Fire,
@@ -2032,124 +2095,131 @@ namespace NiaBukkit.API.Util
         RedstoneWallTorch,
         [MaterialAttribute(27500)]
         SoulWallTorch,
-        [MaterialAttribute(19469,90)]
+        [MaterialAttribute(90)]
         NetherPortal,
-        [MaterialAttribute(12724, 104)]
+        
+        //TODO: What?
+        [MaterialAttribute(104)]
         AttachedPumpkinStem,
-        [MaterialAttribute(30882,105)]
+        [MaterialAttribute(105)]
         AttachedMelonStem,
-        [MaterialAttribute(19021,104)]
+        
+        [MaterialAttribute(104)]
         PumpkinStem,
-        [MaterialAttribute(8247,105)]
+        [MaterialAttribute(105)]
         MelonStem,
-        [MaterialAttribute(16782,119)]
+        [MaterialAttribute(119)]
         EndPortal,
         [MaterialAttribute(29709,127)]
         Cocoa,
-        [MaterialAttribute(8810,132)]
+        [MaterialAttribute(132)]
         Tripwire,
-        [MaterialAttribute(11905, 390)]
+        [MaterialAttribute(390)]
         PottedOakSapling,
-        [MaterialAttribute(29498,390)]
+        [MaterialAttribute(390)]
         PottedSpruceSapling,
-        [MaterialAttribute(32484,390)]
+        [MaterialAttribute(390)]
         PottedBirchSapling,
-        [MaterialAttribute(7525,390)]
+        [MaterialAttribute(390)]
         PottedJungleSapling,
-        [MaterialAttribute(14096,390)]
+        [MaterialAttribute(390)]
         PottedAcaciaSapling,
-        [MaterialAttribute(6486,390)]
+        [MaterialAttribute(390)]
         PottedDarkOakSapling,
-        [MaterialAttribute(23315,390)]
+        [MaterialAttribute(390)]
         PottedFern,
-        [MaterialAttribute(9727,390)]
+        [MaterialAttribute(390)]
         PottedDandelion,
-        [MaterialAttribute(7457,390)]
+        [MaterialAttribute(390)]
         PottedPoppy,
-        [MaterialAttribute(6599,390)]
+        [MaterialAttribute(390)]
         PottedBlueOrchid,
-        [MaterialAttribute(13184,390)]
+        [MaterialAttribute(390)]
         PottedAllium,
-        [MaterialAttribute(8754,390)]
+        [MaterialAttribute(390)]
         PottedAzureBluet,
-        [MaterialAttribute(28594,390)]
+        [MaterialAttribute(390)]
         PottedRedTulip,
-        [MaterialAttribute(28807,390)]
+        [MaterialAttribute(390)]
         PottedOrangeTulip,
-        [MaterialAttribute(24330,390)]
+        [MaterialAttribute(390)]
         PottedWhiteTulip,
-        [MaterialAttribute(10089,390)]
+        [MaterialAttribute(390)]
         PottedPinkTulip,
-        [MaterialAttribute(19707,390)]
+        [MaterialAttribute(390)]
         PottedOxeyeDaisy,
-        [MaterialAttribute(28917,390)]
+        [MaterialAttribute(390)]
         PottedCornflower,
-        [MaterialAttribute(9364,390)]
+        [MaterialAttribute(390)]
         PottedLilyOfTheValley,
-        [MaterialAttribute(26876,390)]
+        [MaterialAttribute(390)]
         PottedWitherRose,
-        [MaterialAttribute(22881,390)]
+        [MaterialAttribute(390)]
         PottedRedMushroom,
-        [MaterialAttribute(14481,390)]
+        [MaterialAttribute(390)]
         PottedBrownMushroom,
-        [MaterialAttribute(13020,390)]
+        [MaterialAttribute(390)]
         PottedDeadBush,
-        [MaterialAttribute(8777,390)]
+        [MaterialAttribute(390)]
         PottedCactus,
         [MaterialAttribute(17258, 141)]
         Carrots,
         [MaterialAttribute(10879,142)]
         Potatoes,
-        [MaterialAttribute(31650,397)]
+        
+        //TODO: What?
+        [MaterialAttribute(144)]
         SkeletonWallSkull,
-        [MaterialAttribute(9326,397, 1)]
+        [MaterialAttribute(144, 1)]
         WitherSkeletonWallSkull,
-        [MaterialAttribute(16296,397, 2)]
+        [MaterialAttribute(144, 2)]
         ZombieWallHead,
-        [MaterialAttribute(13164,397, 3)]
+        [MaterialAttribute(144, 3)]
         PlayerWallHead,
-        [MaterialAttribute(30123,397, 4)]
+        [MaterialAttribute(144, 4)]
         CreeperWallHead,
-        [MaterialAttribute(19818,397, 5)]
+        [MaterialAttribute(144, 5)]
         DragonWallHead,
-        [MaterialAttribute(15967,425, 15)]
+        [MaterialAttribute(177, 15)]
         WhiteWallBanner,
-        [MaterialAttribute(9936,425, 14)]
+        [MaterialAttribute(177, 14)]
         OrangeWallBanner,
-        [MaterialAttribute(23291,425, 13)]
+        [MaterialAttribute(177, 13)]
         MagentaWallBanner,
-        [MaterialAttribute(12011,425, 12)]
+        [MaterialAttribute(177, 12)]
         LightBlueWallBanner,
-        [MaterialAttribute(32004,425, 11)]
+        [MaterialAttribute(177, 11)]
         YellowWallBanner,
-        [MaterialAttribute(21422,425, 10)]
+        [MaterialAttribute(177, 10)]
         LimeWallBanner,
-        [MaterialAttribute(9421,425, 9)]
+        [MaterialAttribute(177, 9)]
         PinkWallBanner,
-        [MaterialAttribute(24275,425, 8)]
+        [MaterialAttribute(177, 8)]
         GrayWallBanner,
-        [MaterialAttribute(31088,425, 7)]
+        [MaterialAttribute(177, 7)]
         LightGrayWallBanner,
-        [MaterialAttribute(10889,425, 6)]
+        [MaterialAttribute(177, 6)]
         CyanWallBanner,
-        [MaterialAttribute(14298,425, 5)]
+        [MaterialAttribute(177, 5)]
         PurpleWallBanner,
-        [MaterialAttribute(17757,425, 4)]
+        [MaterialAttribute(177, 4)]
         BlueWallBanner,
-        [MaterialAttribute(14731,425, 3)]
+        [MaterialAttribute(177, 3)]
         BrownWallBanner,
-        [MaterialAttribute(15046,425, 2)]
+        [MaterialAttribute(177, 2)]
         GreenWallBanner,
-        [MaterialAttribute(4378,425, 1)]
+        [MaterialAttribute(177, 1)]
         RedWallBanner,
-        [MaterialAttribute(4919,425)]
+        [MaterialAttribute(177)]
         BlackWallBanner,
-        [MaterialAttribute(22075,207)]
+        [MaterialAttribute(207)]
         Beetroots,
-        [MaterialAttribute(26605,209)]
+        [MaterialAttribute(209)]
         EndGateway,
-        [MaterialAttribute(21814, 212)]
+        [MaterialAttribute(212)]
         FrostedIce,
+        
+        //TODO: What?
         [MaterialAttribute(29697)]
         KelpPlant,
         [MaterialAttribute(5128)]
@@ -2174,7 +2244,7 @@ namespace NiaBukkit.API.Util
         HornCoralWallFan,
         [MaterialAttribute(8478)]
         BambooSapling,
-        [MaterialAttribute(22542, 390)]
+        [MaterialAttribute(390)]
         PottedBamboo,
         [MaterialAttribute(13668)]
         VoidAir,
@@ -2188,65 +2258,53 @@ namespace NiaBukkit.API.Util
         WeepingVinesPlant,
         [MaterialAttribute(25338)]
         TwistingVinesPlant,
-        [MaterialAttribute(19242, 68)]
+        [MaterialAttribute(68)]
         CrimsonWallSign,
-        [MaterialAttribute(13534,68)]
+        [MaterialAttribute(68)]
         WarpedWallSign,
-        [MaterialAttribute(5548,390)]
+        [MaterialAttribute(390)]
         PottedCrimsonFungus,
-        [MaterialAttribute(30800,390)]
+        [MaterialAttribute(390)]
         PottedWarpedFungus,
-        [MaterialAttribute(13852,390)]
+        [MaterialAttribute(390)]
         PottedCrimsonRoots,
-        [MaterialAttribute(6403,390)]
+        [MaterialAttribute(390)]
         PottedWarpedRoots,
     }
 
     internal class MaterialAttribute : System.Attribute
     {
         public readonly int Id;
-        public readonly int LegacyId;
         
         public readonly int MaxStack;
         public readonly short Durability;
 
         public readonly byte SubId;
 
-        public MaterialAttribute(int id, int legacyId, byte subId = 0, int stack = 64, short durability = 0)
+        public MaterialAttribute(int id, byte subId = 0, int stack = 64, short durability = 0)
         {
             Id = id;
-            LegacyId = legacyId;
             SubId = subId;
             MaxStack = stack;
             Durability = durability;
         }
-        public MaterialAttribute(int id) : this(id, id) {}
+        // public MaterialAttribute(int id) : this(id) {}
     }
 
     public static class MaterialExtensions
     {
-        public static int GetId(this Material m)
+        public static int GetBlockId(this Material m)
         {
             var attributes =
-                (MaterialAttribute[]) m.GetType().GetField(m.ToString())!.GetCustomAttributes(typeof(MaterialAttribute), false);
+                (MaterialAttribute[]) m.GetType().GetField(m.ToString())!.GetCustomAttributes(typeof(MaterialAttribute),
+                    false);
             if (attributes.Length > 0)
                 return attributes[0].Id;
 
             return -1;
         }
         
-        public static int GetLegacyId(this Material m)
-        {
-            var attributes =
-                (MaterialAttribute[]) m.GetType().GetField(m.ToString())!.GetCustomAttributes(typeof(MaterialAttribute),
-                    false);
-            if (attributes.Length > 0)
-                return attributes[0].LegacyId;
-
-            return -1;
-        }
-        
-        public static int GetLegacySubId(this Material m)
+        public static int GetMetaData(this Material m)
         {
             var attributes =
                 (MaterialAttribute[]) m.GetType().GetField(m.ToString())!.GetCustomAttributes(typeof(MaterialAttribute),

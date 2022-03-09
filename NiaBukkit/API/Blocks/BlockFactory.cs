@@ -169,7 +169,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData AcaciaSign;
         public static readonly BlockData JungleSign;
         public static readonly BlockData DarkOakSign;
-        public static readonly BlockData OakDoor;
+        public static readonly BlockData OakDoor = Init(new BlockDoor(Material.OakDoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
         public static readonly BlockData Ladder;
         public static readonly BlockData Rail;
         public static readonly BlockData CobblestoneStairs = Init(new BlockStairs(Cobblestone, Material.CobblestoneStairs));
@@ -251,7 +251,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData MushroomStem;
         public static readonly BlockData IronBars;
         public static readonly BlockData Chain;
-        public static readonly BlockData GlassPane;
+        public static readonly BlockData GlassPane = Init(new BlockTall(Material.GlassPane).SetDurability(.3F).SetSound(SoundEffectType.GlassEffect));
         public static readonly BlockData Melon;
         public static readonly BlockData AttachedPumpkinStem;
         public static readonly BlockData AttachedMelonStem;
@@ -493,11 +493,11 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData JungleFence;
         public static readonly BlockData AcaciaFence;
         public static readonly BlockData DarkOakFence;
-        public static readonly BlockData SpruceDoor;
-        public static readonly BlockData BirchDoor;
-        public static readonly BlockData JungleDoor;
-        public static readonly BlockData AcaciaDoor;
-        public static readonly BlockData DarkOakDoor;
+        public static readonly BlockData SpruceDoor = Init(new BlockDoor(Material.SpruceDoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData BirchDoor = Init(new BlockDoor(Material.BirchDoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData JungleDoor = Init(new BlockDoor(Material.JungleDoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData AcaciaDoor = Init(new BlockDoor(Material.AcaciaDoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData DarkOakDoor = Init(new BlockDoor(Material.DarkOakDoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
         public static readonly BlockData EndRod;
         public static readonly BlockData ChorusPlant;
         public static readonly BlockData ChorusFlower;
@@ -782,8 +782,7 @@ namespace NiaBukkit.API.Blocks
             Air.Update(null);
             foreach (var (_, blockData) in BlockData.Materials)
             {
-                var id = blockData.Type.GetLegacyId() << 4 | blockData.Type.GetLegacySubId();
-                BlockData.LegacyMaterials.TryAdd(id, blockData);
+                BlockData.LegacyMaterials.TryAdd(blockData.GetFlatId(), blockData);
             }
         }
     }

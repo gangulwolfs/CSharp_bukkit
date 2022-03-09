@@ -61,11 +61,11 @@ namespace NiaBukkit.API.World.Chunks
             _skyLight = new NibbleArray(data);
         }
 
-        public BlockData GetPalette(int index)
+        public BlockData GetPaletteFromIndex(int index)
         {
             return _palette[index];
         }
-        public int GetOldPaletteData(int i) => GetPalette(i).Type.GetLegacyId() << 4 | GetPalette(i).Type.GetLegacySubId();
+        public int GetFlatIdFromPalette(int i) => GetPaletteFromIndex(i).GetFlatId();
 
         public int GetOrCreatePaletteIndex(BlockData block)
         {
@@ -104,9 +104,7 @@ namespace NiaBukkit.API.World.Chunks
             return index < 0 || index >= _palette.Count ? BlockFactory.Air : _palette[index];
         }
 
-        public int GetBlockData(int i) => GetBlock(i).Type.GetId();
-
-        public int GetLegacyBlockData(int i) => GetBlock(i).Type.GetLegacyId() << 4 | GetBlock(i).Type.GetLegacySubId();
+        internal int GetFlatId(int i) => GetBlock(i).GetFlatId();
 
         public int GetPaletteIndex(int x, int y, int z) => GetPaletteIndex(Index(x, y, z));
 

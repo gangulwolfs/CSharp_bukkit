@@ -21,6 +21,8 @@ namespace NiaBukkit.API.Blocks.Data
 
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
+            if(properties == null) return base.GetBlockData(block, properties);
+            
             var stairs = (BlockStairs) block;
             stairs.Facing = Enum.Parse<Direction>(properties.GetString("facing").Minecraft2Name());
             stairs.Half = Enum.Parse<PropertyHalf>(properties.GetString("half").Minecraft2Name());
@@ -29,11 +31,27 @@ namespace NiaBukkit.API.Blocks.Data
             return base.GetBlockData(block, properties);
         }
 
+        public override NBTTagCompound ToNBT()
+        {
+            var tag = base.ToNBT();
+            var properties = tag.GetOrCreateCompound("Properties");
+            properties.Set("half", new NBTTagString(Half.ToString().ToLower()));
+            properties.Set("shape", new NBTTagString(Shape.ToString().ToLower()));
+            properties.Set("facing", new NBTTagString(Facing.ToString().ToLower()));
+            
+            return tag;
+        }
+
+        public override int GetFlatId()
+        {
+            return Type.GetBlockId() << 4 | Half.GetMeta() << 2 | Facing.GetMeta4();
+        }
+
         public static bool operator ==(BlockStairs o1, BlockData o2)
         {
             if (o1 is null || o2 is null) return o1 is null && o2 is null;
             if (o2 is not BlockStairs o) return false;
-            return o1.Facing == o.Facing && o1.Half == o.Half && o1.Shape == o.Shape && o1.Type == o.Type;
+            return o1.Facing == o.Facing && o1.Half == o.Half && o1.Shape == o.Shape && (BlockWaterlogged) o1 == o;
         }
 
         public static bool operator !=(BlockStairs o1, BlockData o2) => !(o1 == o2);
@@ -42,22 +60,6 @@ namespace NiaBukkit.API.Blocks.Data
         {
             if (obj is not BlockStairs data) return false;
             return this == data;
-        }
-
-        public override NBTTagCompound ToNBT()
-        {
-            var tag = base.ToNBT();
-            var properties = tag.GetCompound("Properties");
-            properties.Set("half", new NBTTagString(Half.ToString().ToLower()));
-            properties.Set("shape", new NBTTagString(Shape.ToString().ToLower()));
-            properties.Set("facing", new NBTTagString(Facing.ToString().ToLower()));
-            
-            return tag;
-        }
-
-        public override string ToString()
-        {
-            return ToNBT().ToString();
         }
     }
 }
