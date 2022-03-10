@@ -1,4 +1,5 @@
 ﻿using System;
+using NiaBukkit.API.NBT;
 
 namespace NiaBukkit.API.Util
 {
@@ -50,13 +51,13 @@ namespace NiaBukkit.API.Util
 
         public static byte GetMeta3(this Direction data) => (byte) (data - Direction.South);
         
-        public static byte GetMeta4(this Direction data) => data switch
+        public static byte GetMetaEWSN(this Direction data) => data switch
         {
             Direction.East => 0,
             Direction.West => 1,
             Direction.South => 2,
             Direction.North => 3,
-            _ => 4
+            _ => 0
         };
         public static byte GetMetaESWN(this Direction data) => data switch
         {
@@ -64,6 +65,15 @@ namespace NiaBukkit.API.Util
             Direction.South => 1,
             Direction.West => 2,
             Direction.North => 3,
+            _ => 0
+        };
+
+        public static byte GetMetaNSWE(this Direction data) => data switch
+        {
+            Direction.North => 0,
+            Direction.South => 1,
+            Direction.West => 2,
+            Direction.East => 3,
             _ => 0
         };
 
@@ -87,5 +97,54 @@ namespace NiaBukkit.API.Util
             PropertyDoubleBlockHalf.Lower => 0,
             _ => 1
         };
+
+
+        public static Direction GetState(this NBTTagCompound properties, Direction defaultValue)
+        {
+            var data = properties?.GetString("facing");
+            return data == null ? defaultValue : Enum.Parse<Direction>(data.Minecraft2Name());
+        }
+
+
+        public static Axis GetState(this NBTTagCompound properties, Axis defaultValue)
+        {
+            var data = properties?.GetString("axis");
+            return data == null ? defaultValue : Enum.Parse<Axis>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyHalf GetState(this NBTTagCompound properties, PropertyHalf defaultValue)
+        {
+            var data = properties?.GetString("half");
+            return data == null ? defaultValue : Enum.Parse<PropertyHalf>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyShape GetState(this NBTTagCompound properties, PropertyShape defaultValue)
+        {
+            var data = properties?.GetString("shape");
+            return data == null ? defaultValue : Enum.Parse<PropertyShape>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyHinge GetState(this NBTTagCompound properties, PropertyHinge defaultValue)
+        {
+            var data = properties?.GetString("hinge");
+            return data == null ? defaultValue : Enum.Parse<PropertyHinge>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyDoubleBlockHalf GetState(this NBTTagCompound properties, PropertyDoubleBlockHalf defaultValue)
+        {
+            var data = properties?.GetString("half");
+            return data == null ? defaultValue : Enum.Parse<PropertyDoubleBlockHalf>(data.Minecraft2Name());
+        }
+
+
+        public static bool GetState(this NBTTagCompound properties, string tag)
+        {
+            var data = properties?.GetString(tag);
+            return data != null && bool.Parse(data);
+        }
     }
 }

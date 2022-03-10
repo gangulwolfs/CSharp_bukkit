@@ -18,7 +18,7 @@ namespace NiaBukkit.API.Blocks.Data
 
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
-            ((BlockStonecutter) block).Facing = Enum.Parse<Direction>(properties.GetString("facing").Minecraft2Name());
+            ((BlockStonecutter) block).Facing = properties.GetState(Direction.East);
             return base.GetBlockData(block, properties);
         }
 

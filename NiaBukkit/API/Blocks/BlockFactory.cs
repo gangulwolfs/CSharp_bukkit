@@ -230,12 +230,12 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData GreenStainedGlass;
         public static readonly BlockData RedStainedGlass;
         public static readonly BlockData BlackStainedGlass;
-        public static readonly BlockData OakTrapdoor;
-        public static readonly BlockData SpruceTrapdoor;
-        public static readonly BlockData BirchTrapdoor;
-        public static readonly BlockData JungleTrapdoor;
-        public static readonly BlockData AcaciaTrapdoor;
-        public static readonly BlockData DarkOakTrapdoor;
+        public static readonly BlockData OakTrapdoor = Init(new BlockTrapdoor(Material.OakTrapdoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData SpruceTrapdoor = Init(new BlockTrapdoor(Material.SpruceTrapdoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData BirchTrapdoor = Init(new BlockTrapdoor(Material.BirchTrapdoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData JungleTrapdoor = Init(new BlockTrapdoor(Material.JungleTrapdoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData AcaciaTrapdoor = Init(new BlockTrapdoor(Material.AcaciaTrapdoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
+        public static readonly BlockData DarkOakTrapdoor = Init(new BlockTrapdoor(Material.DarkOakTrapdoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
         public static readonly BlockData StoneBricks = Init(new BlockData(Material.StoneBricks).SetBreakData(1.5F, 6));
         public static readonly BlockData MossyStoneBricks = Init(new BlockData(Material.MossyStoneBricks).SetBreakData(1.5F, 6));
         public static readonly BlockData CrackedStoneBricks = Init(new BlockData(Material.CrackedStoneBricks).SetBreakData(1.5F, 6));
@@ -387,7 +387,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData DarkOakStairs = Init(new BlockStairs(DarkOakPlanks, Material.DarkOakStairs));
         public static readonly BlockData SlimeBlock;
         public static readonly BlockData Barrier;
-        public static readonly BlockData IronTrapdoor;
+        public static readonly BlockData IronTrapdoor = Init(new BlockTrapdoor(Material.IronTrapdoor).SetDurability(5).SetSound(SoundEffectType.MetalEffect));
         public static readonly BlockData Prismarine = Init(new BlockData(Material.Prismarine).SetBreakData(1.5F, 6));
         public static readonly BlockData PrismarineBricks = Init(new BlockData(Material.PrismarineBricks).SetBreakData(1.5F, 6));
         public static readonly BlockData DarkPrismarine = Init(new BlockData(Material.DarkPrismarine).SetBreakData(1.5F, 6));

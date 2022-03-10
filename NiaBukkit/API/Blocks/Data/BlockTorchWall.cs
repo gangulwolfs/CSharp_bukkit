@@ -20,7 +20,7 @@ namespace NiaBukkit.API.Blocks.Data
 
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
-            ((BlockTorchWall) block).Facing = Enum.Parse<Direction>(properties.GetString("facing").Minecraft2Name());
+            ((BlockTorchWall) block).Facing = properties.GetState(Direction.East);
             return base.GetBlockData(block, properties);
         }
 
@@ -32,7 +32,7 @@ namespace NiaBukkit.API.Blocks.Data
             return tag;
         }
 
-        public override int GetFlatId() => Type.GetBlockId() << 4 | Facing.GetMeta4() + 1;
+        public override int GetFlatId() => Type.GetBlockId() << 4 | Facing.GetMetaEWSN() + 1;
 
         public static bool operator ==(BlockTorchWall o1, BlockData o2)
         {

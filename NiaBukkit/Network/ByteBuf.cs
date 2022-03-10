@@ -201,7 +201,7 @@ namespace NiaBukkit.Network
 
         public int ReadInt()
         {
-            return IPAddress.NetworkToHostOrder(BitConverter.ToInt32(Read(4), 0));
+            return IPAddress.NetworkToHostOrder(BitConverter.ToInt32(Read(4)));
         }
 
         public string ReadString()
@@ -211,17 +211,17 @@ namespace NiaBukkit.Network
 
         public long ReadLong()
         {
-            return IPAddress.NetworkToHostOrder(BitConverter.ToInt64(Read(8), 0));
+            return IPAddress.NetworkToHostOrder(BitConverter.ToInt64(Read(8)));
         }
 
         public short ReadShort()
         {
-            return IPAddress.NetworkToHostOrder(BitConverter.ToInt16(Read(2), 0));
+            return IPAddress.NetworkToHostOrder(BitConverter.ToInt16(Read(2)));
         }
 
         public float ReadFloat()
         {
-            return NetworkToHostOrder(BitConverter.ToSingle(Read(4), 0));
+            return NetworkToHostOrder(BitConverter.ToSingle(Read(4)));
         }
 
         public double ReadDouble()
@@ -363,7 +363,11 @@ namespace NiaBukkit.Network
         public void WriteLong(long data)
         {
             // buf.AddRange(BitConverter.GetBytes(data));
-            _buf.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data)));
+            var array = BitConverter.GetBytes(data);
+            if(BitConverter.IsLittleEndian)
+                Array.Reverse(array);
+            
+            _buf.AddRange(array);
         }
 
         public void WriteUuid(Uuid uuid)

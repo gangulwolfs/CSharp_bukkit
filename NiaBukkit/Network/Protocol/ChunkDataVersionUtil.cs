@@ -93,7 +93,7 @@ namespace NiaBukkit.Network.Protocol
                 
                 var bitIndex = (i - cellIndex * valuesPerLong) * bitsPerEntry;
                 var value = (int) (data[cellIndex] >> bitIndex & maxEntryValue);
-
+                
                 action.Invoke(i, value);
             }
         }

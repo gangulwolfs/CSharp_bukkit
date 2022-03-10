@@ -22,10 +22,10 @@ namespace NiaBukkit.API.Blocks.Data
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
             var tall = (BlockTall) block;
-            tall.East = bool.Parse(properties.GetString("east"));
-            tall.South = bool.Parse(properties.GetString("south"));
-            tall.North = bool.Parse(properties.GetString("north"));
-            tall.West = bool.Parse(properties.GetString("west"));
+            tall.East = properties.GetState("east");
+            tall.South = properties.GetState("south");
+            tall.North = properties.GetState("north");
+            tall.West = properties.GetState("west");
             
             return base.GetBlockData(block, properties);
         }
@@ -52,5 +52,10 @@ namespace NiaBukkit.API.Blocks.Data
         }
 
         public static bool operator !=(BlockTall o1, BlockData o2) => !(o1 == o2);
+
+        public override bool Equals(object obj)
+        {
+            return obj is BlockData data && this == data;
+        }
     }
 }

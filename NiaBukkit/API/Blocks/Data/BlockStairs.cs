@@ -24,9 +24,9 @@ namespace NiaBukkit.API.Blocks.Data
             if(properties == null) return base.GetBlockData(block, properties);
             
             var stairs = (BlockStairs) block;
-            stairs.Facing = Enum.Parse<Direction>(properties.GetString("facing").Minecraft2Name());
-            stairs.Half = Enum.Parse<PropertyHalf>(properties.GetString("half").Minecraft2Name());
-            stairs.Shape = Enum.Parse<PropertyShape>(properties.GetString("shape").Minecraft2Name());
+            stairs.Facing = properties.GetState(Direction.East);
+            stairs.Half = properties.GetState(PropertyHalf.Bottom);
+            stairs.Shape = properties.GetState(PropertyShape.Straight);
             
             return base.GetBlockData(block, properties);
         }
@@ -44,7 +44,7 @@ namespace NiaBukkit.API.Blocks.Data
 
         public override int GetFlatId()
         {
-            return Type.GetBlockId() << 4 | Half.GetMeta() << 2 | Facing.GetMeta4();
+            return Type.GetBlockId() << 4 | Half.GetMeta() << 2 | Facing.GetMetaEWSN();
         }
 
         public static bool operator ==(BlockStairs o1, BlockData o2)

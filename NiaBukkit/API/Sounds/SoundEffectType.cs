@@ -22,7 +22,7 @@
             SoundEffects.BlockGlassStep, SoundEffects.BlockGlassPlace, SoundEffects.BlockGlassHit,
             SoundEffects.BlockGlassFall);
 
-        public static readonly SoundEffectType MetalEffect = new(1, 1, SoundEffects.BlockMetalBreak,
+        public static readonly SoundEffectType MetalEffect = new(1, 1.5F, SoundEffects.BlockMetalBreak,
             SoundEffects.BlockMetalStep, SoundEffects.BlockMetalPlace, SoundEffects.BlockMetalHit,
             SoundEffects.BlockMetalFall);
 

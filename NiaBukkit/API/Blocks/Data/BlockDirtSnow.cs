@@ -17,7 +17,7 @@ namespace NiaBukkit.API.Blocks.Data
 
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
-            ((BlockDirtSnow) block).Snowy = bool.Parse(properties.GetString("snowy"));
+            ((BlockDirtSnow) block).Snowy = properties.GetState("snowy");
             return base.GetBlockData(block, properties);
         }
 

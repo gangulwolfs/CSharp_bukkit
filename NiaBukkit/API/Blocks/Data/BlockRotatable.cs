@@ -19,7 +19,7 @@ namespace NiaBukkit.API.Blocks.Data
 
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
-            ((BlockRotatable) block).Axis = Enum.Parse<Axis>(properties.GetString("axis").ToUpper());
+            ((BlockRotatable) block).Axis = properties.GetState(Axis.Y);
             return base.GetBlockData(block, properties);
         }
 

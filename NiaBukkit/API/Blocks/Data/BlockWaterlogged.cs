@@ -12,9 +12,7 @@ namespace NiaBukkit.API.Blocks.Data
 
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
-            if(properties == null) return base.GetBlockData(block, properties);
-            
-            ((BlockWaterlogged) block).Waterlogged = bool.Parse(properties.GetString("waterlogged") ?? "False");
+            ((BlockWaterlogged) block).Waterlogged = properties.GetState("waterlogged");
             return base.GetBlockData(block, properties);
         }
 

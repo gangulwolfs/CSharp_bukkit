@@ -97,16 +97,18 @@ namespace NiaBukkit.API.World.Chunks
             for (var i = 0; i < paletteList.Length; i++)
             {
                 if(paletteList[i] is not NBTTagCompound paletteCompound) continue;
-                section.GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(paletteCompound.GetString("Name"))
+                Bukkit.ConsoleSender.SendMessage(paletteCompound);
+                var T = section.GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(paletteCompound.GetString("Name"))
                     .GetBlockData(paletteCompound.GetCompound("Properties")));
                 
-                // Bukkit.ConsoleSender.SendMessage(paletteCompound);
-                // Bukkit.ConsoleSender.SendMessage(BlockData.GetBlockDataByName(paletteCompound.GetString("Name"))
-                //     .GetBlockData(paletteCompound.GetCompound("Properties")));
+                Bukkit.ConsoleSender.SendMessage(T +": " + BlockData.GetBlockDataByName(paletteCompound.GetString("Name"))
+                    .GetBlockData(paletteCompound.GetCompound("Properties")));
             }
 
             ChunkDataVersionUtil.IterateCompactArrayWithPadding(bits, blockStateList, section.SetBlock);
-
+            
+            // Bukkit.ConsoleSender.SendMessage(section.GetBlock(13, 6, 15));
+            
             return section;
         }
 

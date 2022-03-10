@@ -24,11 +24,11 @@ namespace NiaBukkit.API.Blocks.Data
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
             var door = (BlockDoor) block;
-            door.Facing = Enum.Parse<Direction>(properties.GetString("facing").Minecraft2Name());
-            door.Half = Enum.Parse<PropertyDoubleBlockHalf>(properties.GetString("half").Minecraft2Name());
-            door.Hinge = Enum.Parse<PropertyHinge>(properties.GetString("hinge").Minecraft2Name());
-            door.Open = bool.Parse(properties.GetString("open"));
-            door.Powered = bool.Parse(properties.GetString("powered"));
+            door.Facing = properties.GetState(Direction.East);
+            door.Half = properties.GetState(PropertyDoubleBlockHalf.Lower);
+            door.Hinge = properties.GetState(PropertyHinge.Left);
+            door.Open = properties.GetState("open");
+            door.Powered = properties.GetState("powered");
             
             return base.GetBlockData(block, properties);
         }
@@ -63,6 +63,15 @@ namespace NiaBukkit.API.Blocks.Data
             return tag;
         }
 
-        public override int GetFlatId() => base.GetFlatId() | Half.GetMeta() << 3 | Open.ToInt() << 2 | Facing.GetMetaESWN();
+        public override int GetFlatId()
+        {
+            var baseCode = base.GetFlatId() | Half.GetMeta() << 3;
+            baseCode |= Half == PropertyDoubleBlockHalf.Upper
+                ? Powered.ToInt() << 1 | Hinge.GetMeta()
+                : Open.ToInt() << 2 | Facing.GetMetaESWN();
+            
+            return baseCode;
+        }
+        // public override int GetFlatId() => base.GetFlatId() | Half.GetMeta() << 3 | Open.ToInt() << 2 | Powered.ToInt() << 1 | Hinge.GetMeta();
     }
 }
