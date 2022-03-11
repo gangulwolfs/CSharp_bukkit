@@ -22,10 +22,10 @@ namespace NiaBukkit.API.Blocks.Data
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
             var tall = (BlockTall) block;
-            tall.East = properties.GetState("east");
-            tall.South = properties.GetState("south");
-            tall.North = properties.GetState("north");
-            tall.West = properties.GetState("west");
+            tall.East = properties.GetBool("east");
+            tall.South = properties.GetBool("south");
+            tall.North = properties.GetBool("north");
+            tall.West = properties.GetBool("west");
             
             return base.GetBlockData(block, properties);
         }

@@ -93,6 +93,15 @@ namespace NiaBukkit.API.World.Chunks
             _blocks[index] = id;
         }
 
+        public byte GetLightLevel(int x, int y, int z)
+        {
+            var point = Index(x, y, z);
+
+            return _skyLight != null
+                ? Math.Max(_skyLight[point], _blockLight[point])
+                : _blockLight[point];
+        }
+
         public BlockData GetBlock(int x, int y, int z)
         {
             return GetBlock(Index(x, y, z));

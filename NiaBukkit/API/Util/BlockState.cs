@@ -46,6 +46,34 @@ namespace NiaBukkit.API.Util
         Lower
     }
 
+    public enum PropertySlabType
+    {
+        Top,
+        Bottom,
+        Double
+    }
+
+    public enum PropertyChestType
+    {
+        Single,
+        Left,
+        Right
+    }
+
+    public enum PropertyBedPart
+    {
+        Head,
+        Foot
+    }
+
+    public enum PropertyBellAttach
+    {
+        Floor,
+        Ceiling,
+        SingleWall,
+        DoubleWall
+    }
+
     public static class BlockStateExtensions
     {
 
@@ -77,6 +105,15 @@ namespace NiaBukkit.API.Util
             _ => 0
         };
 
+        public static byte GetMetaSWNE(this Direction data) => data switch
+        {
+            Direction.South => 0,
+            Direction.West => 1,
+            Direction.North => 2,
+            Direction.East => 3,
+            _ => 0
+        };
+
         public static byte GetMeta(this Direction data) => (byte) data;
 
         public static byte GetMeta(this PropertyHalf data) => data switch
@@ -96,6 +133,26 @@ namespace NiaBukkit.API.Util
         {
             PropertyDoubleBlockHalf.Lower => 0,
             _ => 1
+        };
+        public static byte GetMeta(this PropertySlabType data) => data switch
+        {
+            PropertySlabType.Bottom => 0,
+            _ => 1
+        };
+        
+        public static byte GetMeta(this PropertyChestType data) => data switch
+        {
+            PropertyChestType.Single => 0,
+            PropertyChestType.Right => 1,
+            PropertyChestType.Left => 2,
+            _ => 0
+        };
+
+        public static byte GetMeta(this PropertyBedPart data) => data switch
+        {
+            PropertyBedPart.Foot => 0,
+            PropertyBedPart.Head => 1,
+            _ => 0
         };
 
 
@@ -141,10 +198,31 @@ namespace NiaBukkit.API.Util
         }
 
 
-        public static bool GetState(this NBTTagCompound properties, string tag)
+        public static PropertySlabType GetState(this NBTTagCompound properties, PropertySlabType defaultValue)
         {
-            var data = properties?.GetString(tag);
-            return data != null && bool.Parse(data);
+            var data = properties?.GetString("type");
+            return data == null ? defaultValue : Enum.Parse<PropertySlabType>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyChestType GetState(this NBTTagCompound properties, PropertyChestType defaultValue)
+        {
+            var data = properties?.GetString("type");
+            return data == null ? defaultValue : Enum.Parse<PropertyChestType>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyBedPart GetState(this NBTTagCompound properties, PropertyBedPart defaultValue)
+        {
+            var data = properties?.GetString("part");
+            return data == null ? defaultValue : Enum.Parse<PropertyBedPart>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyBellAttach GetState(this NBTTagCompound properties, PropertyBellAttach defaultValue)
+        {
+            var data = properties?.GetString("attachment");
+            return data == null ? defaultValue : Enum.Parse<PropertyBellAttach>(data.Minecraft2Name());
         }
     }
 }

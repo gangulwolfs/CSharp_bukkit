@@ -8,7 +8,7 @@ namespace NiaBukkit.API.Blocks.Data
     {
         public Axis Axis { get; private set; }
         
-        internal BlockRotatable(Material type) : base(type)
+        public BlockRotatable(Material type) : base(type)
         {
         }
 

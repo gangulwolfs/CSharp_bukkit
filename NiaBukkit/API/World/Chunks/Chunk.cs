@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NiaBukkit.API.Blocks;
 using NiaBukkit.API.Util;
 using NiaBukkit.Network;
 
@@ -44,6 +45,19 @@ namespace NiaBukkit.API.World.Chunks
         public void SetBlock(int x, int y, int z, Material material)
         {
             GetOrCreateSection(y >> 4).SetBlock(x, y % 16, z, material);
+        }
+
+        public BlockData GetBlock(int x, int y, int z)
+        {
+            return GetOrCreateSection(y >> 4).GetBlock(x, y % 16, z);
+        }
+
+        public byte GetLightLevel(int x, int y, int z)
+        {
+            if (x < -30000000 || z < -30000000 || x >= 30000000 || z >= 30000000)
+                return 15;
+            
+            return GetOrCreateSection(y >> 4).GetLightLevel(x, y % 16, z);
         }
 
         public ushort GetBitMask()

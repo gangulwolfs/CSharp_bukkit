@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Text;
 using System.Threading;
 using NiaBukkit.API;
@@ -30,8 +29,8 @@ namespace NiaBukkit
 
             Console.CancelKeyPress += ConsoleCloseEvent;
 
-            Bukkit.MainWorld.WorldSpawn.Set(336.5, 6, 30);
-            ChunkRegionManager.GetChunk(Bukkit.MainWorld, 335 >> 4, 32 >> 4);
+            Bukkit.MainWorld.WorldSpawn.Set(318.5, 4, 60);
+            ChunkRegionManager.GetChunk(Bukkit.MainWorld, 321 >> 4, 63 >> 4);
         }
 
         private static void Init()

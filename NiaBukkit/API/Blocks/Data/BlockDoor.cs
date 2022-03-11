@@ -27,8 +27,8 @@ namespace NiaBukkit.API.Blocks.Data
             door.Facing = properties.GetState(Direction.East);
             door.Half = properties.GetState(PropertyDoubleBlockHalf.Lower);
             door.Hinge = properties.GetState(PropertyHinge.Left);
-            door.Open = properties.GetState("open");
-            door.Powered = properties.GetState("powered");
+            door.Open = properties.GetBool("open");
+            door.Powered = properties.GetBool("powered");
             
             return base.GetBlockData(block, properties);
         }

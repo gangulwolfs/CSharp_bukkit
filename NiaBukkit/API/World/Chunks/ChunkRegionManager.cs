@@ -107,7 +107,7 @@ namespace NiaBukkit.API.World.Chunks
 
             ChunkDataVersionUtil.IterateCompactArrayWithPadding(bits, blockStateList, section.SetBlock);
             
-            // Bukkit.ConsoleSender.SendMessage(section.GetBlock(13, 6, 15));
+            Bukkit.ConsoleSender.SendMessage(section.GetBlock(1, 5, 15));
             
             return section;
         }

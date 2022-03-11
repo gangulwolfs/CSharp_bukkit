@@ -213,8 +213,6 @@ namespace NiaBukkit.API.Util
         
         [MaterialAttribute(33)]
         Piston,
-        [MaterialAttribute(34)]
-        PistonExtension,
         [MaterialAttribute(35)]
         WhiteWool,
         [MaterialAttribute(35, 1)]
@@ -247,8 +245,6 @@ namespace NiaBukkit.API.Util
         RedWool,
         [MaterialAttribute(35, 15)]
         BlackWool,
-        [MaterialAttribute(36)]
-        PistonMoved,
         [MaterialAttribute( 37)]
         Dandelion,
         [MaterialAttribute( 38)]
@@ -353,12 +349,8 @@ namespace NiaBukkit.API.Util
         NetherBrickSlab,
         [MaterialAttribute(44, 7)]
         QuartzSlab,
-        [MaterialAttribute(181)]
-        DoubleRedSandstoneSlab,
         [MaterialAttribute(182)]
         RedSandstoneSlab,
-        [MaterialAttribute(204)]
-        PurpurDoubleSlab,
         [MaterialAttribute(205)]
         PurpurSlab,
         
@@ -1555,37 +1547,37 @@ namespace NiaBukkit.API.Util
         Sugar,
         [MaterialAttribute(92)]
         Cake,
-        [MaterialAttribute(355)]
+        [MaterialAttribute(26)]
         WhiteBed,
-        [MaterialAttribute(355, 1)]
+        [MaterialAttribute(26, 1)]
         OrangeBed,
-        [MaterialAttribute(355, 2)]
+        [MaterialAttribute(26, 2)]
         MagentaBed,
-        [MaterialAttribute(355, 3)]
+        [MaterialAttribute(26, 3)]
         LightBlueBed,
-        [MaterialAttribute(355, 4)]
+        [MaterialAttribute(26, 4)]
         YellowBed,
-        [MaterialAttribute(355, 5)]
+        [MaterialAttribute(26, 5)]
         LimeBed,
-        [MaterialAttribute(355, 6)]
+        [MaterialAttribute(26, 6)]
         PinkBed,
-        [MaterialAttribute(355, 7)]
+        [MaterialAttribute(26, 7)]
         GrayBed,
-        [MaterialAttribute(355, 8)]
+        [MaterialAttribute(26, 8)]
         LightGrayBed,
-        [MaterialAttribute(355, 9)]
+        [MaterialAttribute(26, 9)]
         CyanBed,
-        [MaterialAttribute(355, 10)]
+        [MaterialAttribute(26, 10)]
         PurpleBed,
-        [MaterialAttribute(355, 11)]
+        [MaterialAttribute(26, 11)]
         BlueBed,
-        [MaterialAttribute(355, 12)]
+        [MaterialAttribute(26, 12)]
         BrownBed,
-        [MaterialAttribute(355, 13)]
+        [MaterialAttribute(26, 13)]
         GreenBed,
-        [MaterialAttribute(355, 14)]
+        [MaterialAttribute(26, 14)]
         RedBed,
-        [MaterialAttribute(355, 15)]
+        [MaterialAttribute(26, 15)]
         BlackBed,
         [MaterialAttribute(357)]
         Cookie,
@@ -2057,19 +2049,19 @@ namespace NiaBukkit.API.Util
         CrackedPolishedBlackstoneBricks,
         [MaterialAttribute(4099)]
         RespawnAnchor,
-        [MaterialAttribute(24998,8)]
+        [MaterialAttribute(8)]
         Water,
         [MaterialAttribute(9)]
         StationaryWater,
-        [MaterialAttribute(8415,10)]
+        [MaterialAttribute(10)]
         Lava,
         [MaterialAttribute(11)]
         StationaryLava,
         [MaterialAttribute(27189,175, 2)]
         TallSeagrass,
-        [MaterialAttribute(30226, 34)]
+        [MaterialAttribute(34)]
         PistonHead,
-        [MaterialAttribute(13831)]
+        [MaterialAttribute(36)]
         MovingPiston,
         [MaterialAttribute(50)]
         WallTorch,

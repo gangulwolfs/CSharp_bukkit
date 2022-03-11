@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using NiaBukkit.API.Blocks;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Entities;
 using NiaBukkit.API.Util;
@@ -59,6 +60,20 @@ namespace NiaBukkit.API.World
             _loadedChunks.TryRemove(new ChunkCoord(this, x, z), out var chunk);
 
             return chunk;
+        }
+
+        public BlockData GetBlock(int x, int y, int z)
+        {
+            x <<= 4;
+            z <<= 4;
+            return GetChunk(x, z).GetBlock(x, y, z);
+        }
+
+        public byte GetLightLevel(int x, int y, int z)
+        {
+            x <<= 4;
+            z <<= 4;
+            return GetChunk(x, z).GetLightLevel(x, y, z);
         }
     }
 }

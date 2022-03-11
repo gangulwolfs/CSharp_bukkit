@@ -73,6 +73,13 @@ namespace NiaBukkit.API.NBT
         public int GetInt(string tagName)
         {
             _data.TryGetValue(tagName, out var nbt);
+            if (nbt == null) return 0;
+
+            if (nbt.NBTType == NBTType.String)
+                return int.TryParse(((NBTTagString) nbt).Data, out var result)
+                    ? result
+                    : 0;
+                
             return nbt is not NBTTagInt value ? 0 : value.Data;
         }
 
@@ -139,7 +146,13 @@ namespace NiaBukkit.API.NBT
 
         public bool GetBool(string tagName)
         {
-            return GetByte(tagName) != 0;
+            _data.TryGetValue(tagName, out var nbt);
+            if (nbt == null) return false;
+
+            if (nbt.NBTType == NBTType.String)
+                return bool.TryParse(((NBTTagString) nbt).Data, out var result) && result;
+            
+            return nbt is NBTTagByte value && value.Data != 0;
         }
 
         public override string ToString()

@@ -65,9 +65,11 @@ namespace NiaBukkit.API.Blocks
             return this;
         }
 
-        internal virtual void Update(BlockPosition position)
+        internal virtual void Update(BlockPosition position, Random random)
         {
         }
+
+        internal virtual bool CanPlace(BlockPosition position) => true;
 
         internal virtual BlockData GetBlockData(NBTTagCompound properties)
         {
@@ -79,9 +81,9 @@ namespace NiaBukkit.API.Blocks
             return block.SetBreakData(Speed, Durability).SetSound(SoundEffectType);
         }
 
-        internal BlockData GetBlockData(BlockData blockData)
+        internal BlockData SetBase(BlockData baseBlock)
         {
-            return blockData.SetBreakData(Speed, Durability).SetSound(SoundEffectType);
+            return SetBreakData(baseBlock.Speed, baseBlock.Durability).SetSound(baseBlock.SoundEffectType);
         }
 
         internal BlockData SetLight(int blockLight)

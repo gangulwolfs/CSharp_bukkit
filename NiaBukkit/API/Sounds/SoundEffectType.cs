@@ -38,6 +38,14 @@
             SoundEffects.BlockWartBlockStep, SoundEffects.BlockWartBlockPlace, SoundEffects.BlockWartBlockHit,
             SoundEffects.BlockWartBlockFall);
 
+        public static readonly SoundEffectType CropEffect = new(1, 1, SoundEffects.BlockCropBreak,
+            SoundEffects.BlockGrassStep, SoundEffects.ItemCropPlant, SoundEffects.BlockGrassHit,
+            SoundEffects.BlockGrassFall);
+
+        public static readonly SoundEffectType AnvilEffect = new(.3F, 1, SoundEffects.BlockAnvilBreak,
+            SoundEffects.BlockAnvilStep, SoundEffects.BlockAnvilPlace, SoundEffects.BlockAnvilHit,
+            SoundEffects.BlockAnvilFall);
+
 
 
 

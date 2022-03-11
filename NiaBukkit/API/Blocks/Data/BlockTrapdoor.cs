@@ -23,7 +23,7 @@ namespace NiaBukkit.API.Blocks.Data
             var o = (BlockTrapdoor) block;
             o.Facing = properties.GetState(Direction.North);
             o.Half = properties.GetState(PropertyHalf.Bottom);
-            o.Open = properties.GetState("open");
+            o.Open = properties.GetBool("open");
             
             return base.GetBlockData(block, properties);
         }
