@@ -46,6 +46,22 @@
             SoundEffects.BlockAnvilStep, SoundEffects.BlockAnvilPlace, SoundEffects.BlockAnvilHit,
             SoundEffects.BlockAnvilFall);
 
+        public static readonly SoundEffectType NetherOreEffect = new(.3F, 1, SoundEffects.BlockNetherOreBreak,
+            SoundEffects.BlockNetherOreStep, SoundEffects.BlockNetherOrePlace, SoundEffects.BlockNetherOreHit,
+            SoundEffects.BlockNetherOreFall);
+
+        public static readonly SoundEffectType NetherGoldOreEffect = new(.3F, 1, SoundEffects.BlockNetherGoldOreBreak,
+            SoundEffects.BlockNetherGoldOreStep, SoundEffects.BlockNetherGoldOrePlace, SoundEffects.BlockNetherGoldOreHit,
+            SoundEffects.BlockNetherGoldOreFall);
+
+        public static readonly SoundEffectType SandEffect = new(.3F, 1, SoundEffects.BlockSandBreak,
+            SoundEffects.BlockSandStep, SoundEffects.BlockSandPlace, SoundEffects.BlockSandHit,
+            SoundEffects.BlockSandFall);
+
+        public static readonly SoundEffectType WetGrassEffect = new(.3F, 1, SoundEffects.BlockWetGrassBreak,
+            SoundEffects.BlockWetGrassStep, SoundEffects.BlockWetGrassPlace, SoundEffects.BlockWetGrassHit,
+            SoundEffects.BlockWetGrassFall);
+
 
 
 

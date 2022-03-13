@@ -39,6 +39,7 @@ namespace NiaBukkit.Network
         internal NetworkManager(TcpClient client)
         {
             IsAvailable = true;
+            client.NoDelay = true;
             
             Client = client;
         }
@@ -242,13 +243,13 @@ namespace NiaBukkit.Network
 
                     Encrypter.TransformBlock(encrypt, 0, encrypt.Length, data, 0);
 
-                    NetworkStream stream = Client.GetStream();
+                    var stream = Client.GetStream();
                     stream.WriteAsync(data, 0, data.Length);
                     stream.Flush();
                 }
                 else
                 {
-                    Client.Client.Send(data);
+                    Client.Client.SendAsync(data, SocketFlags.None);
                 }
             }
             catch (SocketException e)

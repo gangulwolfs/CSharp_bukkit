@@ -11,7 +11,7 @@
         internal override void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
-            if(protocol < ProtocolVersion.v1_9)
+            if(protocol < ProtocolVersion.v1_12)
                 buf.WriteVarInt((int) (_data / 1000000L));
             else
                 buf.WriteLong(_data);

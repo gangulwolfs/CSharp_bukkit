@@ -10,7 +10,7 @@ namespace NiaBukkit.Network.Protocol.Status
 
 		public StatusOutResponse(ProtocolVersion protocol, int maxPlayers, int onlinePlayers, string description)
 		{
-			JsonBuilder json = new JsonBuilder();
+			var json = new JsonBuilder();
 			json.Add("version", new JsonBuilder().Add("name", protocol.GetProtocolName()).Add("protocol", (int) protocol));
 			json.Add("players", new JsonBuilder().Add("max", maxPlayers).Add("online", onlinePlayers));
 			json.Add("description", new JsonBuilder().Add("text", description));

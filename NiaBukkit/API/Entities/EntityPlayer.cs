@@ -91,8 +91,8 @@ namespace NiaBukkit.API.Entities
 		{
 			if (_loadedChunk.Contains(_currentChunkCoord)) return;
 			
-			if(_beforeLocation != Location && NetworkManager != null)
-				NetworkManager.Teleport(_beforeLocation, Enumerable.Empty<TeleportFlags>());
+			if(_beforeLocation != Location)
+				NetworkManager?.Teleport(_beforeLocation, Enumerable.Empty<TeleportFlags>());
 		}
 
 		[SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.World.Chunks.ChunkCoord[]")]

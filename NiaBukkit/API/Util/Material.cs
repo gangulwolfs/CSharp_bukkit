@@ -861,7 +861,7 @@ namespace NiaBukkit.API.Util
         TallGrass,
         [MaterialAttribute(175, 3)]
         LargeFern,
-        [MaterialAttribute(31190,95)]
+        [MaterialAttribute(95)]
         WhiteStainedGlass,
         [MaterialAttribute(95, 1)]
         OrangeStainedGlass,
@@ -1355,7 +1355,7 @@ namespace NiaBukkit.API.Util
         Gunpowder,
         [MaterialAttribute(295)]
         WheatSeeds,
-        [MaterialAttribute(296)]
+        [MaterialAttribute(59)]
         Wheat,
         [MaterialAttribute(297)]
         Bread,
@@ -2057,7 +2057,7 @@ namespace NiaBukkit.API.Util
         Lava,
         [MaterialAttribute(11)]
         StationaryLava,
-        [MaterialAttribute(27189,175, 2)]
+        [MaterialAttribute(175, 2)]
         TallSeagrass,
         [MaterialAttribute(34)]
         PistonHead,
@@ -2154,9 +2154,9 @@ namespace NiaBukkit.API.Util
         PottedDeadBush,
         [MaterialAttribute(390)]
         PottedCactus,
-        [MaterialAttribute(17258, 141)]
+        [MaterialAttribute(141)]
         Carrots,
-        [MaterialAttribute(10879,142)]
+        [MaterialAttribute(142)]
         Potatoes,
         
         //TODO: What?
@@ -2238,9 +2238,9 @@ namespace NiaBukkit.API.Util
         BambooSapling,
         [MaterialAttribute(390)]
         PottedBamboo,
-        [MaterialAttribute(13668)]
+        [MaterialAttribute(0)]
         VoidAir,
-        [MaterialAttribute(17422)]
+        [MaterialAttribute(0)]
         CaveAir,
         [MaterialAttribute(31612)]
         BubbleColumn,

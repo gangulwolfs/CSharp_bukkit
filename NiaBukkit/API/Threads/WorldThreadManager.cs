@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using NiaBukkit.API.Entities;
 using NiaBukkit.API.World.Chunks;
 using NiaBukkit.Network.Protocol;
@@ -36,18 +37,21 @@ namespace NiaBukkit.API.Threads
                     if (players == null)
                         continue;
 
-                    Chunk chunk = target.World.GetChunk(target.X, target.Z);
+                    var chunk = target.World.GetChunk(target.X, target.Z);
                     target.World.AddChunk(chunk);
 
-                    Packet packet = new PlayOutChunkData(chunk);
-                    foreach (var player in players)
+                    Task.Run(() =>
                     {
-                        if(player?.NetworkManager == null || !player.NetworkManager.IsAvailable || player.World != target.World)
-                            continue;
+                        Packet packet = new PlayOutChunkData(chunk);
+                        foreach (var player in players)
+                        {
+                            if(player?.NetworkManager == null || !player.NetworkManager.IsAvailable || player.World != target.World)
+                                continue;
                         
-                        player.NetworkManager.SendPacket(packet);
-                        player.ChunkLoaded(target);
-                    }
+                            player.NetworkManager.SendPacket(packet);
+                            player.ChunkLoaded(target);
+                        }
+                    });
                 }
             }
         }

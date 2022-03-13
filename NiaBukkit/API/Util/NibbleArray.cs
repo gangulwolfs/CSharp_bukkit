@@ -1,11 +1,12 @@
-﻿using NiaBukkit.API.World.Chunks;
+﻿using System.Collections.Generic;
+using NiaBukkit.API.World.Chunks;
 
 namespace NiaBukkit.API.Util
 {
     public class NibbleArray
     {
         private readonly byte[] _data;
-        public byte[] Data => _data;
+        public IEnumerable<byte> Data => _data;
         public int Length => _data.Length * 2;
 
         public NibbleArray(int length)

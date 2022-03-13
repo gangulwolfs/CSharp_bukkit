@@ -55,7 +55,7 @@ namespace NiaBukkit.API.Blocks.Data
             var properties = tag.GetOrCreateCompound("Properties");
             properties.Set("attachment", new NBTTagString(Attachment.ToString()));
             properties.Set("powered", new NBTTagString(Powered.ToString()));
-            properties.Set("facing", new NBTTagString(Facing.ToString()));
+            properties.Set("facing", new NBTTagString(Facing.ToString().ToLower()));
             
             return tag;
         }

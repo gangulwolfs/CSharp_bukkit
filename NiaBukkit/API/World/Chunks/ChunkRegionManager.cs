@@ -12,7 +12,7 @@ namespace NiaBukkit.API.World.Chunks
         
         internal static Chunk GetChunk(World world, int x, int z)
         {
-            var buf = RegionFile.Load($"D:/마인크래프트/1.16.5/world/region/r.{x >> 5}.{z >> 5}.mca", x, z);
+            var buf = RegionFile.Load($"D:/마인크래프트/1.16.5/world_b/region/r.{x >> 5}.{z >> 5}.mca", x, z);
             // var buf = RegionFile.Load($"C:/Users/skyne/AppData/Roaming/.minecraft/saves/New World-/region/r.{x >> 5}.{z >> 5}.mca", x, z);
             if (buf == null)
                 return null;
@@ -46,7 +46,7 @@ namespace NiaBukkit.API.World.Chunks
             var chunk = new Chunk(world, posX, posZ);
             // chunk.Done = nbtTagCompound.GetBool("TerrainPopulated");
             // chunk.SetHeightMap(nbtTagCompound.GetIntArray("HeightMap"));
-            var hasLight = nbtLevelCompound.GetBool(nbtTagCompound.HasKey("isLightOn") ? "isLightOn" : "LightPopulated");
+            var hasLight = nbtLevelCompound.GetBool(nbtLevelCompound.HasKey("isLightOn") ? "isLightOn" : "LightPopulated");
 
             // chunk.InhabitedTime = nbtTagCompound.GetBool("InhabitedTime");
             var nbtTagList = nbtLevelCompound.GetList("Sections");
@@ -75,6 +75,7 @@ namespace NiaBukkit.API.World.Chunks
                 {
                     if(nbtChunkSection.HasKeyOfType("BlockLight", NBTType.ByteArray))
                         section.SetBlockLight(nbtChunkSection.GetByteArray("BlockLight"));
+            
                     if(hasSkyLight && nbtChunkSection.HasKeyOfType("SkyLight", NBTType.ByteArray))
                         section.SetSkyLight(nbtChunkSection.GetByteArray("SkyLight"));
                 }
@@ -83,31 +84,41 @@ namespace NiaBukkit.API.World.Chunks
             }
 
             chunk.SetChunkSections(chunkSections);
+
             return chunk;
         }
 
         private static ChunkSection LoadChunkSectionPalette(byte yPos, NBTTagCompound nbtTagCompound)
         {
             var paletteList = nbtTagCompound.GetList("Palette");
+            if (paletteList.Length == 1) return null;
             var blockStateList = nbtTagCompound.GetLongArray("BlockStates");
 
             var section = new ChunkSection(yPos);
+            
             var bits = blockStateList.Length * 64 / ChunkSection.Size;
 
             for (var i = 0; i < paletteList.Length; i++)
             {
                 if(paletteList[i] is not NBTTagCompound paletteCompound) continue;
-                Bukkit.ConsoleSender.SendMessage(paletteCompound);
                 var T = section.GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(paletteCompound.GetString("Name"))
                     .GetBlockData(paletteCompound.GetCompound("Properties")));
-                
-                Bukkit.ConsoleSender.SendMessage(T +": " + BlockData.GetBlockDataByName(paletteCompound.GetString("Name"))
+
+                Bukkit.ConsoleSender.SendMessage(paletteCompound);
+                Bukkit.ConsoleSender.SendMessage(T + ": " + BlockData
+                    .GetBlockDataByName(paletteCompound.GetString("Name"))
                     .GetBlockData(paletteCompound.GetCompound("Properties")));
             }
 
             ChunkDataVersionUtil.IterateCompactArrayWithPadding(bits, blockStateList, section.SetBlock);
-            
-            Bukkit.ConsoleSender.SendMessage(section.GetBlock(1, 5, 15));
+
+            if (yPos == 64)
+            {
+                // Bukkit.ConsoleSender.SendMessage(Convert.ToString(blockStateList[0], 2));
+                
+                // for(var i = 0; i < 16 * 16; i++)
+                //     Bukkit.ConsoleSender.SendMessage(section.GetBlock(i));
+            }
             
             return section;
         }

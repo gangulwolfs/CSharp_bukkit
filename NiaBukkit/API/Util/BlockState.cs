@@ -74,6 +74,13 @@ namespace NiaBukkit.API.Util
         DoubleWall
     }
 
+    public enum PropertyWallHeight
+    {
+        None,
+        Low,
+        Tall
+    }
+
     public static class BlockStateExtensions
     {
 
@@ -155,6 +162,8 @@ namespace NiaBukkit.API.Util
             _ => 0
         };
 
+        public static byte GetMeta(this PropertyWallHeight data) => (byte) data;
+
 
         public static Direction GetState(this NBTTagCompound properties, Direction defaultValue)
         {
@@ -223,6 +232,13 @@ namespace NiaBukkit.API.Util
         {
             var data = properties?.GetString("attachment");
             return data == null ? defaultValue : Enum.Parse<PropertyBellAttach>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyWallHeight GetState(this NBTTagCompound properties, string key)
+        {
+            var data = properties?.GetString("attachment");
+            return data == null ? PropertyWallHeight.None : Enum.Parse<PropertyWallHeight>(data.Minecraft2Name());
         }
     }
 }

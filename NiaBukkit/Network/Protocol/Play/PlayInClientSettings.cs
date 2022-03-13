@@ -15,7 +15,7 @@ namespace NiaBukkit.Network.Protocol.Play
 
         private static void Read_V1_12(NetworkManager networkManager, ByteBuf buf)
         {
-            EntityPlayer player = (EntityPlayer) networkManager.Player;
+            var player = (EntityPlayer) networkManager.Player;
 
             player.Locate = buf.ReadString();
             player.ViewDistance = (byte) buf.ReadByte();

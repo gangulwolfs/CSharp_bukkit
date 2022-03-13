@@ -61,6 +61,11 @@ namespace NiaBukkit.API.World.Chunks
             _skyLight = new NibbleArray(data);
         }
 
+        internal void SetPaletteData(int index, BlockData data)
+        {
+            _palette[index] = data;
+        }
+
         public BlockData GetPaletteFromIndex(int index)
         {
             return _palette[index];

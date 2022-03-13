@@ -57,6 +57,31 @@ namespace NiaBukkit.Network.Protocol
             return data;
         }
 
+        internal static void CreateCompactArray(ByteBuf buf, int bitsPerBlock, Func<int, int> func)
+        {
+            ulong buffer = 0;
+            var bitIndex = 0;
+            buf.WriteVarInt(ChunkSection.Size * bitsPerBlock / 64);
+
+            for (var i = 0; i < ChunkSection.Size; i++)
+            {
+                var value = func.Invoke(i);
+                buffer |= (ulong) (uint) value << bitIndex;
+                var remaining = bitsPerBlock - (64 - bitIndex);
+                if (remaining >= 0)
+                {
+                    buf.WriteULong(buffer);
+                    buffer = (ulong) (value >> (bitsPerBlock - remaining));
+                    bitIndex = remaining;
+                }
+                else
+                    bitIndex += bitsPerBlock;
+            }
+            
+            if(bitIndex > 0)
+                buf.WriteULong(buffer);
+        }
+
         internal static void IterateCompactArray(int bitsPerBlock, long[] data, Action<int, int> action)
         {
             var maxEntryValue = (1L << bitsPerBlock) - 1;

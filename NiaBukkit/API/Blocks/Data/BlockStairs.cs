@@ -21,8 +21,6 @@ namespace NiaBukkit.API.Blocks.Data
 
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)
         {
-            if(properties == null) return base.GetBlockData(block, properties);
-            
             var stairs = (BlockStairs) block;
             stairs.Facing = properties.GetState(Direction.East);
             stairs.Half = properties.GetState(PropertyHalf.Bottom);
@@ -36,7 +34,7 @@ namespace NiaBukkit.API.Blocks.Data
             var tag = base.ToNBT();
             var properties = tag.GetOrCreateCompound("Properties");
             properties.Set("half", new NBTTagString(Half.ToString().ToLower()));
-            properties.Set("shape", new NBTTagString(Shape.ToString().ToLower()));
+            properties.Set("shape", new NBTTagString(Shape.ToString().Name2Minecraft()));
             properties.Set("facing", new NBTTagString(Facing.ToString().ToLower()));
             
             return tag;

@@ -31,7 +31,7 @@ namespace NiaBukkit.API
             
             string[] text = message.Split("§");
             Console.Write(text[0]);
-            for (int i = 1; i < text.Length; i++)
+            for (var i = 1; i < text.Length; i++)
             {
                 if (text[i].Length <= 0)
                 {

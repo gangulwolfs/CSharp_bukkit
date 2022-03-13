@@ -64,16 +64,12 @@ namespace NiaBukkit.API.World
 
         public BlockData GetBlock(int x, int y, int z)
         {
-            x <<= 4;
-            z <<= 4;
-            return GetChunk(x, z).GetBlock(x, y, z);
+            return GetChunk(x >> 4, z >> 4).GetBlock(x % 16, y, z % 16);
         }
 
         public byte GetLightLevel(int x, int y, int z)
         {
-            x <<= 4;
-            z <<= 4;
-            return GetChunk(x, z).GetLightLevel(x, y, z);
+            return GetChunk(x >> 4, z >> 4).GetLightLevel(x % 16, y, z % 16);
         }
     }
 }

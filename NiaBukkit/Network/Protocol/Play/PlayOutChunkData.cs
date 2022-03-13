@@ -1,7 +1,5 @@
-﻿using System;
-using NiaBukkit.API;
-using NiaBukkit.API.Blocks;
-using NiaBukkit.API.NBT;
+﻿using NiaBukkit.API;
+using NiaBukkit.API.World;
 using NiaBukkit.API.World.Chunks;
 
 namespace NiaBukkit.Network.Protocol.Play
@@ -37,27 +35,25 @@ namespace NiaBukkit.Network.Protocol.Play
         {
             const byte maxBitsBlock = 13;
             var mask = _chunk.GetBitMask();
+
             buf.WriteVarInt(mask);
 
             var data = new ByteBuf();
             for (var i = 0; i < _chunk.ChunkSections.Length; i++)
             {
-                if ((mask & 1 << i) == 0) continue;
+                //30476 19968
+                if ((mask >> i & 1) == 0) continue;
                 var section = _chunk.ChunkSections[i];
 
-                var bitsPerBlock = ChunkDataVersionUtil.GetBitsPerBlock(section.PaletteSize, maxBitsBlock);
-                // var bitsPerBlock = maxBitsBlock;
+                // var bitsPerBlock = ChunkDataVersionUtil.GetBitsPerBlock(section.PaletteSize, maxBitsBlock);
+                var bitsPerBlock = maxBitsBlock;
                 data.WriteByte(bitsPerBlock);
 
-                // data.WriteVarInt(3);
-                // data.WriteVarInt(0);
-                // data.WriteVarInt(7 << 4);
-                // data.WriteVarInt(256 << 4);
-                
                 if (bitsPerBlock != maxBitsBlock)
                 {
-                    data.WriteVarInt(section.PaletteSize);
-                    for (var k = 0; k < section.PaletteSize; k++)
+                    var size = section.PaletteSize;
+                    data.WriteVarInt(size);
+                    for (var k = 0; k < size; k++)
                     {
                         data.WriteVarInt(section.GetFlatIdFromPalette(k));
                     }
@@ -65,36 +61,31 @@ namespace NiaBukkit.Network.Protocol.Play
                 else
                     data.WriteVarInt(0);
                 
-                var chunkArray = ChunkDataVersionUtil.CreateCompactArray(bitsPerBlock,
+                var array = ChunkDataVersionUtil.CreateCompactArray(bitsPerBlock,
                     bitsPerBlock == maxBitsBlock ? section.GetFlatId : section.GetPaletteIndex);
-                data.WriteVarInt(chunkArray.Length);
+                
+                data.WriteLongArray(array);
+                // Bukkit.ConsoleSender.SendMessage(array.Length * 8 + ChunkSection.Size);
 
-                foreach (var d in chunkArray)
-                    data.WriteLong(d);
-
-                _chunk.ChunkSections[i].WriteBlockLight(data);
-                if (_chunk.ChunkSections[i].HasSkyLight())
-                    _chunk.ChunkSections[i].WriteSkyLight(data);
+                section.WriteBlockLight(data);
+                
+                if (_chunk.Coord.World.Dimension == Dimention.OverWorld)
+                    if (section.HasSkyLight())
+                        section.WriteSkyLight(data);
+                    else
+                        data.Write(new byte[ChunkSection.Size / 2]);
             }
 
             if (_chunk.IsFullChunk())
                 _chunk.WriteBiomes(data);
 
-            var ch = new long[data.WriteLength / 8];
-            var ori = data.GetBytes();
-            for (var i = 0; i < data.WriteLength - 7; i += 8)
-            {
-                ch[i / 8] = BitConverter.ToInt64(ori, i);
-            }
-
-            buf.WriteVarInt(data.WriteLength);
-            buf.Write(data.GetBytes());
+            buf.Write(data.Flush());
         }
 
         private void WriteOld(ByteBuf buf)
         {
             var mask = _chunk.GetBitMask();
-            buf.WriteUShort((ushort) ~mask);
+            buf.WriteUShort(mask);
             
             var data = new ByteBuf();
 
@@ -115,16 +106,17 @@ namespace NiaBukkit.Network.Protocol.Play
             for (var i = 0; i < _chunk.ChunkSections.Length; i++)
             {
                 if ((mask & 1 << i) == 0) continue;
-                if(_chunk.ChunkSections[i].HasSkyLight())
-                    _chunk.ChunkSections[i].WriteSkyLight(data);
+                var section = _chunk.ChunkSections[i];
+                if (section.HasSkyLight())
+                    section.WriteSkyLight(data);
+                else
+                    data.Write(new byte[ChunkSection.Size / 2]);
             }
             
             if(_chunk.IsFullChunk())
                 _chunk.WriteBiomes(data);
 
-            var chunkData = data.GetBytes();
-            buf.WriteVarInt(chunkData.Length);
-            buf.Write(chunkData);
+            buf.Write(data.Flush());
         }
 
         private static int GetPacketId(ProtocolVersion protocol)

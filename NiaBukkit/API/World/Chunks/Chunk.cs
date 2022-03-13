@@ -63,12 +63,17 @@ namespace NiaBukkit.API.World.Chunks
         public ushort GetBitMask()
         {
             ushort mask = 0;
-            for (var i = ChunkSections.Length - 1; i >= 0; i--)
+            // for (var i = ChunkSections.Length - 1; i >= 0; i--)
+            // {
+            //     mask <<= 1;
+            //     
+            //     if (ChunkSections[i] != null)
+            //         mask += 1;
+            // }
+            for (var i = 0; i < ChunkSections.Length; i++)
             {
-                mask <<= 1;
-                
                 if (ChunkSections[i] != null)
-                    mask += 1;
+                    mask |= (ushort) (1 << i);
             }
 
             return mask;

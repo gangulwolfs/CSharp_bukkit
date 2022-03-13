@@ -13,7 +13,7 @@ namespace NiaBukkit
 {
     public static class Program
     {
-        public const string Name = "MC";
+        public const string Name = "NiaBukkit";
 
         private static void Main()
         {
@@ -29,8 +29,8 @@ namespace NiaBukkit
 
             Console.CancelKeyPress += ConsoleCloseEvent;
 
-            Bukkit.MainWorld.WorldSpawn.Set(318.5, 4, 60);
-            ChunkRegionManager.GetChunk(Bukkit.MainWorld, 321 >> 4, 63 >> 4);
+            Bukkit.MainWorld.WorldSpawn.Set(238.5, 35, 84);
+            Bukkit.MainWorld.GetChunk(238 >> 4, 84 >> 4);
         }
 
         private static void Init()

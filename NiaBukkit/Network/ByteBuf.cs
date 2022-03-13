@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -11,7 +12,7 @@ namespace NiaBukkit.Network
     public class ByteBuf
     {
         private byte[] _readBuf;
-        private readonly List<byte> _buf = new List<byte>();
+        private readonly List<byte> _buf = new ();
 
         private int _pos = 0;
 
@@ -32,7 +33,8 @@ namespace NiaBukkit.Network
 
         public static byte[] GetVarInt(int integer)
         {
-            List<byte> buf = new List<byte>();
+            var buf = new List<byte>();
+            
             while ((integer & -128) != 0)
             {
                 buf.Add((byte) (integer & 127 | 128));
@@ -342,11 +344,12 @@ namespace NiaBukkit.Network
         public void WriteUShort(ushort data)
         {
             _buf.AddRange(BitConverter.GetBytes(data));
+            // _buf.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data)));
         }
 
         public void WriteBool(bool data)
         {
-            _buf.AddRange(BitConverter.GetBytes(data));
+            _buf.Add((byte) (data ? 1 : 0));
         }
 
         public void WriteDouble(double data)
@@ -362,12 +365,20 @@ namespace NiaBukkit.Network
 
         public void WriteLong(long data)
         {
-            // buf.AddRange(BitConverter.GetBytes(data));
-            var array = BitConverter.GetBytes(data);
-            if(BitConverter.IsLittleEndian)
-                Array.Reverse(array);
-            
-            _buf.AddRange(array);
+            _buf.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data)));
+        }
+
+        public void WriteULong(ulong data)
+        {
+            _buf.AddRange(BitConverter.GetBytes((ulong) IPAddress.HostToNetworkOrder((long) data)));
+        }
+
+        public void WriteLongArray(long[] array)
+        {
+            var size = array.Length;
+            WriteVarInt(size);
+            for(var i = 0; i < size; i++)
+                WriteLong(array[i]);
         }
 
         public void WriteUuid(Uuid uuid)
