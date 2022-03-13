@@ -50,10 +50,10 @@ namespace NiaBukkit.API.Util
 		{
 			try
 			{
-				WebClient wc = new WebClient();
-				string[] result = wc.DownloadString("https://api.mojang.com/users/profiles/minecraft/" + name).Split('"');
+				var wc = new WebClient();
+				var result = wc.DownloadString("https://api.mojang.com/users/profiles/minecraft/" + name).Split('"');
 
-				for(int i = 1; i < result.Length; i+=4) {
+				for(var i = 1; i < result.Length; i+=4) {
 					if(result[i].Equals("id")) {
 						return new Uuid(Guid.Parse(result[i + 2]));
 					}
