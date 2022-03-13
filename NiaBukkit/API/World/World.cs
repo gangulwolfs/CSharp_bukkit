@@ -46,6 +46,7 @@ namespace NiaBukkit.API.World
             if (chunk != null)
                 return chunk;
 
+            // return _provider.GetChunk(x, z);
             return ChunkRegionManager.GetChunk(this, x, z) ?? _provider.GetChunk(x, z);
         }
 

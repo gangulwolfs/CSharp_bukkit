@@ -25,13 +25,6 @@ namespace NiaBukkit.API.Blocks
             Type = type;
         }
 
-        internal void SetBlockData(BlockData data)
-        {
-            Speed = data.Speed;
-            Durability = data.Durability;
-            SoundEffectType = data.SoundEffectType;
-        }
-
         public static BlockData GetBlockDataById(int id, byte subId = 0)
         {
             LegacyMaterials.TryGetValue(id << 4 | subId, out var block);

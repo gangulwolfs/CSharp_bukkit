@@ -9,14 +9,13 @@ namespace NiaBukkit.API.Blocks.Data
         public Direction Facing { get; private set; }
         public PropertyHalf Half { get; private set; }
         public PropertyShape Shape { get; private set; }
-        internal BlockStairs(BlockData data, Material type) : base(type)
+        internal BlockStairs(Material type) : base(type)
         {
-            SetBlockData(data);
         }
 
         internal override BlockData GetBlockData(NBTTagCompound properties)
         {
-            return GetBlockData(new BlockStairs(this, Type), properties);
+            return GetBlockData(new BlockStairs(Type), properties);
         }
 
         internal override BlockData GetBlockData(BlockData block, NBTTagCompound properties)

@@ -45,9 +45,15 @@ namespace NiaBukkit.Network.Protocol.Play
                 if ((mask >> i & 1) == 0) continue;
                 var section = _chunk.ChunkSections[i];
 
-                // var bitsPerBlock = ChunkDataVersionUtil.GetBitsPerBlock(section.PaletteSize, maxBitsBlock);
-                var bitsPerBlock = maxBitsBlock;
+                var bitsPerBlock = ChunkDataVersionUtil.GetBitsPerBlock(section.PaletteSize, maxBitsBlock);
+                // var bitsPerBlock = maxBitsBlock;
                 data.WriteByte(bitsPerBlock);
+                
+                // data.WriteVarInt(4);
+                // data.WriteVarInt(0);
+                // data.WriteVarInt(7 << 4);
+                // data.WriteVarInt(2 << 4);
+                // data.WriteVarInt(66 << 4 | 7);
 
                 if (bitsPerBlock != maxBitsBlock)
                 {

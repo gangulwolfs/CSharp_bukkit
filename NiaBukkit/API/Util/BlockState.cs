@@ -81,6 +81,20 @@ namespace NiaBukkit.API.Util
         Tall
     }
 
+    public enum PropertyTrackPosition
+    {
+        NorthSouth,
+        EastWest,
+        AscendingEast,
+        AscendingWest,
+        AscendingNorth,
+        AscendingSouth,
+        SouthEast,
+        SouthWest,
+        NorthWest,
+        NorthEast
+    }
+
     public static class BlockStateExtensions
     {
 
@@ -163,6 +177,7 @@ namespace NiaBukkit.API.Util
         };
 
         public static byte GetMeta(this PropertyWallHeight data) => (byte) data;
+        public static byte GetMeta(this PropertyTrackPosition data) => (byte) data;
 
 
         public static Direction GetState(this NBTTagCompound properties, Direction defaultValue)
@@ -237,8 +252,15 @@ namespace NiaBukkit.API.Util
 
         public static PropertyWallHeight GetState(this NBTTagCompound properties, string key)
         {
-            var data = properties?.GetString("attachment");
+            var data = properties?.GetString(key);
             return data == null ? PropertyWallHeight.None : Enum.Parse<PropertyWallHeight>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyTrackPosition GetState(this NBTTagCompound properties, PropertyTrackPosition defaultValue)
+        {
+            var data = properties?.GetString("shape");
+            return data == null ? defaultValue : Enum.Parse<PropertyTrackPosition>(data.Minecraft2Name());
         }
     }
 }

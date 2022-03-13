@@ -46,21 +46,25 @@
             SoundEffects.BlockAnvilStep, SoundEffects.BlockAnvilPlace, SoundEffects.BlockAnvilHit,
             SoundEffects.BlockAnvilFall);
 
-        public static readonly SoundEffectType NetherOreEffect = new(.3F, 1, SoundEffects.BlockNetherOreBreak,
+        public static readonly SoundEffectType NetherOreEffect = new(1, 1, SoundEffects.BlockNetherOreBreak,
             SoundEffects.BlockNetherOreStep, SoundEffects.BlockNetherOrePlace, SoundEffects.BlockNetherOreHit,
             SoundEffects.BlockNetherOreFall);
 
-        public static readonly SoundEffectType NetherGoldOreEffect = new(.3F, 1, SoundEffects.BlockNetherGoldOreBreak,
+        public static readonly SoundEffectType NetherGoldOreEffect = new(1, 1, SoundEffects.BlockNetherGoldOreBreak,
             SoundEffects.BlockNetherGoldOreStep, SoundEffects.BlockNetherGoldOrePlace, SoundEffects.BlockNetherGoldOreHit,
             SoundEffects.BlockNetherGoldOreFall);
 
-        public static readonly SoundEffectType SandEffect = new(.3F, 1, SoundEffects.BlockSandBreak,
+        public static readonly SoundEffectType SandEffect = new(1, 1, SoundEffects.BlockSandBreak,
             SoundEffects.BlockSandStep, SoundEffects.BlockSandPlace, SoundEffects.BlockSandHit,
             SoundEffects.BlockSandFall);
 
-        public static readonly SoundEffectType WetGrassEffect = new(.3F, 1, SoundEffects.BlockWetGrassBreak,
+        public static readonly SoundEffectType WetGrassEffect = new(1, 1, SoundEffects.BlockWetGrassBreak,
             SoundEffects.BlockWetGrassStep, SoundEffects.BlockWetGrassPlace, SoundEffects.BlockWetGrassHit,
             SoundEffects.BlockWetGrassFall);
+
+        public static readonly SoundEffectType LadderEffect = new(1, 1, SoundEffects.BlockLadderBreak,
+            SoundEffects.BlockLadderStep, SoundEffects.BlockLadderPlace, SoundEffects.BlockLadderHit,
+            SoundEffects.BlockLadderFall);
 
 
 
