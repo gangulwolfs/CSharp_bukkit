@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace NiaBukkit.API.Util
 {
@@ -46,22 +47,24 @@ namespace NiaBukkit.API.Util
 			return new Uuid(Guid.NewGuid());
 		}
 		
-		public static Uuid FromUserName(string name)
+		public static Task<Uuid> FromUserName(string name)
 		{
-			try
+			return Task.Run(() =>
 			{
-				var wc = new WebClient();
-				var result = wc.DownloadString("https://api.mojang.com/users/profiles/minecraft/" + name).Split('"');
-
-				for(var i = 1; i < result.Length; i+=4) {
-					if(result[i].Equals("id")) {
-						return new Uuid(Guid.Parse(result[i + 2]));
-					}
+				try
+				{
+					var wc = new WebClient();
+					var json = JsonBuilder.Parse(
+						wc.DownloadString("https://api.mojang.com/users/profiles/minecraft/" + name));
+					return new Uuid(json.Get<string>("id"));
 				}
-			}
-			catch {}
-			
-			return NameUuidFromBytes(Encoding.UTF8.GetBytes(name));
+				catch
+				{
+					// ignored
+				}
+
+				return NameUuidFromBytes(Encoding.UTF8.GetBytes(name));
+			});
 		}
 		
 		public override string ToString()

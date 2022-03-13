@@ -31,8 +31,6 @@ namespace NiaBukkit
 
             Bukkit.MainWorld.WorldSpawn.Set(238.5, 35, 84);
             Bukkit.MainWorld.GetChunk(247 >> 4, 84 >> 4);
-            
-            Bukkit.ConsoleSender.SendMessage(JsonBuilder.Parse("{\"Test\": \"Asdf\", \"Int\": 1234, \"Double\": 12.12}"));
         }
 
         private static void Init()

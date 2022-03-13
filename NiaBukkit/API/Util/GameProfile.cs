@@ -12,5 +12,10 @@ namespace NiaBukkit.API.Util
 			Uuid = id;
 			Name = name;
 		}
+
+		public override string ToString()
+		{
+			return $"{{UUID={Uuid}, Name={Name}}}";
+		}
 	}
 }

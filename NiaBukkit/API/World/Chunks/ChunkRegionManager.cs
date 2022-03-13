@@ -104,10 +104,10 @@ namespace NiaBukkit.API.World.Chunks
                 var T = section.GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(paletteCompound.GetString("Name"))
                     .GetBlockData(paletteCompound.GetCompound("Properties")));
 
-                Bukkit.ConsoleSender.SendMessage(paletteCompound);
-                Bukkit.ConsoleSender.SendMessage(T + ": " + BlockData
-                    .GetBlockDataByName(paletteCompound.GetString("Name"))
-                    .GetBlockData(paletteCompound.GetCompound("Properties")));
+                // Bukkit.ConsoleSender.SendMessage(paletteCompound);
+                // Bukkit.ConsoleSender.SendMessage(T + ": " + BlockData
+                //     .GetBlockDataByName(paletteCompound.GetString("Name"))
+                //     .GetBlockData(paletteCompound.GetCompound("Properties")));
             }
 
             ChunkDataVersionUtil.IterateCompactArrayWithPadding(bits, blockStateList, section.SetBlock);
