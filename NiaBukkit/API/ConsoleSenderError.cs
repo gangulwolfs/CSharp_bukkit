@@ -39,14 +39,17 @@ namespace NiaBukkit.API
 
         public override void WriteLine(string? value)
         {
-            value ??= "null";
+            lock (Bukkit.ConsoleSender.ConsoleLockObject)
+            {
+                value ??= "null";
             
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("{0}/ERROR]: ", ConsoleSender.GetInfo());
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("{0}/ERROR]: ", ConsoleSender.GetInfo());
             
-            originalConsoleStream.WriteLine(value);
-            Console.ResetColor();
-            Console.Write(">");
+                originalConsoleStream.WriteLine(value);
+                Console.ResetColor();
+                Console.Write(">");
+            }
         }
 
         public override Encoding Encoding => Encoding.UTF8;

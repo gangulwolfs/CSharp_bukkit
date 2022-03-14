@@ -1,5 +1,7 @@
+using System;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
+using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network.Protocol.Status
 {
@@ -10,8 +12,15 @@ namespace NiaBukkit.Network.Protocol.Status
     {
         internal static void Read(NetworkManager networkManager, ByteBuf buf)
         {
-            networkManager.SendPacket(new StatusOutResponse(Bukkit.MinecraftServer.Protocol, ServerProperties.MaxPlayers, Bukkit.OnlinePlayers.Count,
-                ServerProperties.Motd));
+            var players = Bukkit.OnlinePlayers;
+            
+            var size = Math.Min(players.Count, 5);
+            var profiles = new GameProfile[size];
+            for (var i = 0; i < size; i++)
+                profiles[i] = players[i].Profile;
+            
+            networkManager.SendPacket(new StatusOutResponse(Bukkit.MinecraftServer.Protocol, ServerProperties.MaxPlayers, players.Count,
+                ServerProperties.Motd, profiles));
         }
     }
 }

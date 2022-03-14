@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using NiaBukkit.API;
 using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network.Protocol.Status
@@ -8,13 +11,28 @@ namespace NiaBukkit.Network.Protocol.Status
 	public class StatusOutResponse : Packet {
 		private readonly string _status;
 
-		public StatusOutResponse(ProtocolVersion protocol, int maxPlayers, int onlinePlayers, string description)
+		public StatusOutResponse(ProtocolVersion protocol, int maxPlayers, int onlinePlayers, string description, params GameProfile[] profiles)
 		{
 			var json = new JsonBuilder();
-			json.Add("version", new JsonBuilder().Add("name", protocol.GetProtocolName()).Add("protocol", (int) protocol));
-			json.Add("players", new JsonBuilder().Add("max", maxPlayers).Add("online", onlinePlayers));
-			json.Add("description", new JsonBuilder().Add("text", description));
+			var version = new JsonBuilder().Set("name", protocol.GetProtocolName()).Set("protocol", (int) protocol);
+			var players = new JsonBuilder().Set("max", maxPlayers).Set("online", onlinePlayers);
 
+			var sampleLength = profiles.Length;
+			if (sampleLength > 0)
+			{
+				var array = new JsonBuilder[sampleLength];
+				for (var i = 0; i < sampleLength; i++)
+				{
+					var profile = profiles[i];
+					array[i] = new JsonBuilder().Set("name", profile.Name).Set("id", profile.Uuid);
+				}
+
+				players.Set("sample", array);
+			}
+
+			json.Set("version", version);
+			json.Set("players", players);
+			json.Set("description", new JsonBuilder().Set("text", description));
 			_status = json.ToString();
 		}
 

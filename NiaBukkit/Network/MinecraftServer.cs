@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
@@ -23,12 +23,12 @@ namespace NiaBukkit.Network
 		internal RSAParameters ServerKey;
         
         private TcpListener _listener;
-        private const int Timeout = 25000;
-        
-        internal static readonly ConcurrentBag<NetworkManager> NetworkManagers = new();
+
+        private readonly ConcurrentBag<NetworkManager> _networkManagers = new();
         
         public bool IsAvailable { get; private set; }
-        private readonly ConcurrentQueue<NetworkManager> _destroySockets = new();
+
+        public const string ServerId = "";
 
         internal MinecraftServer()
         {
@@ -66,7 +66,6 @@ namespace NiaBukkit.Network
             
             ThreadFactory.LaunchThread(new Thread(AcceptSocketWorker), false).Name = "Client Bind Thread";
             ThreadFactory.LaunchThread(new Thread(ClientUpdateWorker), false).Name = "Client Thread";
-            ThreadFactory.LaunchThread(new Thread(ClientDestroyWorker), false).Name = "Client Destroy Thread";
 
             ThreadFactory.LaunchThread(new Thread(WorldThreadManager.Worker), false).Name = "World Generator";
             ThreadFactory.LaunchThread(new Thread(EntityThreadManager.Worker), false).Name = "Entity Thread";
@@ -76,7 +75,7 @@ namespace NiaBukkit.Network
         {
             while (IsAvailable)
             {
-                NetworkManagers.Add(new NetworkManager(_listener.AcceptTcpClient()));
+                _networkManagers.Add(new NetworkManager(_listener.AcceptTcpClient()));
             }
         }
 
@@ -86,39 +85,33 @@ namespace NiaBukkit.Network
         {
             while (IsAvailable)
             {
-                var currentTimeMillis = TimeManager.CurrentTimeMillis;
-                foreach (var networkManager in NetworkManagers)
-                {
-                    if (networkManager is not {IsAvailable: true})
-                    {
-                        if(!_destroySockets.Contains(networkManager))
-                            _destroySockets.Enqueue(networkManager);
-                        continue;
-                    }
-
-                    if (networkManager.Client is not {Connected: true} || currentTimeMillis - networkManager.LastPacketMillis > Timeout)
-                    {
-                        networkManager.Disconnect();
-                        _destroySockets.Enqueue(networkManager);
-                        continue;
-                    }
-                    
-                    networkManager.Update();
-                }
+                var destroy = new Queue<NetworkManager>();
+                ClientForEachUpdate(destroy);
+                ClientForEachDestroy(destroy);
             }
         }
 
-        private void ClientDestroyWorker()
+        private void ClientForEachUpdate(Queue<NetworkManager> destroy)
         {
-            while (IsAvailable)
+            foreach (var networkManager in _networkManagers)
             {
-                while(!_destroySockets.IsEmpty)
+                if (!(networkManager?.IsAvailable ?? false))
                 {
-                    if(!_destroySockets.TryDequeue(out var networkManager)) continue;
-                    
-                    if(networkManager.Client is {Connected: true}) networkManager.Client.Close();
-                    NetworkManagers.Remove(networkManager);
+                    destroy.Enqueue(networkManager);
+                    continue;
                 }
+                networkManager.Update();
+            }
+        }
+
+        private void ClientForEachDestroy(Queue<NetworkManager> destroy)
+        {
+            while(destroy.Count > 0)
+            {
+                var networkManager = destroy.Dequeue();
+                
+                networkManager.Close();
+                _networkManagers.Remove(networkManager);
             }
         }
 

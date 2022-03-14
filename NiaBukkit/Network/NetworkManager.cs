@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Entities;
@@ -15,9 +17,12 @@ namespace NiaBukkit.Network
 {
     public class NetworkManager
     {
-        internal long LastPacketMillis = TimeManager.CurrentTimeMillis;
-        internal readonly TcpClient Client;
-        
+        private const int Timeout = 25000;
+        private const long KeepAliveTime = 50;
+
+        private long _lastPacketMillis = TimeManager.CurrentTimeMillis;
+        private readonly TcpClient _client;
+
         public bool IsAvailable { get; private set; }
 
         public PacketMode PacketMode { get; internal set; } = PacketMode.Ping;
@@ -25,65 +30,88 @@ namespace NiaBukkit.Network
         public string Host { get; internal set; }
         public short Port { get; internal set; }
 
-        internal ICryptoTransform Encrypter;
-        internal ICryptoTransform Decrypter;
+        private byte[] _verifyToken;
+
+        internal ICryptoTransform Encryptor;
+        internal ICryptoTransform Decryptor;
 		
-		public Player Player { get; internal set; }
+		public EntityPlayer Player { get; internal set; }
 
-        private int _teleportAwait = 0;
+        private int _teleportAwait;
 
-        private const long KeepAliveTime = 50;
 
-        private NetworkBuf _networkBuf = new();
+        private readonly NetworkBuf _networkBuf = new();
 
         internal NetworkManager(TcpClient client)
         {
             IsAvailable = true;
             client.NoDelay = true;
             
-            Client = client;
+            _client = client;
         }
 
-        internal void Disconnect()
+        private void Disconnect()
         {
             IsAvailable = false;
-
-            if (Player != null)
-                Bukkit.RemovePlayer(Player);
             
             // TODO: Client Disconnected
         }
 
+        internal void Close()
+        {
+            if(IsAvailable)
+                Disconnect();
+
+            try
+            {
+                _client.Close();
+                _client.Dispose();
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e);
+            }
+            
+            if (Player != null)
+                Bukkit.RemovePlayer(Player);
+        }
+
         private int GetPacketLength()
         {
-            if (ServerSettings.UseCompression && PacketMode == PacketMode.Play)
-            {
-                int packetLength = ByteBuf.ReadVarInt(Client.GetStream());
-                int dataLength = ByteBuf.ReadVarInt(Client.GetStream());
+            if (!ServerSettings.UseCompression || PacketMode != PacketMode.Play)
+                return ByteBuf.ReadVarInt(_client.GetStream());
+            
+            var packetLength = ByteBuf.ReadVarInt(_client.GetStream());
+            var dataLength = ByteBuf.ReadVarInt(_client.GetStream());
 
-                if (dataLength == 0) return packetLength - ByteBuf.GetVarInt(dataLength).Length;
-                return dataLength;
-            }
-
-            return ByteBuf.ReadVarInt(Client.GetStream());
+            if (dataLength == 0) return packetLength - ByteBuf.GetVarInt(dataLength).Length;
+            return dataLength;
         }
 
         internal void Update()
         {
+            if (TimeoutUpdate()) return;
             ReceiveUpdate();
             PacketHandleUpdate();
             KeepAliveUpdate();
         }
 
+        private bool TimeoutUpdate()
+        {
+            if (_client.Connected && TimeManager.CurrentTimeMillis - _lastPacketMillis <= Timeout) return false;
+            Disconnect();
+            return true;
+        }
+
         private void ReceiveUpdate()
         {
-            if (Client.Available == 0) return;
+            if (_client.Available == 0) return;
             
-            LastPacketMillis = TimeManager.CurrentTimeMillis;
+            _lastPacketMillis = TimeManager.CurrentTimeMillis;
             
             _networkBuf.Buf ??= new byte[GetPacketLength()];
 
-            _networkBuf.Offset += Client.GetStream().Read(_networkBuf.Buf, _networkBuf.Offset,
+            _networkBuf.Offset += _client.GetStream().Read(_networkBuf.Buf, _networkBuf.Offset,
                 _networkBuf.Buf.Length - _networkBuf.Offset);
         }
 
@@ -96,11 +124,11 @@ namespace NiaBukkit.Network
             
             //TODO: 압축 추가
 
-            if (Decrypter != null)
+            if (Decryptor != null)
             {
                 var data = packet;
                 packet = new byte[data.Length];
-                Decrypter.TransformBlock(data, 0, data.Length, packet, 0);
+                Decryptor.TransformBlock(data, 0, data.Length, packet, 0);
             }
 
             var buf = new ByteBuf(packet);
@@ -110,7 +138,7 @@ namespace NiaBukkit.Network
 
         private void KeepAliveUpdate()
         {
-            if (TimeManager.CurrentTimeMillis - LastPacketMillis < KeepAliveTime || Player == null) return;
+            if (Player == null || PacketMode != PacketMode.Play || TimeManager.CurrentTimeMillis - _lastPacketMillis < KeepAliveTime) return;
             SendPacket(new PlayOutKeepAlive(TimeManager.CurrentTimeMillis));
         }
 
@@ -143,7 +171,7 @@ namespace NiaBukkit.Network
 
         internal void SetPosition(Location loc, IEnumerable<TeleportFlags> flags)
         {
-            List<TeleportFlags> flagsList = flags.ToList();
+            var flagsList = flags.ToList();
             SendPacket(new PlayOutPosition(loc.X, loc.Y, loc.Z, loc.Yaw, loc.Pitch, flagsList, TeleportAwaitUpdate()));
             Player.Location = GetFlagLocation(loc, flagsList);
         }
@@ -153,7 +181,7 @@ namespace NiaBukkit.Network
             Player.Location.Yaw = yaw;
             Player.Location.Pitch = pitch;
             
-            ((EntityPlayer) Player).IsOnGround = onGround;
+            Player.IsOnGround = onGround;
             MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityLook(Player.EntityId, yaw, pitch, onGround), false);
             MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityHeadRotation(Player.EntityId, yaw), false);
         }
@@ -202,6 +230,68 @@ namespace NiaBukkit.Network
             Disconnect();
         }
 
+        internal void Encryption()
+        {
+            SendPacket(new LoginOutEncryptionRequest(MinecraftServer.ServerId,
+                SelfCryptography.PublicKeyToAsn1(Bukkit.MinecraftServer.ServerKey),
+                _verifyToken = SelfCryptography.GetRandomToken()));
+        }
+
+        internal async void EncryptionResponse(byte[] sharedKey, IEnumerable<byte> packetToken)
+        {
+            if (!packetToken.SequenceEqual(_verifyToken))
+            {
+                Bukkit.ConsoleSender.SendWarnMessage($"{Host}:{Port} Wrong token");
+                return;
+            }
+            
+            var recv = SelfCryptography.GenerateAes((byte[]) sharedKey.Clone());
+            var cipher = SelfCryptography.GenerateAes((byte[]) sharedKey.Clone());
+
+            Decryptor = recv.CreateDecryptor();
+            Encryptor = cipher.CreateEncryptor();
+
+            if (await Player.IsAuthenticate(sharedKey))
+            {
+                Bukkit.ConsoleSender.SendMessage($"§eUser {Player.Name} authenticated with UUID {Player.Uuid}");
+                Play();
+            }
+            else
+            {
+                Bukkit.ConsoleSender.SendWarnMessage($"§eUser {Player.Name} authentication failed!");
+                Kick("Authentication failed! Try restarting your client.");
+            }
+        }
+
+        internal void Play()
+        {
+            SendPacket(new LoginOutSetCompression(ServerSettings.UseCompression
+                ? ServerSettings.CompressionThreshold
+                : -1));
+            SendPacket(new LoginOutSuccess(Player.Profile));
+				
+            PacketMode = PacketMode.Play;
+            // SendPacket(new PlayOutJoinGame(Player));
+            // SendPacket(new PlayOutServerDifficulty(Player.World.Difficulty));
+            // SendPacket(new PlayOutPlayerAbilities(Player.PlayerAbilities));
+            // SendPacket(new PlayOutHeldItemSlot(Player.HeldItemSlot));
+            // SendPacket(new PlayOutEntityStatus(Player.EntityId, 9));
+				
+            //TODO: PacketPlayOutRecipes
+            //TODO: PacketPlayOutSetSlot 
+
+            if (!IsAvailable) return;
+            
+            Bukkit.AddPlayer(Player);
+            InitPlayer();
+				
+            //TODO: PacketPlayOutEntityMetadata
+            //
+            //
+            SetPosition(Player.Location, Enumerable.Empty<TeleportFlags>());
+            SendPacket(new PlayOutSpawnPosition(Player.Location));
+        }
+
         internal void InitPlayer()
         {
             //TODO: removeSpawnPlayer
@@ -211,7 +301,7 @@ namespace NiaBukkit.Network
             SendPacket(playerInfo);
             foreach (var onlinePlayer in Bukkit.OnlinePlayers)
             {
-                EntityPlayer player = (EntityPlayer) onlinePlayer;
+                var player = (EntityPlayer) onlinePlayer;
                 if(player == Player) continue;
                 if (player.CanSee(Player))
                 {
@@ -219,63 +309,61 @@ namespace NiaBukkit.Network
                     player.NetworkManager.SendPacket(spawnPlayer);
                 }
 
-                if (!((EntityPlayer) Player).CanSee(player)) continue;
+                if (!Player.CanSee(player)) continue;
                 SendPacket(
                     new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer, player));
                 SendPacket(new PlayOutSpawnPlayer(player));
             }
         }
 
-        public void SendPacket(Packet packet)
+        public Task SendPacket(Packet packet)
         {
-            if (Client is not {Connected: true}) return;
+            if (_client is not {Connected: true}) return Task.CompletedTask;
             var buf = new ByteBuf();
             packet.Write(buf, Protocol);
-
-            var data = buf.Flush();
-
+            
+            // var data = buf.Flush();
             try
             {
-                if (Encrypter != null)
+                if (Encryptor != null)
                 {
-                    var encrypt = data;
-                    data = new byte[encrypt.Length];
+                    var data = buf.GetBytes();
+                    data = Encryptor.TransformFinalBlock(data, 0, data.Length);
+                    // using var ms = new MemoryStream();
+                    // using var cs = new CryptoStream(ms, Encryptor, CryptoStreamMode.Write);
+                    // cs.Write(data, 0, data.Length);
+                    // cs.FlushFinalBlock();
 
-                    Encrypter.TransformBlock(encrypt, 0, encrypt.Length, data, 0);
+                    // data = ms.ToArray();
 
-                    var stream = Client.GetStream();
-                    stream.WriteAsync(data, 0, data.Length);
+                    // data = Encryptor.TransformFinalBlock(data, 0, data.Length);
+                    // Encryptor.TransformBlock(toEncrypt, 0, toEncrypt.Length, data, 0);
+
+                    var stream = _client.GetStream();
+                    stream.Write(data, 0, data.Length);
                     stream.Flush();
                 }
                 else
                 {
-                    Client.Client.SendAsync(data, SocketFlags.None);
+                    _client.Client.Send(buf.Flush(), SocketFlags.None);
                 }
-            }
-            catch (SocketException e)
-            {
-                if (e.ErrorCode != 10053 && e.SocketErrorCode != SocketError.Disconnecting && Client is {Connected: true})
-                {
-                    Console.Error.WriteLine(e.Message);
-                    Kick(e.Message);
-                }
-                Disconnect();
             }
             catch (Exception e)
             {
-                Console.Error.WriteLine(e.Message);
-                if(Client is {Connected: true})
-                    try
+                Console.Error.WriteLine(e);
+                if (e is SocketException socketException)
+                {
+                    if (socketException.ErrorCode != 10053 && socketException.SocketErrorCode != SocketError.Disconnecting && _client is {Connected: true})
                     {
                         Kick(e.Message);
                     }
-                    catch (Exception)
-                    {
-                        // ignored
-                    }
-
+                }//else
+                 //   Kick(e.Message);
+                
                 Disconnect();
             }
+            
+            return Task.CompletedTask;
         }
 
         private class NetworkBuf

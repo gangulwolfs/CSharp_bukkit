@@ -1,3 +1,5 @@
+using NiaBukkit.API;
+
 namespace NiaBukkit.Network.Protocol.Login
 {
 	/**
@@ -5,25 +7,25 @@ namespace NiaBukkit.Network.Protocol.Login
 	 */
 	public class LoginOutEncryptionRequest : Packet
 	{
-		private readonly byte[] publicKey;
-		private readonly string serverId;
-		private readonly byte[] vertificationToken;
+		private readonly string _serverId;
+		private readonly byte[] _publicKey;
+		private readonly byte[] _verificationToken;
 		
-		public LoginOutEncryptionRequest(byte[] publicKey, byte[] vertificationToken)
+		public LoginOutEncryptionRequest(string serverId, byte[] publicKey, byte[] verificationToken)
 		{
-			this.publicKey = publicKey;
-			this.vertificationToken = vertificationToken;
-			serverId = "";
+			_serverId = serverId;
+			_publicKey = publicKey;
+			_verificationToken = verificationToken;
 		}
 		
 		internal override void Write(ByteBuf buf, ProtocolVersion protocol)
 		{
 			buf.WriteVarInt((int) LoginPacket.EncryptionRequest);
-			buf.WriteString(serverId);
-			buf.WriteVarInt(publicKey.Length);
-			buf.Write(publicKey);
-			buf.WriteVarInt(vertificationToken.Length);
-			buf.Write(vertificationToken);
+			buf.WriteString(_serverId);
+			buf.WriteVarInt(_publicKey.Length);
+			buf.Write(_publicKey);
+			buf.WriteVarInt(_verificationToken.Length);
+			buf.Write(_verificationToken);
 		}
 	}
 }

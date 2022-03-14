@@ -2,6 +2,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Threads;
 using NiaBukkit.API.Util;
@@ -28,6 +31,8 @@ namespace NiaBukkit.API.Entities
 		private readonly ConcurrentBag<ChunkCoord> _loadedChunk = new();
 
 		private Location _beforeLocation;
+		
+		public bool IsAuthenticated { get; private set; }
 
 		public EntityPlayer(NetworkManager networkManager, GameProfile profile, World.World world, GameMode gameMode) : base(profile, world, gameMode)
 		{
@@ -85,8 +90,6 @@ namespace NiaBukkit.API.Entities
 			_beforeLocation = (Location) Location.Clone();
 		}
 
-		[SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.World.Chunks.ChunkCoord[]")]
-		[SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: Enumerator[NiaBukkit.API.World.Chunks.ChunkCoord]")]
 		private void PlayerChunkMoveUpdate()
 		{
 			if (_loadedChunk.Contains(_currentChunkCoord)) return;
@@ -95,7 +98,6 @@ namespace NiaBukkit.API.Entities
 				NetworkManager?.Teleport(_beforeLocation, Enumerable.Empty<TeleportFlags>());
 		}
 
-		[SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.World.Chunks.ChunkCoord[]")]
 		private void ChunkUpdate()
 		{
 			if (NetworkManager == null) return;
@@ -120,6 +122,31 @@ namespace NiaBukkit.API.Entities
 						WorldThreadManager.AddRequireChunk(target, this);
 				}
 			}
+		}
+		
+		
+		internal Task<bool> IsAuthenticate(IEnumerable<byte> sharedKey)
+		{
+			return Task.Run(() =>
+			{
+				try
+				{
+					var serverId = SelfCryptography.JavaHexDigest(Encoding.UTF8.GetBytes("")
+						.Concat(sharedKey)
+						.Concat(SelfCryptography.PublicKeyToAsn1(Bukkit.MinecraftServer.ServerKey))
+						.ToArray());
+					var address = $"http://session.minecraft.net/game/checkserver.jsp?user={Name}&serverId={serverId}";
+					var auth = new WebClient().DownloadString(address);
+
+					return IsAuthenticated = !auth.Contains("NO");
+				}
+				catch
+				{
+					//ignored
+				}
+
+				return false;
+			});
 		}
 	}
 }

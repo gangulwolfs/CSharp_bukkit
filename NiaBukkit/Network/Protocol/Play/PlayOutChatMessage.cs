@@ -17,7 +17,7 @@ namespace NiaBukkit.Network.Protocol.Play
         internal override void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
-            buf.WriteString(new JsonBuilder().Add("text", _message).ToString());
+            buf.WriteString(new JsonBuilder().Set("text", _message).ToString());
             buf.WriteByte((byte) _type);
             if(protocol >= ProtocolVersion.v1_16)
                 buf.WriteUuid(_uuid);

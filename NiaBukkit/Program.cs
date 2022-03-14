@@ -6,7 +6,6 @@ using NiaBukkit.API.Blocks;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Threads;
 using NiaBukkit.API.Util;
-using NiaBukkit.API.World.Chunks;
 using NiaBukkit.Network;
 
 namespace NiaBukkit

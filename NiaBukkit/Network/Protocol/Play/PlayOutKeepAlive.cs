@@ -19,19 +19,16 @@
 
         private static int GetPacketId(ProtocolVersion protocol)
         {
-            if (protocol > ProtocolVersion.v1_16_5)
-                return 33;
-            if (protocol > ProtocolVersion.v1_15_2)
-                return 31;
-            if (protocol > ProtocolVersion.v1_14_3_CT)
-                return 33;
-            if (protocol > ProtocolVersion.v1_13_2)
-                return 32;
-            if (protocol > ProtocolVersion.v1_12_2)
-                return 33;
-            if (protocol >= ProtocolVersion.v1_9)
-                return 31;
-            return 0;
+            return protocol switch
+            {
+                > ProtocolVersion.v1_16_5 => 33,
+                > ProtocolVersion.v1_15_2 => 31,
+                > ProtocolVersion.v1_14_3_CT => 33,
+                > ProtocolVersion.v1_13_2 => 32,
+                > ProtocolVersion.v1_12_2 => 33,
+                >= ProtocolVersion.v1_9 => 31,
+                _ => 0
+            };
         }
     }
 }

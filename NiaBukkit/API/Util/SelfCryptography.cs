@@ -1,24 +1,56 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace NiaBukkit.API.Util
 {
-	public class SelfCryptography
+	public static class SelfCryptography
 	{
 		private static readonly byte[] Algorithm =
 		{
 			0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00
 		};
 		
-		public static byte[] VertifyToken { get; private set; }
-		
 		private static RSACryptoServiceProvider _provider;
+		
+		public static string JavaHexDigest(byte[] data)
+		{
+			var sha1 = SHA1.Create();
+			var hash = sha1.ComputeHash(data);
+			var negative = (hash[0] & 0x80) == 0x80;
+			if (negative) // check for negative hashes
+				hash = TwosCompliment(hash);
+			// Create the string and trim away the zeroes
+			var digest = GetHexString(hash).Trim('0');
+			if (negative)
+				digest = "-" + digest;
+			return digest;
+		}
+
+		private static string GetHexString(IEnumerable<byte> p)
+		{
+			return p.Aggregate(string.Empty, (current, t) => current + t.ToString("x2"));
+		}
+
+		private static byte[] TwosCompliment(byte[] p) // little endian
+		{
+			int i;
+			var carry = true;
+			for (i = p.Length - 1; i >= 0; i--)
+			{
+				p[i] = (byte) ~p[i];
+				if (!carry) continue;
+				carry = p[i] == 0xFF;
+				p[i]++;
+			}
+			return p;
+		}
 		
 		public static RSAParameters GenerateKeyPair()
 		{
-			if(_provider == null)
-				_provider = new RSACryptoServiceProvider(1024);
-			
+			_provider ??= new RSACryptoServiceProvider(1024);
+
 			return _provider.ExportParameters(true);
 		}
 		
@@ -34,47 +66,46 @@ namespace NiaBukkit.API.Util
 
 		public static RijndaelManaged GenerateAes(byte[] key)
 		{
-			RijndaelManaged cipher = new RijndaelManaged();
+			var cipher = new RijndaelManaged();
 			cipher.Mode = CipherMode.CFB;
 			cipher.Padding = PaddingMode.None;
 			cipher.KeySize = 128;
 			cipher.FeedbackSize = 8;
 			
 			cipher.Key = key;
-			cipher.IV = key;
-			// cipher.IV = (byte[]) key.Clone();
+			// cipher.IV = key;
+			cipher.IV = (byte[]) key.Clone();
 
 			return cipher;
 		}
 		
 		public static byte[] GetRandomToken()
 		{
-			byte[] token = new byte[4];
-			RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+			var token = new byte[4];
+			var provider = new RNGCryptoServiceProvider();
 			provider.GetBytes(token);
-			VertifyToken = token;
 			
 			return token;
 		}
 		
 		public static byte[] PublicKeyToAsn1(RSAParameters parameters)
 		{
-			byte[] mod = CreateIntergerPos(parameters.Modulus);
-			byte[] exp = CreateIntergerPos(parameters.Exponent);
+			var mod = CreateIntegerPos(parameters.Modulus);
+			var exp = CreateIntegerPos(parameters.Exponent);
 			
-			int sequenceLength = mod.Length + exp.Length;
-			byte[] sequenceLengthArray = LengthToByteArray(sequenceLength);
+			var sequenceLength = mod.Length + exp.Length;
+			var sequenceLengthArray = LengthToByteArray(sequenceLength);
 			
-			int keyLength = sequenceLengthArray.Length + sequenceLength + 2;
-			byte[] keyLengthArray = LengthToByteArray(keyLength);
+			var keyLength = sequenceLengthArray.Length + sequenceLength + 2;
+			var keyLengthArray = LengthToByteArray(keyLength);
 			
-			int publicKeyLength = keyLengthArray.Length + keyLength + Algorithm.Length + 1;
-			byte[] publicKeyLengthArray = LengthToByteArray(publicKeyLength);
+			var publicKeyLength = keyLengthArray.Length + keyLength + Algorithm.Length + 1;
+			var publicKeyLengthArray = LengthToByteArray(publicKeyLength);
 			
-			int messageLength = publicKeyLengthArray.Length + publicKeyLength + 1;
+			var messageLength = publicKeyLengthArray.Length + publicKeyLength + 1;
 			
-			byte[] message = new byte[messageLength];
-			int index = 0;
+			var message = new byte[messageLength];
+			var index = 0;
 			
 			message[index++] = 0x30;
 			
@@ -127,10 +158,10 @@ namespace NiaBukkit.API.Util
 			};
 		}
 		
-		private static byte[] CreateIntergerPos(byte[] data)
+		private static byte[] CreateIntegerPos(byte[] data)
 		{
 			byte[] newInt, length;
-			int index = 1;
+			var index = 1;
 			
 			if (data[0] > 0x7F)
 			{
@@ -142,7 +173,7 @@ namespace NiaBukkit.API.Util
 				for(; index <= length.Length; index++)
 					newInt[index] = length[index-1];
 				
-				// newInt[index++] = 0x00;
+				newInt[index++] = 0x00;
 				Buffer.BlockCopy(data, 0, newInt, index, data.Length);
 				
 				return newInt;

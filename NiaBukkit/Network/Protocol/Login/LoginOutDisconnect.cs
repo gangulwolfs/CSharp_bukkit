@@ -14,7 +14,7 @@ namespace NiaBukkit.Network.Protocol.Login
         internal override void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(0);
-            buf.WriteString(new JsonBuilder().Add("text", _reason).ToString());
+            buf.WriteString(new JsonBuilder().Set("text", _reason).ToString());
         }
     }
 }

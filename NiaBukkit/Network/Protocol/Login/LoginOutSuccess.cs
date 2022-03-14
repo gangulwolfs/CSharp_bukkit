@@ -21,7 +21,7 @@ namespace NiaBukkit.Network.Protocol.Login
 			
 			if(protocol > ProtocolVersion.v1_15_2)
 			{
-				foreach (int i in GuidSerialize(_profile.Uuid.ToGuid()))
+				foreach (var i in GuidSerialize(_profile.Uuid.ToGuid()))
 					buf.WriteInt(i);
 			}
 			else

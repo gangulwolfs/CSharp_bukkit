@@ -53,9 +53,8 @@ namespace NiaBukkit.API.Util
 			{
 				try
 				{
-					var wc = new WebClient();
 					var json = JsonBuilder.Parse(
-						wc.DownloadString("https://api.mojang.com/users/profiles/minecraft/" + name));
+						new WebClient().DownloadString("https://api.mojang.com/users/profiles/minecraft/" + name));
 					return new Uuid(json.Get<string>("id"));
 				}
 				catch
@@ -63,7 +62,7 @@ namespace NiaBukkit.API.Util
 					// ignored
 				}
 
-				return NameUuidFromBytes(Encoding.UTF8.GetBytes(name));
+				return NameUuidFromBytes(Encoding.UTF8.GetBytes($"OfflinePlayer: {name}"));
 			});
 		}
 		
