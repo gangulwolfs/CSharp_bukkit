@@ -1,6 +1,4 @@
-﻿using NiaBukkit.API;
-
-namespace NiaBukkit.Network.Protocol.Login
+﻿namespace NiaBukkit.Network.Protocol.Login
 {
     /**
      * <summary>Use Packet Compress</summary>

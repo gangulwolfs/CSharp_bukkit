@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network.Protocol.Login
@@ -30,9 +31,9 @@ namespace NiaBukkit.Network.Protocol.Login
 			buf.WriteString(_profile.Name);
 		}
 		
-		private static int[] GuidSerialize(Guid guid)
+		private static IEnumerable<int> GuidSerialize(Guid guid)
 		{
-			byte[] bytes = guid.ToByteArray();
+			var bytes = guid.ToByteArray();
 
 			// guid bytes to uuid packet
 			(bytes[4], bytes[6]) = (bytes[6], bytes[4]); // swap 4 <> 6

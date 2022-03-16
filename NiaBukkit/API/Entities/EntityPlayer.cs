@@ -34,8 +34,6 @@ namespace NiaBukkit.API.Entities
 		private readonly ConcurrentBag<ChunkCoord> _loadedChunk = new();
 
 		private Location _beforeLocation;
-		
-		public bool IsAuthenticated { get; private set; }
 
 		public EntityPlayer(NetworkManager networkManager, GameProfile profile, World.World world, GameMode gameMode) : base(profile, world, gameMode)
 		{
@@ -128,7 +126,7 @@ namespace NiaBukkit.API.Entities
 		}
 		
 		
-		internal Task<bool> IsAuthenticate(byte[] sharedKey)
+		internal static Task<KeyValuePair<bool, JsonBuilder>> IsAuthenticate(NetworkManager networkManager, byte[] sharedKey)
 		{
 			return Task.Run(() =>
 			{
@@ -142,26 +140,18 @@ namespace NiaBukkit.API.Entities
 					ms.Write(Bukkit.MinecraftServer._cryptography.PublicKey);
 
 					var serverHash = SelfCryptography.JavaHexDigest(ms.ToArray());
-					var address =
-						$"https://sessionserver.mojang.com/session/minecraft/hasJoined?username={Name}&serverId={serverHash}";
+					var address = $"https://sessionserver.mojang.com/session/minecraft/hasJoined?username={networkManager.Name}&serverId={serverHash}";
 					using var wc = new WebClient();
 					var auth = wc.DownloadString(address);
-					if (auth.Length <= 10) return false;
-
-					var json = JsonBuilder.Parse(auth);
-					Profile.Name = json.Get<string>("name");
-					var id = json.Get<string>("id");
-					Profile.Uuid = new Uuid(id);
 					
-					Bukkit.ConsoleSender.SendMessage($"§eUser {Name} authenticated with UUID {id}");
-					return true;
+					return new KeyValuePair<bool, JsonBuilder>(auth.Length > 10, JsonBuilder.Parse(auth));
 				}
 				catch(Exception e)
 				{
 					Console.Error.WriteLine(e);
 				}
 
-				return false;
+				return new KeyValuePair<bool, JsonBuilder>(false, null);
 			});
 		}
 	}

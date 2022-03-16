@@ -47,24 +47,24 @@ namespace NiaBukkit.API.Util
 			return new Uuid(Guid.NewGuid());
 		}
 		
-		public static Task<Uuid> FromUserName(string name)
+		public static Uuid FromUserName(string name)
 		{
-			return Task.Run(() =>
-			{
-				try
-				{
-					using var wc = new WebClient();
-					var uid = wc.DownloadString($"https://api.mojang.com/users/profiles/minecraft/{name}");
-					var json = JsonBuilder.Parse(uid);
-					return new Uuid(json.Get<string>("id"));
-				}
-				catch
-				{
-					// ignored
-				}
+			// return Task.Run(() =>
+			// {
+			// 	try
+			// 	{
+			// 		using var wc = new WebClient();
+			// 		var uid = wc.DownloadString($"https://api.mojang.com/users/profiles/minecraft/{name}");
+			// 		var json = JsonBuilder.Parse(uid);
+			// 		return new Uuid(json.Get<string>("id"));
+			// 	}
+			// 	catch
+			// 	{
+			// 		// ignored
+			// 	}
 
-				return NameUuidFromBytes(Encoding.UTF8.GetBytes($"OfflinePlayer: {name}"));
-			});
+			return NameUuidFromBytes(Encoding.UTF8.GetBytes($"OfflinePlayer: {name}"));
+			// });
 		}
 		
 		public override string ToString()

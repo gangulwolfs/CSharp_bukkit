@@ -18,26 +18,25 @@ namespace NiaBukkit.Network.Protocol.Login
 			GetPlayer(networkManager, name);
         }
 
-        private static async void GetPlayer(NetworkManager networkManager, string name)
+        private static void GetPlayer(NetworkManager networkManager, string name)
         {
-	        var profile = new GameProfile(await Uuid.FromUserName(name), name);
-			
+	        if(ServerProperties.OnlineMode)
+	        {
+		        networkManager.Encryption();
+		        return;
+	        }
+	        
+	        var profile = new GameProfile(Uuid.FromUserName(name), name);
+	        networkManager.Name = profile.Name;
+	        
 	        if (Bukkit.Players.ContainsKey(profile.Uuid))
 	        {
 		        networkManager.Kick("Player Already Connected.");
 		        return;
 	        }
 	        
-	        networkManager.Player = new EntityPlayer(networkManager, profile, Bukkit.MainWorld, ServerProperties.GameMode);
-
-	        if(ServerProperties.OnlineMode)
-	        {
-		        networkManager.Encryption();
-	        }
-	        else
-	        {
-		        networkManager.Play();
-	        }
+	        networkManager.InitEntityPlayer(profile);
+	        networkManager.Play();
         }
 	}
 }
