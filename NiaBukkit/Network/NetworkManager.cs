@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -139,7 +140,7 @@ namespace NiaBukkit.Network
         private void KeepAliveUpdate()
         {
             if (Player == null || PacketMode != PacketMode.Play || TimeManager.CurrentTimeMillis - _lastPacketMillis < KeepAliveTime) return;
-            SendPacket(new PlayOutKeepAlive(TimeManager.CurrentTimeMillis));
+            // SendPacket(new PlayOutKeepAlive(TimeManager.CurrentTimeMillis));
         }
 
         private int TeleportAwaitUpdate()
@@ -193,7 +194,7 @@ namespace NiaBukkit.Network
         {
             Player.Location = (Location) loc.Clone();
             
-            ((EntityPlayer) Player).IsOnGround = onGround;
+            Player.IsOnGround = onGround;
             MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityTeleport(Player.EntityId, loc.X, loc.Y, loc.Z, loc.Yaw, loc.Pitch, onGround), false);
             MinecraftServer.BroadcastInWorld(Player, Player.World, new PlayOutEntityHeadRotation(Player.EntityId, loc.Yaw), false);
         }
@@ -216,7 +217,7 @@ namespace NiaBukkit.Network
                 return;
             }
 
-            string format = ChatSettings.ChatFormat(Player, message);
+            var format = ChatSettings.ChatFormat(Player, message);
             Bukkit.BroadcastMessage(Player.Uuid, format);
         }
 
@@ -233,7 +234,7 @@ namespace NiaBukkit.Network
         internal void Encryption()
         {
             SendPacket(new LoginOutEncryptionRequest(MinecraftServer.ServerId,
-                SelfCryptography.PublicKeyToAsn1(Bukkit.MinecraftServer.ServerKey),
+                Bukkit.MinecraftServer._cryptography.PublicKey,
                 _verifyToken = SelfCryptography.GetRandomToken()));
         }
 
@@ -245,30 +246,32 @@ namespace NiaBukkit.Network
                 return;
             }
             
-            var recv = SelfCryptography.GenerateAes((byte[]) sharedKey.Clone());
-            var cipher = SelfCryptography.GenerateAes((byte[]) sharedKey.Clone());
+            Bukkit.ConsoleSender.SendMessage("§aShared Key: " + string.Join(", ", sharedKey));
+            
+            using var receive = SelfCryptography.GenerateAes(sharedKey);
+            using var send = SelfCryptography.GenerateAes(sharedKey);
 
-            Decryptor = recv.CreateDecryptor();
-            Encryptor = cipher.CreateEncryptor();
+            Encryptor = send.CreateEncryptor(sharedKey, sharedKey);
+            Decryptor = receive.CreateDecryptor(sharedKey, sharedKey);
 
             if (await Player.IsAuthenticate(sharedKey))
             {
-                Bukkit.ConsoleSender.SendMessage($"§eUser {Player.Name} authenticated with UUID {Player.Uuid}");
                 Play();
+                // Kick("Authentication failed! Try restarting your client.");
             }
             else
             {
-                Bukkit.ConsoleSender.SendWarnMessage($"§eUser {Player.Name} authentication failed!");
+                Bukkit.ConsoleSender.SendWarnMessage($"§4User {Player.Name} authentication failed!");
                 Kick("Authentication failed! Try restarting your client.");
             }
         }
 
         internal void Play()
         {
-            SendPacket(new LoginOutSetCompression(ServerSettings.UseCompression
-                ? ServerSettings.CompressionThreshold
-                : -1));
             SendPacket(new LoginOutSuccess(Player.Profile));
+            // SendPacket(new LoginOutSetCompression(ServerSettings.UseCompression
+            //     ? ServerSettings.CompressionThreshold
+            //     : -1));
 				
             PacketMode = PacketMode.Play;
             // SendPacket(new PlayOutJoinGame(Player));
@@ -288,8 +291,8 @@ namespace NiaBukkit.Network
             //TODO: PacketPlayOutEntityMetadata
             //
             //
-            SetPosition(Player.Location, Enumerable.Empty<TeleportFlags>());
-            SendPacket(new PlayOutSpawnPosition(Player.Location));
+            // SetPosition(Player.Location, Enumerable.Empty<TeleportFlags>());
+            // SendPacket(new PlayOutSpawnPosition(Player.Location));
         }
 
         internal void InitPlayer()
@@ -316,54 +319,79 @@ namespace NiaBukkit.Network
             }
         }
 
+        private byte[] Encrypt(byte[] data)
+        {
+            return WriteCrypto(Encryptor, data);
+        }
+
+        private byte[] Decrypt(byte[] data)
+        {
+            return WriteCrypto(Decryptor, data);
+        }
+
+        private static byte[] WriteCrypto(ICryptoTransform transform, byte[] data)
+        {
+            using var ms = new MemoryStream();
+            using var cs = new CryptoStream(ms, transform, CryptoStreamMode.Write);
+            cs.Write(data);
+            // var result = new byte[data.Length];
+            // transform.TransformBlock(data, 0, data.Length, result, 0);
+            cs.FlushFinalBlock();
+            cs.Close();
+
+            // return ms.ToArray();
+            return ms.ToArray();
+        }
+
         public Task SendPacket(Packet packet)
         {
             if (_client is not {Connected: true}) return Task.CompletedTask;
-            var buf = new ByteBuf();
-            packet.Write(buf, Protocol);
-            
-            // var data = buf.Flush();
-            try
+
+            return Task.Run(() =>
             {
-                if (Encryptor != null)
+                var buf = new ByteBuf();
+                packet.Write(buf, Protocol);
+                var data = buf.Flush();
+                try
                 {
-                    var data = buf.GetBytes();
-                    data = Encryptor.TransformFinalBlock(data, 0, data.Length);
-                    // using var ms = new MemoryStream();
-                    // using var cs = new CryptoStream(ms, Encryptor, CryptoStreamMode.Write);
-                    // cs.Write(data, 0, data.Length);
-                    // cs.FlushFinalBlock();
+                    if (Encryptor != null)
+                    {
+                        if(data.Length < 42)
+                            Bukkit.ConsoleSender.SendMessage(ChatColor.Blue + "Before Encryption: " + string.Join(", ", data));
+                        data = Encrypt(data);
+                        if(data.Length < 42)
+                            Bukkit.ConsoleSender.SendMessage("§6After Encryption: " + string.Join(", ", data));
 
-                    // data = ms.ToArray();
-
-                    // data = Encryptor.TransformFinalBlock(data, 0, data.Length);
-                    // Encryptor.TransformBlock(toEncrypt, 0, toEncrypt.Length, data, 0);
-
-                    var stream = _client.GetStream();
-                    stream.Write(data, 0, data.Length);
-                    stream.Flush();
+                        var stream = _client.GetStream();
+                        stream.Write(data, 0, data.Length);
+                        // _client.Client?.Send(data, SocketFlags.None);
+                        stream.Flush();
+                    }
+                    else
+                    {
+                        // _client.Client.Send(buf.Flush(), SocketFlags.None);
+                        _client.Client?.Send(data, SocketFlags.None);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    _client.Client.Send(buf.Flush(), SocketFlags.None);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine(e);
-                if (e is SocketException socketException)
-                {
-                    if (socketException.ErrorCode != 10053 && socketException.SocketErrorCode != SocketError.Disconnecting && _client is {Connected: true})
+                    if (e is SocketException socketException)
+                    {
+                        if (socketException.ErrorCode != 10053 && socketException.SocketErrorCode != SocketError.Disconnecting && _client is {Connected: true})
+                        {
+                            Kick(e.Message);
+                            Console.Error.WriteLine(e);
+                        }
+                    }
+                    else
                     {
                         Kick(e.Message);
+                        Console.Error.WriteLine(e);
                     }
-                }//else
-                 //   Kick(e.Message);
-                
-                Disconnect();
-            }
-            
-            return Task.CompletedTask;
+
+                    Disconnect();
+                }
+            });
         }
 
         private class NetworkBuf

@@ -123,6 +123,7 @@ namespace NiaBukkit.API.Util
                                 throw new Exception($"JSON Parse Error. Index: {index}");
 
                             builder.Set(info.GetKey(), ParseArray(json, ref index));
+                            info.Clear();
                             continue;
                         }
                         break;
@@ -133,6 +134,7 @@ namespace NiaBukkit.API.Util
                                 throw new Exception($"JSON Parse Error. Index: {index}");
                             
                             builder.Set(info.GetKey(), Parse(json, ref index));
+                            info.Clear();
                             continue;
                         }
                         break;
@@ -187,6 +189,7 @@ namespace NiaBukkit.API.Util
                             info.HasKey = true;
                             continue;
                         }
+                        Bukkit.ConsoleSender.SendMessage(info.GetKey());
                         break;
                 }
                 
@@ -229,7 +232,6 @@ namespace NiaBukkit.API.Util
                         {
                             return builder.ToArray();
                         }
-
                         break;
                     case ',':
                         if (!info.IsStringPart)

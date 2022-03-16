@@ -1,57 +1,50 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using NiaBukkit.API.Entities;
 using NiaBukkit.API.World.Chunks;
-using NiaBukkit.Network.Protocol;
 using NiaBukkit.Network.Protocol.Play;
 
 namespace NiaBukkit.API.Threads
 {
     public static class WorldThreadManager
     {
-        private static readonly ConcurrentQueue<ChunkCoord> NeedLoadingChunk = new ConcurrentQueue<ChunkCoord>();
+        private const int ThreadDelay = 200;
+        private static readonly ConcurrentQueue<ChunkCoord> NeedLoadingChunk = new();
 
-        private static readonly ConcurrentDictionary<ChunkCoord, ConcurrentBag<EntityPlayer>> ChunkSendPlayers =
-            new ConcurrentDictionary<ChunkCoord, ConcurrentBag<EntityPlayer>>();
-        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.Util.MaterialAttribute")]
-        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.Reflection.CustomAttributeRecord[]")]
-        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.RuntimeMethodInfoStub")]
-        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.Util.Material")]
-        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: NiaBukkit.API.Util.MaterialAttribute[]")]
-        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.Byte[]")]
+        private static readonly ConcurrentDictionary<ChunkCoord, ConcurrentBag<EntityPlayer>> ChunkSendPlayers = new();
+        
         internal static void Worker()
         {
             while (Bukkit.MinecraftServer.IsAvailable)
             {
-                while (!NeedLoadingChunk.IsEmpty)
+                if (NeedLoadingChunk.IsEmpty)
                 {
-                    NeedLoadingChunk.TryDequeue(out var target);
-                    if(target == null)
+                    Thread.Sleep(ThreadDelay);
+                    continue;
+                }
+                
+                NeedLoadingChunk.TryDequeue(out var target);
+                if(target == null)
+                    continue;
+
+                ChunkSendPlayers.TryRemove(target, out var players);
+
+                if (players == null)
+                    continue;
+
+                var chunk = target.World.GetChunk(target.X, target.Z);
+                target.World.AddChunk(chunk);
+
+                var packet = new PlayOutChunkData(chunk);
+                foreach (var player in players)
+                {
+                    if(player?.NetworkManager == null || !player.NetworkManager.IsAvailable || player.World != target.World)
                         continue;
-
-                    ChunkSendPlayers.TryRemove(target, out var players);
-
-                    if (players == null)
-                        continue;
-
-                    var chunk = target.World.GetChunk(target.X, target.Z);
-                    target.World.AddChunk(chunk);
-
-                    Task.Run(() =>
-                    {
-                        Packet packet = new PlayOutChunkData(chunk);
-                        foreach (var player in players)
-                        {
-                            if(player?.NetworkManager == null || !player.NetworkManager.IsAvailable || player.World != target.World)
-                                continue;
-                        
-                            player.NetworkManager.SendPacket(packet);
-                            player.ChunkLoaded(target);
-                        }
-                    });
+                
+                    player.NetworkManager.SendPacket(packet);
+                    player.ChunkLoaded(target);
                 }
             }
         }

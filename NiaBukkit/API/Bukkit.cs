@@ -32,18 +32,24 @@ namespace NiaBukkit.API
 
 		internal static void AddPlayer(Player player)
 		{
-			player.World.Players.Add(player);
-			player.World.Entities.Add(player);
-			Players.TryAdd(player.Uuid, player);
-			Entities.TryAdd(player.Uuid, player);
+			lock (Players)
+			{
+				player.World.Players.Add(player);
+				player.World.Entities.Add(player);
+				Players.TryAdd(player.Uuid, player);
+				Entities.TryAdd(player.Uuid, player);
+			}
 		}
 
 		internal static void RemovePlayer(Player player)
 		{
-			player.World.Players.Remove(player);
-			player.World.Entities.Remove(player);
-			Players.Remove(player.Uuid, out _);
-			Entities.Remove(player.Uuid, out _);
+			lock (Players)
+			{
+				player.World.Players.Remove(player);
+				player.World.Entities.Remove(player);
+				Players.Remove(player.Uuid, out _);
+				Entities.Remove(player.Uuid, out _);
+			}
 		}
 
 		public static void BroadcastMessage(string message) => BroadcastMessage(Uuid.RandomUuid(), message);

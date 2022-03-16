@@ -18,15 +18,14 @@ namespace NiaBukkit.Network.Protocol.Play
 
         private static int GetPacketId(ProtocolVersion protocol)
         {
-            if (protocol > ProtocolVersion.v1_16_5)
-                return 14;
-            if (protocol > ProtocolVersion.v1_15_2)
-                return 13;
-            if (protocol > ProtocolVersion.v1_14_3_CT)
-                return 14;
-            if (protocol >= ProtocolVersion.v1_9)
-                return 13;
-            return 65;
+            return protocol switch
+            {
+                > ProtocolVersion.v1_16_5 => 14,
+                > ProtocolVersion.v1_15_2 => 13,
+                > ProtocolVersion.v1_14_3_CT => 14,
+                >= ProtocolVersion.v1_9 => 13,
+                _ => 65
+            };
         }
     }
 }

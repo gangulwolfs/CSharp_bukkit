@@ -53,8 +53,9 @@ namespace NiaBukkit.API.Util
 			{
 				try
 				{
-					var json = JsonBuilder.Parse(
-						new WebClient().DownloadString("https://api.mojang.com/users/profiles/minecraft/" + name));
+					using var wc = new WebClient();
+					var uid = wc.DownloadString($"https://api.mojang.com/users/profiles/minecraft/{name}");
+					var json = JsonBuilder.Parse(uid);
 					return new Uuid(json.Get<string>("id"));
 				}
 				catch

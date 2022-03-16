@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Threads;
@@ -125,24 +128,37 @@ namespace NiaBukkit.API.Entities
 		}
 		
 		
-		internal Task<bool> IsAuthenticate(IEnumerable<byte> sharedKey)
+		internal Task<bool> IsAuthenticate(byte[] sharedKey)
 		{
 			return Task.Run(() =>
 			{
 				try
 				{
-					var serverId = SelfCryptography.JavaHexDigest(Encoding.UTF8.GetBytes("")
-						.Concat(sharedKey)
-						.Concat(SelfCryptography.PublicKeyToAsn1(Bukkit.MinecraftServer.ServerKey))
-						.ToArray());
-					var address = $"http://session.minecraft.net/game/checkserver.jsp?user={Name}&serverId={serverId}";
-					var auth = new WebClient().DownloadString(address);
+					using var ms = new MemoryStream();
 
-					return IsAuthenticated = !auth.Contains("NO");
+					var ascii = Encoding.ASCII.GetBytes("");
+					ms.Write(ascii, 0, ascii.Length);
+					ms.Write(sharedKey, 0, 16);
+					ms.Write(Bukkit.MinecraftServer._cryptography.PublicKey);
+
+					var serverHash = SelfCryptography.JavaHexDigest(ms.ToArray());
+					var address =
+						$"https://sessionserver.mojang.com/session/minecraft/hasJoined?username={Name}&serverId={serverHash}";
+					using var wc = new WebClient();
+					var auth = wc.DownloadString(address);
+					if (auth.Length <= 10) return false;
+
+					var json = JsonBuilder.Parse(auth);
+					Profile.Name = json.Get<string>("name");
+					var id = json.Get<string>("id");
+					Profile.Uuid = new Uuid(id);
+					
+					Bukkit.ConsoleSender.SendMessage($"§eUser {Name} authenticated with UUID {id}");
+					return true;
 				}
-				catch
+				catch(Exception e)
 				{
-					//ignored
+					Console.Error.WriteLine(e);
 				}
 
 				return false;

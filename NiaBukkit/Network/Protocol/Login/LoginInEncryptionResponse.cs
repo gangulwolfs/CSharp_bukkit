@@ -1,3 +1,4 @@
+using NiaBukkit.API;
 using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network.Protocol.Login
@@ -10,7 +11,7 @@ namespace NiaBukkit.Network.Protocol.Login
 	        var sharedSecret = buf.Read(buf.ReadVarInt());
 	        var verifyToken = buf.Read(buf.ReadVarInt());
 	        
-	        networkManager.EncryptionResponse(SelfCryptography.Decrypt(sharedSecret), SelfCryptography.Decrypt(verifyToken));
+	        networkManager.EncryptionResponse(Bukkit.MinecraftServer._cryptography.Decrypt(sharedSecret), Bukkit.MinecraftServer._cryptography.Decrypt(verifyToken));
         }
 	}
 }

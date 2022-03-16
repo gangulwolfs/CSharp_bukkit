@@ -102,17 +102,15 @@ namespace NiaBukkit.Network.Protocol.Play
 
         private static int GetPacketId(ProtocolVersion protocol)
         {
-            if (protocol > ProtocolVersion.v1_16_5)
-                return 38;
-            if (protocol > ProtocolVersion.v1_15_2)
-                return 36;
-            if (protocol > ProtocolVersion.v1_14_3_CT)
-                return 38;
-            if (protocol > ProtocolVersion.v1_12_2)
-                return 37;
-            if (protocol >= ProtocolVersion.v1_9)
-                return 35;
-            return 1;
+            return protocol switch
+            {
+                > ProtocolVersion.v1_16_5 => 38,
+                > ProtocolVersion.v1_15_2 => 36,
+                > ProtocolVersion.v1_14_3_CT => 38,
+                > ProtocolVersion.v1_12_2 => 37,
+                >= ProtocolVersion.v1_9 => 35,
+                _ => 1
+            };
         }
     }
 }

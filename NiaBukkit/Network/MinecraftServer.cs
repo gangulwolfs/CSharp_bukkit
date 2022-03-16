@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -5,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Threading;
+using System.Threading.Tasks;
 using NiaBukkit.API;
 using NiaBukkit.API.Util;
 using NiaBukkit.API.Config;
@@ -18,6 +20,7 @@ namespace NiaBukkit.Network
     public class MinecraftServer
     {
         public const string MinecraftKey = "minecraft:";
+        private const int ThreadDelay = 10;
         // public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v15w33b;
         public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_12_2;
 		internal RSAParameters ServerKey;
@@ -29,6 +32,8 @@ namespace NiaBukkit.Network
         public bool IsAvailable { get; private set; }
 
         public const string ServerId = "";
+
+        internal SelfCryptography _cryptography = new();
 
         internal MinecraftServer()
         {
@@ -48,8 +53,6 @@ namespace NiaBukkit.Network
                     SendTimeout = 500
                 }
             };
-
-            ServerKey = SelfCryptography.GenerateKeyPair();
 		}
 		
 		private void SocketStart()
@@ -63,20 +66,26 @@ namespace NiaBukkit.Network
                 Bukkit.ConsoleSender.SendWarnMessage("Failed to start the minecraft server");
                 throw;
             }
-            
-            ThreadFactory.LaunchThread(new Thread(AcceptSocketWorker), false).Name = "Client Bind Thread";
+
+            _listener.BeginAcceptTcpClient(AcceptSocket, null);
             ThreadFactory.LaunchThread(new Thread(ClientUpdateWorker), false).Name = "Client Thread";
 
             ThreadFactory.LaunchThread(new Thread(WorldThreadManager.Worker), false).Name = "World Generator";
             ThreadFactory.LaunchThread(new Thread(EntityThreadManager.Worker), false).Name = "Entity Thread";
         }
 
-        private void AcceptSocketWorker()
+        private void AcceptSocket(IAsyncResult result)
         {
-            while (IsAvailable)
+            try
             {
-                _networkManagers.Add(new NetworkManager(_listener.AcceptTcpClient()));
+                _networkManagers.Add(new NetworkManager(_listener.EndAcceptTcpClient(result)));
             }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e);
+            }
+
+            _listener.BeginAcceptTcpClient(AcceptSocket, null);
         }
 
         [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: Enumerator[NiaBukkit.Network.NetworkManager]")]
@@ -88,6 +97,8 @@ namespace NiaBukkit.Network
                 var destroy = new Queue<NetworkManager>();
                 ClientForEachUpdate(destroy);
                 ClientForEachDestroy(destroy);
+                
+                Thread.Sleep(ThreadDelay);
             }
         }
 
@@ -104,15 +115,18 @@ namespace NiaBukkit.Network
             }
         }
 
-        private void ClientForEachDestroy(Queue<NetworkManager> destroy)
+        private Task ClientForEachDestroy(Queue<NetworkManager> destroy)
         {
-            while(destroy.Count > 0)
+            return Task.Run(() =>
             {
-                var networkManager = destroy.Dequeue();
+                while(destroy.Count > 0)
+                {
+                    var networkManager = destroy.Dequeue();
                 
-                networkManager.Close();
-                _networkManagers.Remove(networkManager);
-            }
+                    networkManager.Close();
+                    _networkManagers.Remove(networkManager);
+                }
+            });
         }
 
         public string GetServerModName()

@@ -4,8 +4,8 @@ namespace NiaBukkit.API.Util
 {
 	public class GameProfile
 	{
-		public Uuid Uuid { get; private set; }
-		public string Name { get; private set; }
+		public Uuid Uuid { get; internal set; }
+		public string Name { get; internal set; }
 		
 		public GameProfile(Uuid id, string name)
 		{
