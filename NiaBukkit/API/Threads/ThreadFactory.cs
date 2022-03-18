@@ -6,7 +6,7 @@ namespace NiaBukkit.API.Threads
 {
     public class ThreadFactory
     {
-        private static readonly List<Thread> Threads = new List<Thread>();
+        private static readonly List<Thread> Threads = new();
 
         public static Thread LaunchThread(Thread thread, bool setName = true)
         {

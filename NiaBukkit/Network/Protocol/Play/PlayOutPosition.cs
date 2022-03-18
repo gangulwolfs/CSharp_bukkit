@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network.Protocol.Play
 {
@@ -44,21 +45,17 @@ namespace NiaBukkit.Network.Protocol.Play
     
         private static int GetPacketId(ProtocolVersion protocol)
         {
-            if (protocol > ProtocolVersion.v1_16_5)
-                return 56;
-            if (protocol > ProtocolVersion.v1_15_2)
-                return 52;
-            if (protocol > ProtocolVersion.v1_14_3_CT)
-                return 54;
-            if (protocol > ProtocolVersion.v1_13_2)
-                return 53;
-            if (protocol > ProtocolVersion.v1_12_2)
-                return 50;
-            if (protocol > ProtocolVersion.v1_11_2)
-                return 47;
-            if (protocol >= ProtocolVersion.v1_9)
-                return 46;
-            return 8;
+            return protocol switch
+            {
+                > ProtocolVersion.v1_16_5 => 56,
+                > ProtocolVersion.v1_15_2 => 52,
+                > ProtocolVersion.v1_14_3_CT => 54,
+                > ProtocolVersion.v1_13_2 => 53,
+                > ProtocolVersion.v1_12_2 => 50,
+                > ProtocolVersion.v1_11_2 => 47,
+                >= ProtocolVersion.v1_9 => 46,
+                _ => 8
+            };
         }
     }
 

@@ -50,6 +50,18 @@ namespace NiaBukkit.API.World
             return ChunkRegionManager.GetChunk(this, x, z) ?? _provider.GetChunk(x, z);
         }
 
+        /// <summary>
+        /// Get Chunk from loaded Stack
+        /// </summary>
+        /// <param name="x">Chunk X</param>
+        /// <param name="z">Chunk Z</param>
+        /// <returns>if not loaded, return null.</returns>
+        internal Chunk GetLoadedChunk(int x, int z)
+        {
+            _loadedChunks.TryGetValue(new ChunkCoord(this, x, z), out var chunk);
+            return chunk;
+        }
+
         internal void AddChunk(Chunk chunk)
         {
             if (chunk.Coord.World != this) return;

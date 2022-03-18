@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using NiaBukkit.API;
 using NiaBukkit.API.Config;
+using NiaBukkit.API.Cryptography;
 using NiaBukkit.API.Entities;
 using NiaBukkit.API.Util;
+using NiaBukkit.Minecraft;
 using NiaBukkit.Network.Protocol;
 using NiaBukkit.Network.Protocol.Login;
 using NiaBukkit.Network.Protocol.Play;
@@ -32,8 +33,8 @@ namespace NiaBukkit.Network
 
         private byte[] _verifyToken;
 
-        internal ICryptoTransform Encryptor;
-        internal ICryptoTransform Decryptor;
+        internal AesCipher Encryptor;
+        internal AesCipher Decryptor;
         
         public string Name { get; internal set; }
 		
@@ -44,7 +45,7 @@ namespace NiaBukkit.Network
 
         private readonly NetworkBuf _networkBuf = new();
 
-        private readonly object _packetLockObject = new();
+        private Stream _networkStream;
 
         internal NetworkManager(TcpClient client)
         {
@@ -52,6 +53,7 @@ namespace NiaBukkit.Network
             client.NoDelay = true;
             
             _client = client;
+            _networkStream = _client.GetStream();
         }
 
         private void Disconnect()
@@ -83,10 +85,10 @@ namespace NiaBukkit.Network
         private int GetPacketLength()
         {
             if (!ServerSettings.UseCompression || PacketMode != PacketMode.Play)
-                return ByteBuf.ReadVarInt(_client.GetStream());
+                return ByteBuf.ReadVarInt(_networkStream);
             
-            var packetLength = ByteBuf.ReadVarInt(_client.GetStream());
-            var dataLength = ByteBuf.ReadVarInt(_client.GetStream());
+            var packetLength = ByteBuf.ReadVarInt(_networkStream);
+            var dataLength = ByteBuf.ReadVarInt(_networkStream);
 
             if (dataLength == 0) return packetLength - ByteBuf.GetVarInt(dataLength).Length;
             return dataLength;
@@ -110,13 +112,12 @@ namespace NiaBukkit.Network
         private void ReceiveUpdate()
         {
             if (_client.Available == 0) return;
-            
+
             _lastPacketMillis = TimeManager.CurrentTimeMillis;
-            
+
             _networkBuf.Buf ??= new byte[GetPacketLength()];
 
-            _networkBuf.Offset += _client.GetStream().Read(_networkBuf.Buf, _networkBuf.Offset,
-                _networkBuf.Buf.Length - _networkBuf.Offset);
+            _networkBuf.Offset += _networkStream.Read(_networkBuf.Buf, _networkBuf.Offset, _networkBuf.Buf.Length - _networkBuf.Offset);
         }
 
         private void PacketHandleUpdate()
@@ -124,7 +125,6 @@ namespace NiaBukkit.Network
             if(_networkBuf.Buf == null || _networkBuf.Offset != _networkBuf.Buf.Length) return;
             
             var packet = _networkBuf.Buf;
-            packet = Decryptor != null ? Decrypt(packet) : packet;
             _networkBuf.Clear();
             
             //TODO: 압축 추가
@@ -137,7 +137,7 @@ namespace NiaBukkit.Network
         private void KeepAliveUpdate()
         {
             if (Player == null || PacketMode != PacketMode.Play || TimeManager.CurrentTimeMillis - _lastPacketMillis < KeepAliveTime) return;
-            // SendPacket(new PlayOutKeepAlive(TimeManager.CurrentTimeMillis));
+            SendPacket(new PlayOutKeepAlive(TimeManager.CurrentTimeMillis));
         }
 
         private int TeleportAwaitUpdate()
@@ -231,7 +231,7 @@ namespace NiaBukkit.Network
         internal void Encryption()
         {
             SendPacket(new LoginOutEncryptionRequest(MinecraftServer.ServerId,
-                Bukkit.MinecraftServer._cryptography.PublicKey,
+                Bukkit.MinecraftServer.Cryptography.PublicKey,
                 _verifyToken = SelfCryptography.GetRandomToken()));
         }
 
@@ -243,49 +243,54 @@ namespace NiaBukkit.Network
                 return;
             }
             
-            Bukkit.ConsoleSender.SendMessage("§aShared Key: " + string.Join(", ", sharedKey));
-            
-            using var receive = SelfCryptography.GenerateAes(sharedKey);
-            using var send = SelfCryptography.GenerateAes(sharedKey);
+            // using var aes = SelfCryptography.GenerateAes(sharedKey);
 
-            Encryptor = send.CreateEncryptor(sharedKey, sharedKey);
-            Decryptor = receive.CreateDecryptor(sharedKey, sharedKey);
+            _networkStream = new AesStream(new AesCipher(sharedKey, sharedKey), new AesCipher(sharedKey, sharedKey), _networkStream);
 
-            var (key, value) = await EntityPlayer.IsAuthenticate(this, sharedKey);
+            var (key, value) = await MojangAuth.IsAuthenticate(this, sharedKey);
             if(key)
             {
                 var profile = new GameProfile(new Uuid(value.Get<string>("id")),
                     value.Get<string>("name"));
-                InitEntityPlayer(profile);
-                Bukkit.ConsoleSender.SendMessage($"§eUser {Name} authenticated with UUID {value.Get<string>("id")}");
+                if (!InitEntityPlayer(profile))
+                {
+                    return;
+                }
+                Bukkit.ConsoleSender.SendMessage($"§eUser {profile.Name} authenticated with UUID {value.Get<string>("id")}");
                 Play();
-                // Kick("Authentication failed! Try restarting your client.");
             }
             else
             {
-                Bukkit.ConsoleSender.SendWarnMessage($"§4User {Player.Name} authentication failed!");
+                Bukkit.ConsoleSender.SendWarnMessage($"§4User {Name} authentication failed!");
                 Kick("Authentication failed! Try restarting your client.");
             }
         }
 
-        internal void InitEntityPlayer(GameProfile profile)
+        internal bool InitEntityPlayer(GameProfile profile)
         {
+            if (Bukkit.Players.ContainsKey(profile.Uuid))
+            {
+                Kick("Player Already Connected.");
+                return false;
+            }
+            
             Player = new EntityPlayer(this, profile, Bukkit.MainWorld, ServerProperties.GameMode);
+            return true;
         }
 
-        internal async void Play()
+        internal void Play()
         {
-            await SendPacket(new LoginOutSetCompression(ServerSettings.UseCompression
+            SendPacket(new LoginOutSetCompression(ServerSettings.UseCompression
                 ? ServerSettings.CompressionThreshold
                 : -1));
-            await SendPacket(new LoginOutSuccess(Player.Profile));
+            SendPacket(new LoginOutSuccess(Player.Profile));
 				        
             PacketMode = PacketMode.Play;
-            await SendPacket(new PlayOutJoinGame(Player));
-            await SendPacket(new PlayOutServerDifficulty(Player.World.Difficulty));
-            await SendPacket(new PlayOutPlayerAbilities(Player.PlayerAbilities));
-            await SendPacket(new PlayOutHeldItemSlot(Player.HeldItemSlot));
-            await SendPacket(new PlayOutEntityStatus(Player.EntityId, 9));
+            SendPacket(new PlayOutJoinGame(Player));
+            SendPacket(new PlayOutServerDifficulty(Player.World.Difficulty));
+            SendPacket(new PlayOutPlayerAbilities(Player.PlayerAbilities));
+            SendPacket(new PlayOutHeldItemSlot(Player.HeldItemSlot));
+            SendPacket(new PlayOutEntityStatus(Player.EntityId, 9));
 				
             //TODO: PacketPlayOutRecipes
             //TODO: PacketPlayOutSetSlot 
@@ -293,108 +298,103 @@ namespace NiaBukkit.Network
             if (!IsAvailable) return;
             
             Bukkit.AddPlayer(Player);
-            await InitPlayer();
+            InitPlayer();
 				
             //TODO: PacketPlayOutEntityMetadata
             //
             //
             SetPosition(Player.Location, Enumerable.Empty<TeleportFlags>());
-            await SendPacket(new PlayOutSpawnPosition(Player.Location));
+            SendPacket(new PlayOutSpawnPosition(Player.Location));
         }
 
-        private async Task InitPlayer()
+        private void InitPlayer()
         {
             //TODO: removeSpawnPlayer
             var playerInfo = new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer, Player);
             var spawnPlayer = new PlayOutSpawnPlayer(Player);
             
-            await SendPacket(playerInfo);
+            SendPacket(playerInfo);
             foreach (var onlinePlayer in Bukkit.OnlinePlayers)
             {
                 var player = (EntityPlayer) onlinePlayer;
                 if(player == Player) continue;
                 if (player.CanSee(Player))
                 {
-                    await player.NetworkManager.SendPacket(playerInfo);
-                    await player.NetworkManager.SendPacket(spawnPlayer);
+                    player.NetworkManager.SendPacket(playerInfo);
+                    player.NetworkManager.SendPacket(spawnPlayer);
                 }
 
                 if (!Player.CanSee(player)) continue;
-                await SendPacket(
+                SendPacket(
                     new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.AddPlayer, player));
-                await SendPacket(new PlayOutSpawnPlayer(player));
+                SendPacket(new PlayOutSpawnPlayer(player));
             }
         }
 
-        private byte[] Encrypt(byte[] data)
+        public void SendPacket(Packet packet)
         {
-            return WriteCrypto(Encryptor, data);
+            if (_client is not {Connected: true}) return;
+
+            var buf = new ByteBuf();
+            packet.Write(buf, Protocol);
+            var data = buf.Flush();
+            try
+            {
+                _networkStream.Write(data, 0, data.Length);
+            }
+            catch (Exception e)
+            {
+                SocketSendExceptionCheck(e);
+                Disconnect();
+            }
         }
 
-        private byte[] Decrypt(byte[] data)
-        {
-            return WriteCrypto(Decryptor, data);
-        }
-
-        private static byte[] WriteCrypto(ICryptoTransform transform, byte[] data)
-        {
-            using var ms = new MemoryStream();
-            using var cs = new CryptoStream(ms, transform, CryptoStreamMode.Write);
-            cs.Write(data);
-            // var result = new byte[data.Length];
-            // transform.TransformBlock(data, 0, data.Length, result, 0);
-            cs.FlushFinalBlock();
-            cs.Close();
-
-            // return ms.ToArray();
-            return ms.ToArray();
-        }
-
-        public Task SendPacket(Packet packet)
+        public Task SendPacketAsync(Packet packet)
         {
             if (_client is not {Connected: true}) return Task.CompletedTask;
 
             return Task.Run(() =>
             {
-                lock (_packetLockObject)
+                var buf = new ByteBuf();
+                packet.Write(buf, Protocol);
+                var data = buf.Flush();
+                try
                 {
-                    var buf = new ByteBuf();
-                    packet.Write(buf, Protocol);
-                    var data = buf.Flush();
-                    try
-                    {
-                        if (data.Length < 42)
-                            Bukkit.ConsoleSender.SendMessage(ChatColor.Blue + "Before Encryption: " +
-                                                             string.Join(", ", data));
-
-                        _client.Client.Send(Encryptor != null ? data = Encrypt(data) : data, SocketFlags.None);
-
-                        if (data.Length < 42 && Encryptor != null)
-                            Bukkit.ConsoleSender.SendMessage("§6After Encryption: " + string.Join(", ", data));
-                    }
-                    catch (Exception e)
-                    {
-                        SocketSendExceptionCheck(e);
-                        Disconnect();
-                    }
+                    _networkStream.Write(data, 0, data.Length);
+                }
+                catch (Exception e)
+                {
+                    SocketSendExceptionCheck(e);
+                    Disconnect();
                 }
             });
         }
 
         private void SocketSendExceptionCheck(Exception e)
         {
-            if (_client is not {Connected: true}) return;
-            if (e is SocketException exception)
+            while (true)
             {
-                if (exception.ErrorCode == 10053 || exception.SocketErrorCode == SocketError.Disconnecting ||
-                    _client is not {Connected: true}) return;
-                
-                Kick(e.Message);
-                Console.Error.WriteLine(e);
-            }else if (e is not InvalidOperationException && e is not NullReferenceException)
-            {
-                Kick(e.Message);
-                Console.Error.WriteLine(e);
+                if (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                    continue;
+                }
+
+                if (_client is not {Connected: true}) return;
+                if (e is SocketException exception)
+                {
+                    if (exception.ErrorCode == 10053 || exception.SocketErrorCode == SocketError.Disconnecting || _client is not {Connected: true}) return;
+
+                    Kick(e.Message);
+                    Console.Error.WriteLine(e);
+                }
+                else if (e is not InvalidOperationException && e is not NullReferenceException)
+                {
+                    Kick(e.Message);
+                    Console.Error.WriteLine(e);
+                }
+
+                break;
             }
         }
 

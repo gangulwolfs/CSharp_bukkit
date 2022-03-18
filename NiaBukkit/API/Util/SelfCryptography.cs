@@ -26,7 +26,7 @@ namespace NiaBukkit.API.Util
 			_provider = new RSACryptoServiceProvider(1024);
 			_privateKey = _provider.ExportParameters(true);
 			_publicKey = _provider.ExportParameters(false);
-			
+
 			// _provider.Public
 
 			// var store = new X509Store(StoreLocation.CurrentUser);

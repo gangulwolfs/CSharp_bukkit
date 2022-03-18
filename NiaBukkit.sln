@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\TestPlugin.csproj", "{9819339E-9E1E-4887-8563-8B46BBA37D44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiaBukkit", "NiaBukkit\NiaBukkit.csproj", "{759C1596-1603-4570-B52C-06A76D6D57D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiaBukkit", "NiaBukkit\NiaBukkit.csproj", "{EFFE8AF2-368E-4D37-8D2D-1DF3466336E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		{9819339E-9E1E-4887-8563-8B46BBA37D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9819339E-9E1E-4887-8563-8B46BBA37D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9819339E-9E1E-4887-8563-8B46BBA37D44}.Release|Any CPU.Build.0 = Release|Any CPU
-		{759C1596-1603-4570-B52C-06A76D6D57D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{759C1596-1603-4570-B52C-06A76D6D57D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{759C1596-1603-4570-B52C-06A76D6D57D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{759C1596-1603-4570-B52C-06A76D6D57D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFFE8AF2-368E-4D37-8D2D-1DF3466336E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFFE8AF2-368E-4D37-8D2D-1DF3466336E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFFE8AF2-368E-4D37-8D2D-1DF3466336E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFFE8AF2-368E-4D37-8D2D-1DF3466336E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

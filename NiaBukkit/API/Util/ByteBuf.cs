@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using NiaBukkit.API.Util;
 
-namespace NiaBukkit.Network
+namespace NiaBukkit.API.Util
 {
     public class ByteBuf
     {
@@ -46,7 +43,7 @@ namespace NiaBukkit.Network
             return buf.ToArray();
         }
         
-        public static int ReadVarInt(NetworkStream stream)
+        public static int ReadVarInt(Stream stream)
         {
             var value = 0;
             var size = 0;

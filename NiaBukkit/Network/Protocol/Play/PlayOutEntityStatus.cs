@@ -1,4 +1,6 @@
-﻿namespace NiaBukkit.Network.Protocol.Play
+﻿using NiaBukkit.API.Util;
+
+namespace NiaBukkit.Network.Protocol.Play
 {
     public class PlayOutEntityStatus : Packet
     {

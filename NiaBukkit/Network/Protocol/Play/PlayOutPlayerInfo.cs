@@ -1,4 +1,5 @@
 ﻿using NiaBukkit.API.Entities;
+using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network.Protocol.Play
 {
@@ -60,21 +61,17 @@ namespace NiaBukkit.Network.Protocol.Play
 
         private static int GetPacketId(ProtocolVersion protocol)
         {
-            if (protocol > ProtocolVersion.v1_16_5)
-                return 54;
-            if (protocol > ProtocolVersion.v1_15_2)
-                return 50;
-            if (protocol > ProtocolVersion.v1_14_3_CT)
-                return 52;
-            if (protocol > ProtocolVersion.v1_13_2)
-                return 51;
-            if (protocol > ProtocolVersion.v1_12_2)
-                return 48;
-            if (protocol > ProtocolVersion.v1_11_2)
-                return 46;
-            if (protocol >= ProtocolVersion.v1_9)
-                return 45;
-            return 56;
+            return protocol switch
+            {
+                > ProtocolVersion.v1_16_5 => 54,
+                > ProtocolVersion.v1_15_2 => 50,
+                > ProtocolVersion.v1_14_3_CT => 52,
+                > ProtocolVersion.v1_13_2 => 51,
+                > ProtocolVersion.v1_12_2 => 48,
+                > ProtocolVersion.v1_11_2 => 46,
+                >= ProtocolVersion.v1_9 => 45,
+                _ => 56
+            };
         }
         
         public enum EnumPlayerInfoAction

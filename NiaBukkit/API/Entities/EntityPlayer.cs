@@ -108,51 +108,26 @@ namespace NiaBukkit.API.Entities
 				return;
 			_currentChunkCoord = new ChunkCoord(World, (int) Location.X >> 4, (int) Location.Z >> 4);
 
+			var list = new List<ChunkCoord>();
+
 			var radius = ServerProperties.ViewDistance;
-			if(!_loadedChunk.Contains(_currentChunkCoord))
-				WorldThreadManager.AddRequireChunk(_currentChunkCoord, this);
 			
 			for (var x = -radius; x <= radius; x++)
 			{
 				for (var z = -radius; z <= radius; z++)
 				{
-					if(x == 0 && z == 0) continue;
-					
 					var target = new ChunkCoord(World, _currentChunkCoord.X + x, _currentChunkCoord.Z + z);
 					if(!_loadedChunk.Contains(target))
-						WorldThreadManager.AddRequireChunk(target, this);
+						list.Add(target);
 				}
 			}
-		}
-		
-		
-		internal static Task<KeyValuePair<bool, JsonBuilder>> IsAuthenticate(NetworkManager networkManager, byte[] sharedKey)
-		{
-			return Task.Run(() =>
+			
+			list.Sort((x1, x2) => x1.DistancePow(_currentChunkCoord).CompareTo(x2.DistancePow(_currentChunkCoord)));
+			
+			foreach (var chunkCoord in list)
 			{
-				try
-				{
-					using var ms = new MemoryStream();
-
-					var ascii = Encoding.ASCII.GetBytes("");
-					ms.Write(ascii, 0, ascii.Length);
-					ms.Write(sharedKey, 0, 16);
-					ms.Write(Bukkit.MinecraftServer._cryptography.PublicKey);
-
-					var serverHash = SelfCryptography.JavaHexDigest(ms.ToArray());
-					var address = $"https://sessionserver.mojang.com/session/minecraft/hasJoined?username={networkManager.Name}&serverId={serverHash}";
-					using var wc = new WebClient();
-					var auth = wc.DownloadString(address);
-					
-					return new KeyValuePair<bool, JsonBuilder>(auth.Length > 10, JsonBuilder.Parse(auth));
-				}
-				catch(Exception e)
-				{
-					Console.Error.WriteLine(e);
-				}
-
-				return new KeyValuePair<bool, JsonBuilder>(false, null);
-			});
+				WorldThreadManager.AddRequireChunk(chunkCoord, this);
+			}
 		}
 	}
 }

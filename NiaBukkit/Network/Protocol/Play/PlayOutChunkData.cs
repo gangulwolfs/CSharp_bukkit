@@ -1,4 +1,5 @@
 ﻿using NiaBukkit.API;
+using NiaBukkit.API.Util;
 using NiaBukkit.API.World;
 using NiaBukkit.API.World.Chunks;
 
@@ -67,10 +68,9 @@ namespace NiaBukkit.Network.Protocol.Play
                 else
                     data.WriteVarInt(0);
                 
-                var array = ChunkDataVersionUtil.CreateCompactArray(bitsPerBlock,
+                ChunkDataVersionUtil.CreateCompactArray(data, bitsPerBlock,
                     bitsPerBlock == maxBitsBlock ? section.GetFlatId : section.GetPaletteIndex);
                 
-                data.WriteLongArray(array);
                 // Bukkit.ConsoleSender.SendMessage(array.Length * 8 + ChunkSection.Size);
 
                 section.WriteBlockLight(data);

@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using NiaBukkit.API;
+using NiaBukkit.API.Util;
 using NiaBukkit.API.World.Chunks;
 
 namespace NiaBukkit.Network.Protocol

@@ -23,7 +23,6 @@ namespace NiaBukkit.Network
         private const int ThreadDelay = 10;
         // public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v15w33b;
         public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_12_2;
-		internal RSAParameters ServerKey;
         
         private TcpListener _listener;
 
@@ -33,7 +32,7 @@ namespace NiaBukkit.Network
 
         public const string ServerId = "";
 
-        internal SelfCryptography _cryptography = new();
+        internal readonly SelfCryptography Cryptography = new();
 
         internal MinecraftServer()
         {
@@ -98,7 +97,7 @@ namespace NiaBukkit.Network
                 ClientForEachUpdate(destroy);
                 ClientForEachDestroy(destroy);
                 
-                Thread.Sleep(ThreadDelay);
+                // Thread.Sleep(ThreadDelay);
             }
         }
 
@@ -115,18 +114,15 @@ namespace NiaBukkit.Network
             }
         }
 
-        private Task ClientForEachDestroy(Queue<NetworkManager> destroy)
+        private void ClientForEachDestroy(Queue<NetworkManager> destroy)
         {
-            return Task.Run(() =>
+            while(destroy.Count > 0)
             {
-                while(destroy.Count > 0)
-                {
-                    var networkManager = destroy.Dequeue();
-                
-                    networkManager.Close();
-                    _networkManagers.Remove(networkManager);
-                }
-            });
+                var networkManager = destroy.Dequeue();
+            
+                networkManager.Close();
+                _networkManagers.Remove(networkManager);
+            }
         }
 
         public string GetServerModName()

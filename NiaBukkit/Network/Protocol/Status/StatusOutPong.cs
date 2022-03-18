@@ -1,3 +1,5 @@
+using NiaBukkit.API.Util;
+
 namespace NiaBukkit.Network.Protocol.Status
 {
 	/**

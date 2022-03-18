@@ -45,5 +45,10 @@ namespace NiaBukkit.API.World.Chunks
         {
             return $"ChunkCoord({World.Name}, {X}, {Z})";
         }
+
+        public int DistancePow(ChunkCoord coord)
+        {
+            return (int) (Math.Pow(coord.X - X, 2) + Math.Pow(coord.Z - Z, 2));
+        }
     }
 }

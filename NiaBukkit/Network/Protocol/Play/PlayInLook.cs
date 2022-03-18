@@ -1,4 +1,6 @@
-﻿namespace NiaBukkit.Network.Protocol.Play
+﻿using NiaBukkit.API.Util;
+
+namespace NiaBukkit.Network.Protocol.Play
 {
     public class PlayInLook : PlayInPacket
     {
@@ -9,19 +11,16 @@
 
         internal override int GetPacketId(ProtocolVersion protocol)
         {
-            if (protocol > ProtocolVersion.v1_16_5)
-                return 19;
-            if (protocol > ProtocolVersion.v1_15_2)
-                return 20;
-            if (protocol > ProtocolVersion.v1_13_2)
-                return 19;
-            if (protocol > ProtocolVersion.v1_12_2)
-                return 18;
-            if (protocol > ProtocolVersion.v1_11_2)
-                return 15;
-            if (protocol >= ProtocolVersion.v1_9)
-                return 14;
-            return 5;
+            return protocol switch
+            {
+                > ProtocolVersion.v1_16_5 => 19,
+                > ProtocolVersion.v1_15_2 => 20,
+                > ProtocolVersion.v1_13_2 => 19,
+                > ProtocolVersion.v1_12_2 => 18,
+                > ProtocolVersion.v1_11_2 => 15,
+                >= ProtocolVersion.v1_9 => 14,
+                _ => 5
+            };
         }
     }
 }

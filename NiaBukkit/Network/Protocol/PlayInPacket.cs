@@ -1,4 +1,6 @@
-﻿namespace NiaBukkit.Network.Protocol
+﻿using NiaBukkit.API.Util;
+
+namespace NiaBukkit.Network.Protocol
 {
     public abstract class PlayInPacket
     {
