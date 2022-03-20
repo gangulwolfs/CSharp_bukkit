@@ -3,8 +3,9 @@ using NiaBukkit.Network;
 
 namespace NiaBukkit.Network.Protocol
 {
-    public class Packet
+    public interface Packet
     {
         internal virtual void Write(ByteBuf buf, ProtocolVersion protocol) {}
+        int GetPacketId(ProtocolVersion protocol);
     }
 }
