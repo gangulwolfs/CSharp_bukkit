@@ -2,7 +2,7 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutEntityStatus : Packet
+    public class PlayOutEntityStatus : IPacket
     {
         private readonly int _id;
         private readonly byte _data;
@@ -13,14 +13,14 @@ namespace NiaBukkit.Network.Protocol.Play
             _data = data;
         }
 
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteInt(_id);
             buf.WriteByte(_data);
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

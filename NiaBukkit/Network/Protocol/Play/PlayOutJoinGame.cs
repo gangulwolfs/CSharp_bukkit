@@ -7,7 +7,7 @@ namespace NiaBukkit.Network.Protocol.Play
     /**
      * <summary>Player Game Start</summary>
      */
-    public class PlayOutJoinGame : Packet
+    public class PlayOutJoinGame : IPacket
     {
         private Player _player;
         public PlayOutJoinGame(Player player)
@@ -15,7 +15,7 @@ namespace NiaBukkit.Network.Protocol.Play
             _player = player;
         }
         
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             // buf.WriteInt(_player.EntityId);
             //
@@ -73,7 +73,7 @@ namespace NiaBukkit.Network.Protocol.Play
 
         private void Write_V1_9_1(ByteBuf buf)
         {
-            int gameMode = (int) _player.GameMode;
+            var gameMode = (int) _player.GameMode;
             
             if (_player.World.IsHardCore)
                 gameMode |= 0x8;
@@ -88,7 +88,7 @@ namespace NiaBukkit.Network.Protocol.Play
 
         private void WriteOld(ByteBuf buf)
         {
-            int gameMode = (int) _player.GameMode;
+            var gameMode = (int) _player.GameMode;
             
             if (_player.World.IsHardCore)
                 gameMode |= 0x8;
@@ -100,7 +100,7 @@ namespace NiaBukkit.Network.Protocol.Play
             buf.WriteBool(false); // 정보 최소화
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

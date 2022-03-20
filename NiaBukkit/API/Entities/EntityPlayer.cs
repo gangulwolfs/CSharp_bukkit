@@ -94,9 +94,11 @@ namespace NiaBukkit.API.Entities
 		private void PlayerChunkMoveUpdate()
 		{
 			if (_loadedChunk.Contains(_currentChunkCoord)) return;
-			
-			if(_beforeLocation != Location)
+
+			if (_beforeLocation != Location)
+			{
 				NetworkManager?.Teleport(_beforeLocation, Enumerable.Empty<TeleportFlags>());
+			}
 		}
 
 		private void ChunkUpdate()

@@ -1,13 +1,16 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
-using System.Threading.Tasks;
+using System.Threading;
 using NiaBukkit.API;
+using NiaBukkit.API.Compress;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Cryptography;
 using NiaBukkit.API.Entities;
+using NiaBukkit.API.Threads;
 using NiaBukkit.API.Util;
 using NiaBukkit.Minecraft;
 using NiaBukkit.Network.Protocol;
@@ -18,6 +21,8 @@ namespace NiaBukkit.Network
 {
     public class NetworkManager
     {
+        private const int ThreadDelay = 5;
+
         private const int Timeout = 25000;
         private const long KeepAliveTime = 50;
 
@@ -26,15 +31,14 @@ namespace NiaBukkit.Network
 
         public bool IsAvailable { get; private set; }
 
+        public bool CompressionEnabled { get; private set; }
+
         public PacketMode PacketMode { get; internal set; } = PacketMode.Ping;
         public ProtocolVersion Protocol { get; internal set; }
         public string Host { get; internal set; }
         public short Port { get; internal set; }
 
         private byte[] _verifyToken;
-
-        internal AesCipher Encryptor;
-        internal AesCipher Decryptor;
         
         public string Name { get; internal set; }
 		
@@ -42,10 +46,11 @@ namespace NiaBukkit.Network
 
         private int _teleportAwait;
 
+        private Stream _sendStream;
+        private NetworkBuf _receiveStream;
 
-        private readonly NetworkBuf _networkBuf = new();
-
-        private Stream _networkStream;
+        private ConcurrentQueue<byte[]> _packet = new();
+        private ThreadFactory _threadFactory = new();
 
         internal NetworkManager(TcpClient client)
         {
@@ -53,20 +58,30 @@ namespace NiaBukkit.Network
             client.NoDelay = true;
             
             _client = client;
-            _networkStream = _client.GetStream();
+            _sendStream = _client.GetStream();
+            _receiveStream = new NetworkBuf();
+
+            var so = new StateObject(_client.Client);
+            so.TargetSocket.BeginReceive(so.Buffer, 0, StateObject.BufferSize, SocketFlags.None, ReceiveAsync, so);
+
+            _threadFactory.LaunchThread(new Thread(DoPacketSendQueueWork), false).Name = "Packet Send Thread";
+            // var so2 = new StateObject(_client.Client);
+            // so2.TargetSocket.BeginSend(so.buffer, 0, StateObject.BufferSize, SocketFlags.None, SendAsync, so2);
         }
 
         private void Disconnect()
         {
             IsAvailable = false;
-            
+            _threadFactory.KillAll();
             // TODO: Client Disconnected
         }
 
         internal void Close()
         {
-            if(IsAvailable)
+            if (IsAvailable)
+            {
                 Disconnect();
+            }
 
             try
             {
@@ -82,23 +97,56 @@ namespace NiaBukkit.Network
                 Bukkit.RemovePlayer(Player);
         }
 
-        private int GetPacketLength()
+        private void ReceiveAsync(IAsyncResult rs)
         {
-            if (!ServerSettings.UseCompression || PacketMode != PacketMode.Play)
-                return ByteBuf.ReadVarInt(_networkStream);
-            
-            var packetLength = ByteBuf.ReadVarInt(_networkStream);
-            var dataLength = ByteBuf.ReadVarInt(_networkStream);
+            var so = (StateObject) rs.AsyncState;
+            try
+            {
+                var read = so!.TargetSocket.EndReceive(rs);
+                if (read > 0)
+                {
+                    _lastPacketMillis = TimeManager.CurrentTimeMillis;
+                    
+                    _receiveStream.Read(so.Buffer, read);
 
-            if (dataLength == 0) return packetLength - ByteBuf.GetVarInt(dataLength).Length;
-            return dataLength;
+                    var result = _receiveStream.ReadPacket();
+                    while (result != null)
+                    {
+                        PacketHandleUpdate(result);
+                        result = _receiveStream.ReadPacket();
+                    }
+
+                    so.TargetSocket.BeginReceive(so.Buffer, 0, StateObject.BufferSize, 0, ReceiveAsync, so);
+                }
+
+                else
+                    Disconnect();
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e);
+                if (e is not ObjectDisposedException)
+                {
+                    so!.TargetSocket.BeginReceive(so.Buffer, 0, StateObject.BufferSize, 0, ReceiveAsync, so);
+                }
+            }
+        }
+        
+        private void PacketHandleUpdate(byte[] packet)
+        {
+
+            //TODO: 압축 추가
+            if (CompressionEnabled)
+                packet = Decompress(packet);
+
+            var buf = new ByteBuf(packet);
+            var packetId = buf.ReadVarInt();
+            PacketFactory.Handle(this, buf, packetId);
         }
 
         internal void Update()
         {
             if (TimeoutUpdate()) return;
-            ReceiveUpdate();
-            PacketHandleUpdate();
             KeepAliveUpdate();
         }
 
@@ -107,31 +155,6 @@ namespace NiaBukkit.Network
             if (_client.Connected && TimeManager.CurrentTimeMillis - _lastPacketMillis <= Timeout) return false;
             Disconnect();
             return true;
-        }
-
-        private void ReceiveUpdate()
-        {
-            if (_client.Available == 0) return;
-
-            _lastPacketMillis = TimeManager.CurrentTimeMillis;
-
-            _networkBuf.Buf ??= new byte[GetPacketLength()];
-
-            _networkBuf.Offset += _networkStream.Read(_networkBuf.Buf, _networkBuf.Offset, _networkBuf.Buf.Length - _networkBuf.Offset);
-        }
-
-        private void PacketHandleUpdate()
-        {
-            if(_networkBuf.Buf == null || _networkBuf.Offset != _networkBuf.Buf.Length) return;
-            
-            var packet = _networkBuf.Buf;
-            _networkBuf.Clear();
-            
-            //TODO: 압축 추가
-
-            var buf = new ByteBuf(packet);
-            var packetId = buf.ReadVarInt();
-            PacketFactory.Handle(this, buf, packetId);
         }
 
         private void KeepAliveUpdate()
@@ -220,7 +243,7 @@ namespace NiaBukkit.Network
 
         public void Kick(string reason)
         {
-            Packet packet = PacketMode == PacketMode.Login
+            IPacket packet = PacketMode == PacketMode.Login
                 ? new LoginOutDisconnect(reason)
                 : new PlayOutDisconnect(reason);
             
@@ -242,11 +265,10 @@ namespace NiaBukkit.Network
                 Bukkit.ConsoleSender.SendWarnMessage($"{Host}:{Port} Wrong token");
                 return;
             }
+
+            _sendStream = new AesStream(new AesCipher(sharedKey, sharedKey), _sendStream);
+            _receiveStream = new CryptoNetworkBuf(new AesCipher(sharedKey, sharedKey));
             
-            // using var aes = SelfCryptography.GenerateAes(sharedKey);
-
-            _networkStream = new AesStream(new AesCipher(sharedKey, sharedKey), new AesCipher(sharedKey, sharedKey), _networkStream);
-
             var (key, value) = await MojangAuth.IsAuthenticate(this, sharedKey);
             if(key)
             {
@@ -280,9 +302,14 @@ namespace NiaBukkit.Network
 
         internal void Play()
         {
-            SendPacket(new LoginOutSetCompression(ServerSettings.UseCompression
-                ? ServerSettings.CompressionThreshold
-                : -1));
+            if(ServerSettings.UseCompression)
+            {
+                SendPacket(new LoginOutSetCompression(ServerSettings.CompressionThreshold));
+                CompressionEnabled = true;
+            }else
+                SendPacket(new LoginOutSetCompression(-1));
+
+
             SendPacket(new LoginOutSuccess(Player.Profile));
 				        
             PacketMode = PacketMode.Play;
@@ -331,43 +358,72 @@ namespace NiaBukkit.Network
             }
         }
 
-        public void SendPacket(Packet packet)
+        private void DoPacketSendQueueWork()
         {
-            if (_client is not {Connected: true}) return;
-
-            var buf = new ByteBuf();
-            packet.Write(buf, Protocol);
-            var data = buf.Flush();
-            try
+            while (IsAvailable)
             {
-                _networkStream.Write(data, 0, data.Length);
-            }
-            catch (Exception e)
-            {
-                SocketSendExceptionCheck(e);
-                Disconnect();
-            }
-        }
+                if(_packet.IsEmpty)
+                {
+                    try
+                    {
+                        Thread.Sleep(ThreadDelay);
+                    }catch(Exception)
+                    {
+                    }
+                    continue;
+                }
 
-        public Task SendPacketAsync(Packet packet)
-        {
-            if (_client is not {Connected: true}) return Task.CompletedTask;
+                if (!_packet.TryDequeue(out var result)) continue;
 
-            return Task.Run(() =>
-            {
-                var buf = new ByteBuf();
-                packet.Write(buf, Protocol);
-                var data = buf.Flush();
                 try
                 {
-                    _networkStream.Write(data, 0, data.Length);
+                    _sendStream.Write(result, 0, result.Length);
                 }
                 catch (Exception e)
                 {
                     SocketSendExceptionCheck(e);
                     Disconnect();
                 }
-            });
+            }
+        }
+
+        private static byte[] Decompress(byte[] buf)
+        {
+            var result = new ByteBuf(buf);
+            var length = result.ReadVarInt();
+
+            var compressed = result.Read(result.Length);
+            if (length == 0)
+                return compressed;
+
+            return ByteCompress.ZLipDecompress(compressed);
+        }
+
+
+        private static byte[] Compress(ByteBuf buf)
+        {
+            var result = new ByteBuf();
+            if(buf.WriteLength >= ServerSettings.CompressionThreshold)
+            {
+                var compressed = ByteCompress.ZLipCompress(buf.GetBytes());
+                result.WriteVarInt(buf.WriteLength);
+                result.Write(compressed);
+            }else
+            {
+                result.WriteVarInt(0);
+                result.Write(buf.GetBytes());
+            }
+
+            return result.Flush();
+        }
+
+        public void SendPacket(IPacket packet)
+        {
+            if (_client is not {Connected: true}) return;
+            
+            var buf = new ByteBuf();
+            packet.Write(buf, Protocol);
+            _packet.Enqueue(CompressionEnabled ? Compress(buf) : buf.Flush());
         }
 
         private void SocketSendExceptionCheck(Exception e)
@@ -398,15 +454,17 @@ namespace NiaBukkit.Network
             }
         }
 
-        private class NetworkBuf
+        private class StateObject
         {
-            public byte[] Buf;
-            public int Offset;
+            public const int BufferSize = 1024;
+            public readonly byte[] Buffer = new byte[BufferSize];
+            public Socket TargetSocket { get; }
 
-            public void Clear()
+            public StateObject(Socket socket, byte[] buffer = null)
             {
-                Buf = null;
-                Offset = 0;
+                TargetSocket = socket;
+                if (buffer != null)
+                    Buffer = buffer;
             }
         }
     }

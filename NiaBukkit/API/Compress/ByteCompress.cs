@@ -9,25 +9,27 @@ namespace NiaBukkit.API.Compress
     {
         public static byte[] ZLipCompress(byte[] origin)
         {
-            using var stream = new MemoryStream();
-            using var zipStream = new ZLibStream(stream, CompressionLevel.Optimal);
+            using var ms = new MemoryStream();
+            using var zipStream = new ZLibStream(ms, CompressionLevel.Optimal);
             zipStream.Write(origin, 0, origin.Length);
             zipStream.Flush();
             
-            return stream.ToArray();
+            return ms.ToArray();
         }
         
         public static byte[] ZLipDecompress(byte[] origin)
         {
-            using var stream = new MemoryStream(origin);
-            stream.Position = 2;
+            using var ms = new MemoryStream(origin);
+            //ZLib head : 2 bytes
+            ms.Position = 2;
             
-            using var zipStream = new System.IO.Compression.DeflateStream(stream, CompressionMode.Decompress);
-            // using var zipStream = new Ionic.Zlib.ZlibStream(stream, Ionic.Zlib.CompressionMode.Decompress);
-            using var resultStream = new MemoryStream();
-            zipStream.CopyTo(resultStream);
+            using var zip = new System.IO.Compression.DeflateStream(ms, CompressionMode.Decompress);
+            //zipStream.Write(origin, 2, origin.Length - 2);
+            //zipStream.Close();
+            using var rs = new MemoryStream();
+            zip.CopyTo(rs);
 
-            return resultStream.ToArray();
+            return rs.ToArray();
         }
         
         public static byte[] GZipCompress(byte[] origin)
@@ -42,13 +44,11 @@ namespace NiaBukkit.API.Compress
         
         public static byte[] GZipDecompress(byte[] origin)
         {
-            using var stream = new MemoryStream(origin);
+            using var ms = new MemoryStream(origin);
             
-            using var zipStream = new GZipStream(stream, CompressionMode.Decompress);
-            using var resultStream = new MemoryStream();
-            zipStream.CopyTo(resultStream);
+            using var zipStream = new GZipStream(ms, CompressionMode.Decompress);
             
-            return resultStream.ToArray();
+            return ms.ToArray();
         }
     }
 }

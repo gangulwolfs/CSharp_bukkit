@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Threading;
-using System.Threading.Tasks;
 using NiaBukkit.API;
 using NiaBukkit.API.Util;
 using NiaBukkit.API.Config;
@@ -19,8 +17,9 @@ namespace NiaBukkit.Network
 {
     public class MinecraftServer
     {
+        private const int ThreadEmptyDelay = 500;
         public const string MinecraftKey = "minecraft:";
-        private const int ThreadDelay = 10;
+        private const int ThreadDelay = 50;
         // public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v15w33b;
         public ProtocolVersion Protocol { get; internal set; } = ProtocolVersion.v1_12_2;
         
@@ -34,10 +33,20 @@ namespace NiaBukkit.Network
 
         internal readonly SelfCryptography Cryptography = new();
 
+        private readonly ThreadFactory _threadFactory = new();
+
         internal MinecraftServer()
         {
 			Init();
 			SocketStart();
+        }
+
+        public void Stop(string stopMessage = "Server Closed")
+        {
+            foreach (var networkManager in _networkManagers)
+                networkManager.Kick(stopMessage);
+
+            _threadFactory.KillAll();
         }
 		
 		private void Init()
@@ -67,10 +76,10 @@ namespace NiaBukkit.Network
             }
 
             _listener.BeginAcceptTcpClient(AcceptSocket, null);
-            ThreadFactory.LaunchThread(new Thread(ClientUpdateWorker), false).Name = "Client Thread";
+            _threadFactory.LaunchThread(new Thread(ClientUpdateWorker), false).Name = "Client Thread";
 
-            ThreadFactory.LaunchThread(new Thread(WorldThreadManager.Worker), false).Name = "World Generator";
-            ThreadFactory.LaunchThread(new Thread(EntityThreadManager.Worker), false).Name = "Entity Thread";
+            _threadFactory.LaunchThread(new Thread(WorldThreadManager.Worker), false).Name = "World Generator";
+            _threadFactory.LaunchThread(new Thread(EntityThreadManager.Worker), false).Name = "Entity Thread";
         }
 
         private void AcceptSocket(IAsyncResult result)
@@ -93,11 +102,17 @@ namespace NiaBukkit.Network
         {
             while (IsAvailable)
             {
+                if (_networkManagers.IsEmpty)
+                {
+                    Thread.Sleep(ThreadEmptyDelay);
+                    continue;
+                }
+                
                 var destroy = new Queue<NetworkManager>();
                 ClientForEachUpdate(destroy);
                 ClientForEachDestroy(destroy);
                 
-                // Thread.Sleep(ThreadDelay);
+                Thread.Sleep(ThreadDelay);
             }
         }
 
@@ -130,7 +145,7 @@ namespace NiaBukkit.Network
             return "NiaBukkit";
         }
 
-        internal static void BroadcastInWorld(Player sender, World world, Packet packet, bool me = true)
+        internal static void BroadcastInWorld(Player sender, World world, IPacket packet, bool me = true)
         {
             foreach (var player in world.Players)
             {
@@ -139,7 +154,7 @@ namespace NiaBukkit.Network
             }
         }
 
-        internal static void Broadcast(Packet packet)
+        internal static void Broadcast(IPacket packet)
         {
             foreach (var player in Bukkit.OnlinePlayers)
             {

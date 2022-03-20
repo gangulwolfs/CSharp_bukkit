@@ -4,9 +4,9 @@ using NiaBukkit.API.Util;
 namespace NiaBukkit.Network.Protocol.Play
 {
     public class 
-        PlayInClientSettings : PlayInPacket
+        PlayInClientSettings : IPacket
     {
-        internal override void Read(NetworkManager networkManager, ByteBuf buf)
+        public void Read(NetworkManager networkManager, ByteBuf buf)
         {
             //TODO: Version Add
             // if (networkManager.Protocol > ProtocolVersion.v1_16_5) ;
@@ -15,7 +15,7 @@ namespace NiaBukkit.Network.Protocol.Play
 
         private static void Read_V1_12(NetworkManager networkManager, ByteBuf buf)
         {
-            var player = (EntityPlayer) networkManager.Player;
+            var player = networkManager.Player;
 
             player.Locate = buf.ReadString();
             player.ViewDistance = (byte) buf.ReadByte();
@@ -27,14 +27,14 @@ namespace NiaBukkit.Network.Protocol.Play
                 player.MainHand = (MainHand) buf.ReadVarInt();
         }
 
-        internal override int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
-            if (protocol > ProtocolVersion.v1_13_2)
-                return 5;
-            if (protocol >= ProtocolVersion.v1_9)
-                return 4;
-
-            return 21;
+            return protocol switch
+            {
+                > ProtocolVersion.v1_13_2 => 5,
+                >= ProtocolVersion.v1_9 => 4,
+                _ => 21
+            };
         }
     }
 }

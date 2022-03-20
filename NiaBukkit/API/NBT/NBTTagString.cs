@@ -19,7 +19,7 @@ namespace NiaBukkit.API.NBT
             Data = buf.ReadUtf();
         }
 
-        internal override void Write(ByteBuf buf)
+        public void Write(ByteBuf buf)
         {
             buf.WriteUtf(Data);
         }

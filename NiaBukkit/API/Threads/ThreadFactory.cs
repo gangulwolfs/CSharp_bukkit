@@ -6,9 +6,9 @@ namespace NiaBukkit.API.Threads
 {
     public class ThreadFactory
     {
-        private static readonly List<Thread> Threads = new();
+        private readonly List<Thread> Threads = new();
 
-        public static Thread LaunchThread(Thread thread, bool setName = true)
+        public Thread LaunchThread(Thread thread, bool setName = true)
         {
             thread.Start();
             
@@ -22,7 +22,7 @@ namespace NiaBukkit.API.Threads
             return thread;
         }
 
-        public static void KillAll()
+        public void KillAll()
         {
             if (Threads == null) return;
             

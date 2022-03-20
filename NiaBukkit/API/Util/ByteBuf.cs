@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.Sockets;
 using System.Text;
 
 namespace NiaBukkit.API.Util
@@ -77,6 +76,25 @@ namespace NiaBukkit.API.Util
             }
 
             return value | ((b & 0x7F) << (size * 7));
+        }
+        
+        public static int ReadVarInt(byte[] data, out int result)
+        {
+            var value = 0;
+            var size = 0;
+            int b;
+
+            while (((b = data[size]) & 0x80) == 0x80)
+            {
+                value |= (b & 0x7F) << (size++ * 7);
+                if (size > 5)
+                {
+                    throw new IOException("VarInt too long.");
+                }
+            }
+
+            result = value | ((b & 0x7F) << (size * 7));
+            return size + 1;
         }
 
         public int ReadByte()
@@ -317,9 +335,11 @@ namespace NiaBukkit.API.Util
             _buf.Add(b);
         }
 
-        public void WriteVarInt(int integer)
+        public int WriteVarInt(int integer)
         {
-            _buf.AddRange(GetVarInt(integer));
+            var data = GetVarInt(integer);
+            _buf.AddRange(data);
+            return data.Length;
         }
 
         public void WriteInt(int data)

@@ -58,10 +58,12 @@ namespace NiaBukkit.API.Compress
                 _ => Array.Empty<byte>()
             });
             var array = _ms.ToArray();
-            //_stream.WriteByte((byte)(array[0] + 1));
-            //_stream.Write(array, 1, array.Length - 5);
-            //_stream.Write(Footer);
-            _stream.Write(array);
+            _stream.WriteByte((byte) (array[0] + 1));
+            _stream.Write(array, 1, array.Length - 5);
+            if (Footer[0] != 0)
+                _stream.Position--;
+
+            _stream.Write(Footer);
 
             _ms.Flush();
         }

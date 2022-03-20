@@ -2,14 +2,14 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayInLook : PlayInPacket
+    public class PlayInLook : IPacket
     {
-        internal override void Read(NetworkManager networkManager, ByteBuf buf)
+        public void Read(NetworkManager networkManager, ByteBuf buf)
         {
             networkManager.LookUpdate(buf.ReadFloat(), buf.ReadFloat(), buf.ReadBool());
         }
 
-        internal override int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

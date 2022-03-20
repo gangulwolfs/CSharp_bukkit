@@ -113,13 +113,13 @@ namespace NiaBukkit.API.Cryptography
 
             var R0 = AesModule.SubMixColumnHelper(C0, C1 >> 8, C2 >> 16, C3 >> 24) ^ RoundKey[round, 0];
             var R1 = AesModule.SubMixColumnHelper(C1, C2 >> 8, C3 >> 16, C0 >> 24) ^ RoundKey[round, 1];
-            var R2 = AesModule.SubMixColumnHelper(C2, C3 >> 8, C1 >> 16, C2 >> 24) ^ RoundKey[round, 2];
+            var R2 = AesModule.SubMixColumnHelper(C2, C3 >> 8, C0 >> 16, C1 >> 24) ^ RoundKey[round, 2];
             var R3 = AesModule.SubMixColumnHelper(C3, C0 >> 8, C1 >> 16, C2 >> 24) ^ RoundKey[round, 3];
 
-            C0 = AesModule.SubAndShift(R0, R1, R2, R3) ^ RoundKey[round + 1, 0];
-            C1 = AesModule.SubAndShift(R1, R2, R3, R0) ^ RoundKey[round + 1, 1];
-            C2 = AesModule.SubAndShift(R2, R3, R0, R1) ^ RoundKey[round + 1, 2];
-            C3 = AesModule.SubAndShift(R3, R0, R1, R2) ^ RoundKey[round + 1, 3];
+            C0 = AesModule.SubAndShift(R0, R1 >> 8, R2 >> 16, R3 >> 24) ^ RoundKey[round + 1, 0];
+            C1 = AesModule.SubAndShift(R1, R2 >> 8, R3 >> 16, R0 >> 24) ^ RoundKey[round + 1, 1];
+            C2 = AesModule.SubAndShift(R2, R3 >> 8, R0 >> 16, R1 >> 24) ^ RoundKey[round + 1, 2];
+            C3 = AesModule.SubAndShift(R3, R0 >> 8, R1 >> 16, R2 >> 24) ^ RoundKey[round + 1, 3];
 
             return AesModule.ColumnsToBytes(C0, C1, C2, C3);
         }

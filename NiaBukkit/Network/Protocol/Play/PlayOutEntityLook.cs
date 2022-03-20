@@ -3,7 +3,7 @@ using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutEntityLook : Packet
+    public class PlayOutEntityLook : IPacket
     {
         private readonly int _entityId;
         private readonly float _yaw, _pitch;
@@ -15,7 +15,7 @@ namespace NiaBukkit.Network.Protocol.Play
             _pitch = pitch;
             _onGround = onGround;
         }
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteVarInt(_entityId);
@@ -24,21 +24,18 @@ namespace NiaBukkit.Network.Protocol.Play
             buf.WriteBool(_onGround);
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
-            if (protocol > ProtocolVersion.v1_16_5)
-                return 43;
-            if (protocol > ProtocolVersion.v1_15_2)
-                return 41;
-            if (protocol > ProtocolVersion.v1_14_3_CT)
-                return 43;
-            if (protocol > ProtocolVersion.v1_12_2)
-                return 42;
-            if (protocol > ProtocolVersion.v1_11_2)
-                return 40;
-            if (protocol >= ProtocolVersion.v1_9)
-                return 39;
-            return 22;
+            return protocol switch
+            {
+                > ProtocolVersion.v1_16_5 => 43,
+                > ProtocolVersion.v1_15_2 => 41,
+                > ProtocolVersion.v1_14_3_CT => 43,
+                > ProtocolVersion.v1_12_2 => 42,
+                > ProtocolVersion.v1_11_2 => 40,
+                >= ProtocolVersion.v1_9 => 39,
+                _ => 22
+            };
         }
     }
 }

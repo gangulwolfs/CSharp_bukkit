@@ -2,7 +2,7 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutServerDifficulty : Packet
+    public class PlayOutServerDifficulty : IPacket
     {
         private readonly Difficulty _difficulty;
 
@@ -10,13 +10,13 @@ namespace NiaBukkit.Network.Protocol.Play
         {
             _difficulty = difficulty;
         }
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteByte((byte) _difficulty);
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

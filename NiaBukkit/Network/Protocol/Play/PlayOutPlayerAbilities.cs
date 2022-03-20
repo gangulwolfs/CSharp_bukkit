@@ -2,7 +2,7 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutPlayerAbilities : Packet
+    public class PlayOutPlayerAbilities : IPacket
     {
         private readonly PlayerAbilities _abilities;
         
@@ -11,7 +11,7 @@ namespace NiaBukkit.Network.Protocol.Play
             _abilities = abilities;
         }
 
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             byte data = 0;
@@ -29,7 +29,7 @@ namespace NiaBukkit.Network.Protocol.Play
             buf.WriteFloat(_abilities.WalkSpeed);
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

@@ -10,4 +10,8 @@
       <EmbeddedResource Include="plugin.yml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Ionic.Zlib.Core" Version="1.0.0" />
+    </ItemGroup>
+
 </Project>

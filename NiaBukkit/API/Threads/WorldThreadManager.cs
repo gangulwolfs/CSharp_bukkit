@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,11 +38,13 @@ namespace NiaBukkit.API.Threads
                 target.World.AddChunk(chunk);
 
                 var packet = new PlayOutChunkData(chunk);
+
                 foreach (var player in players)
                 {
-                    if(player?.NetworkManager == null || !player.NetworkManager.IsAvailable || player.World != target.World)
+                    if (player?.NetworkManager == null || !player.NetworkManager.IsAvailable ||
+                        player.World != target.World)
                         continue;
-            
+
                     player.NetworkManager.SendPacket(packet);
                     player.ChunkLoaded(target);
                 }
@@ -61,16 +62,12 @@ namespace NiaBukkit.API.Threads
 
         internal static void AddRequireChunk(ChunkCoord coord, EntityPlayer player)
         {
-            var loadedChunk = coord.World.GetLoadedChunk(coord.X, coord.Z);
-            if (loadedChunk != null)
-            {
-                player.NetworkManager.SendPacket(new PlayOutChunkData(loadedChunk));
-                return;
-            }
+            if (player?.NetworkManager == null || !player.NetworkManager.IsAvailable ||
+                player.World != coord.World) return;
             
             ChunkSendPlayers.GetOrAdd(coord, chunkCoord => new ConcurrentBag<EntityPlayer>()).Add(player);
-            
-            if(!NeedLoadingChunk.Contains(coord))
+
+            if (!NeedLoadingChunk.Contains(coord))
                 NeedLoadingChunk.Enqueue(coord);
         }
     }

@@ -3,7 +3,7 @@ using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutPosition : Packet
+    public class PlayOutPosition : IPacket
     {
         private readonly double _x, _y, _z;
         private readonly float _pitch, _yaw;
@@ -27,7 +27,7 @@ namespace NiaBukkit.Network.Protocol.Play
             _teleportAwait = teleportAwait;
         }
 
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             
@@ -43,7 +43,7 @@ namespace NiaBukkit.Network.Protocol.Play
                 buf.WriteVarInt(_teleportAwait);
         }
     
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

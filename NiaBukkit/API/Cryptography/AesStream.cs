@@ -1,17 +1,14 @@
 ﻿using System.IO;
-using System.Net.Sockets;
 
 namespace NiaBukkit.API.Cryptography
 {
     public class AesStream : Stream
     {
         private Stream _baseStream;
-        private AesCipher _decryptor;
         private AesCipher _encryptor;
         
-        public AesStream(AesCipher decryptor, AesCipher encryptor, Stream baseStream)
+        public AesStream(AesCipher encryptor, Stream baseStream)
         {
-            _decryptor = decryptor;
             _encryptor = encryptor;
             _baseStream = baseStream;
         }
@@ -23,15 +20,12 @@ namespace NiaBukkit.API.Cryptography
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            var result = new byte[count];
-            count = _baseStream.Read(result, offset, count);
-            
-            return _decryptor.DecryptBlock(result, 0, buffer, offset, count);
+            return _baseStream.Read(buffer, offset, count);
         }
 
         public override int ReadByte()
         {
-            return _decryptor.DecryptByte(_baseStream.ReadByte());
+            return _baseStream.ReadByte();
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -46,10 +40,7 @@ namespace NiaBukkit.API.Cryptography
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            lock (_encryptor)
-            {
-                _baseStream.Write(_encryptor.EncryptBlock(buffer), offset, count);
-            }
+            _baseStream.Write(_encryptor.EncryptBlock(buffer), offset, count);
         }
 
         public override bool CanRead => _baseStream.CanRead;

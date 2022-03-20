@@ -6,7 +6,7 @@ namespace NiaBukkit.Network.Protocol.Login
 	/**
 	 * <summary>Server Protocol Security</summary>
 	 */
-	public class LoginOutEncryptionRequest : Packet
+	public class LoginOutEncryptionRequest : IPacket
 	{
 		private readonly string _serverId;
 		private readonly byte[] _publicKey;
@@ -19,7 +19,7 @@ namespace NiaBukkit.Network.Protocol.Login
 			_verificationToken = verificationToken;
 		}
 		
-		internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+		public void Write(ByteBuf buf, ProtocolVersion protocol)
 		{
 			buf.WriteVarInt((int) LoginPacket.EncryptionRequest);
 			buf.WriteString(_serverId);

@@ -5,15 +5,33 @@ using NiaBukkit.API.World.Chunks;
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutChunkData : Packet
+    public class PlayOutChunkData : IPacket
     {
+        private byte[] _data;
         private readonly Chunk _chunk;
         public PlayOutChunkData(Chunk chunk)
         {
             _chunk = chunk;
         }
+
+        public PlayOutChunkData(Chunk chunk, ProtocolVersion version) : this(chunk)
+        {
+            var buf = new ByteBuf();
+            WritePre(buf, version);
+            _data = buf.GetBytes();
+        }
         
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
+        {
+            if(_data == null)
+                WritePre(buf, protocol);
+            else
+            {
+                buf.Write(_data);
+            }
+        }
+
+        private void WritePre(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteInt(_chunk.Coord.X);
@@ -91,7 +109,7 @@ namespace NiaBukkit.Network.Protocol.Play
         private void WriteOld(ByteBuf buf)
         {
             var mask = _chunk.GetBitMask();
-            buf.WriteUShort(mask);
+            buf.WriteUShort((ushort) ~mask);
             
             var data = new ByteBuf();
 
@@ -125,7 +143,7 @@ namespace NiaBukkit.Network.Protocol.Play
             buf.Write(data.Flush());
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

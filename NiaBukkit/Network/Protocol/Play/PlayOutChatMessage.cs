@@ -2,7 +2,7 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutChatMessage : Packet
+    public class PlayOutChatMessage : IPacket
     {
         private readonly string _message;
         private readonly ChatMessageType _type;
@@ -14,7 +14,7 @@ namespace NiaBukkit.Network.Protocol.Play
             _uuid = uuid;
         }
 
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteString(new JsonBuilder().Set("text", _message).ToString());
@@ -23,7 +23,7 @@ namespace NiaBukkit.Network.Protocol.Play
                 buf.WriteUuid(_uuid);
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             if (protocol > ProtocolVersion.v1_16_5)
                 return 15;

@@ -7,7 +7,7 @@ namespace NiaBukkit.Network.Protocol.Login
 	/**
 	 * <summary>Login Success Packet</summary>
 	 */
-	public class LoginOutSuccess : Packet
+	public class LoginOutSuccess : IPacket
 	{
 		private readonly GameProfile _profile;
 		
@@ -16,7 +16,7 @@ namespace NiaBukkit.Network.Protocol.Login
 			_profile = profile;
 		}
 		
-		internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+		public void Write(ByteBuf buf, ProtocolVersion protocol)
 		{
 			buf.WriteVarInt((int) LoginPacket.LoginSuccess);
 			

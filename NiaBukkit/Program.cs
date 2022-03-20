@@ -46,7 +46,7 @@ namespace NiaBukkit
         private static void ConsoleCloseEvent(object sender, ConsoleCancelEventArgs args)
         {
             Bukkit.PluginManager.DisablePlugins();
-            ThreadFactory.KillAll();
+            Bukkit.MinecraftServer.Stop();
         }
     }
 }

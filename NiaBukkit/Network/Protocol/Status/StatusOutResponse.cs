@@ -8,7 +8,7 @@ namespace NiaBukkit.Network.Protocol.Status
 	/**
 	 * <summary>Client Server Info(Max Players, Online Players, Motd) Send</summary>
 	 */
-	public class StatusOutResponse : Packet {
+	public class StatusOutResponse : IPacket {
 		private readonly string _status;
 
 		public StatusOutResponse(ProtocolVersion protocol, int maxPlayers, int onlinePlayers, string description, params GameProfile[] profiles)
@@ -36,7 +36,7 @@ namespace NiaBukkit.Network.Protocol.Status
 			_status = json.ToString();
 		}
 
-		internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+		public void Write(ByteBuf buf, ProtocolVersion protocol)
 		{
 			buf.WriteVarInt((int) StatusPacket.Response);
 			buf.WriteString(_status);

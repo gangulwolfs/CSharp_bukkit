@@ -2,7 +2,7 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutKeepAlive : Packet
+    public class PlayOutKeepAlive : IPacket
     {
         private readonly long _data;
         public PlayOutKeepAlive(long data)
@@ -10,7 +10,7 @@ namespace NiaBukkit.Network.Protocol.Play
             _data = data;
         }
 
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             if(protocol < ProtocolVersion.v1_12)
@@ -19,7 +19,7 @@ namespace NiaBukkit.Network.Protocol.Play
                 buf.WriteLong(_data);
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

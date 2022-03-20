@@ -2,7 +2,7 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutSpawnPosition : Packet
+    public class PlayOutSpawnPosition : IPacket
     {
         private readonly Location _location;
         public PlayOutSpawnPosition(Location location)
@@ -10,7 +10,7 @@ namespace NiaBukkit.Network.Protocol.Play
             _location = location;
         }
 
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             long data = ((long) _location.X & 0x3FFFFFF) << 38 | (long) _location.Y & 0xFFF << 26 |
                         (long) _location.Z & 0x3FFFFFF;
@@ -19,7 +19,7 @@ namespace NiaBukkit.Network.Protocol.Play
             buf.WriteLong(data);
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

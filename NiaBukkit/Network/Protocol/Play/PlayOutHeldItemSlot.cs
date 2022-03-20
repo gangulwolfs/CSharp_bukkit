@@ -2,7 +2,7 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutHeldItemSlot : Packet
+    public class PlayOutHeldItemSlot : IPacket
     {
         private readonly int _slot;
 
@@ -11,13 +11,13 @@ namespace NiaBukkit.Network.Protocol.Play
             _slot = slot;
         }
 
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteByte((byte) _slot);
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

@@ -5,7 +5,7 @@ namespace NiaBukkit.Network.Protocol.Status
 	/**
 	 * <summary>Ping Speed Send To Client</summary>
 	 */
-	public class StatusOutPong : Packet {
+	public class StatusOutPong : IPacket {
 		private readonly long time;
 		
 		public StatusOutPong(long time)
@@ -13,7 +13,7 @@ namespace NiaBukkit.Network.Protocol.Status
 			this.time = time;
 		}
 
-		internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+		public void Write(ByteBuf buf, ProtocolVersion protocol)
 		{
 			buf.WriteVarInt((int) StatusPacket.Pong);
 			buf.WriteLong(time);

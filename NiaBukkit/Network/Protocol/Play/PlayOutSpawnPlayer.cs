@@ -2,7 +2,7 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutSpawnPlayer : Packet
+    public class PlayOutSpawnPlayer : IPacket
     {
         private readonly Player _player;
         public PlayOutSpawnPlayer(Player player)
@@ -10,7 +10,7 @@ namespace NiaBukkit.Network.Protocol.Play
             _player = player;
         }
         
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteVarInt(_player.EntityId);
@@ -41,13 +41,14 @@ namespace NiaBukkit.Network.Protocol.Play
                 buf.WriteByte(255);
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
-            if (protocol > ProtocolVersion.v1_15_2)
-                return 4;
-            if (protocol >= ProtocolVersion.v1_9)
-                return 5;
-            return 12;
+            return protocol switch
+            {
+                > ProtocolVersion.v1_15_2 => 4,
+                >= ProtocolVersion.v1_9 => 5,
+                _ => 12
+            };
         }
     }
 }

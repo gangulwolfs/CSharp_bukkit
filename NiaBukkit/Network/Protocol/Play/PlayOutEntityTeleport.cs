@@ -2,7 +2,7 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutEntityTeleport : Packet
+    public class PlayOutEntityTeleport : IPacket
     {
         private readonly int _entityId;
         private readonly double _x, _y, _z;
@@ -18,7 +18,7 @@ namespace NiaBukkit.Network.Protocol.Play
             _pitch = pitch;
             _onGround = onGround;
         }
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteVarInt(_entityId);
@@ -40,23 +40,19 @@ namespace NiaBukkit.Network.Protocol.Play
             buf.WriteBool(_onGround);
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
-            if (protocol > ProtocolVersion.v1_16_5)
-                return 97;
-            if (protocol > ProtocolVersion.v1_15_2)
-                return 86;
-            if (protocol > ProtocolVersion.v1_14_3_CT)
-                return 87;
-            if (protocol > ProtocolVersion.v1_12_2)
-                return 80;
-            if (protocol > ProtocolVersion.v1_11_2)
-                return 76;
-            if (protocol > ProtocolVersion.v1_9_4)
-                return 73;
-            if (protocol >= ProtocolVersion.v1_9)
-                return 74;
-            return 24;
+            return protocol switch
+            {
+                > ProtocolVersion.v1_16_5 => 97,
+                > ProtocolVersion.v1_15_2 => 86,
+                > ProtocolVersion.v1_14_3_CT => 87,
+                > ProtocolVersion.v1_12_2 => 80,
+                > ProtocolVersion.v1_11_2 => 76,
+                > ProtocolVersion.v1_9_4 => 73,
+                >= ProtocolVersion.v1_9 => 74,
+                _ => 24
+            };
         }
     }
 }

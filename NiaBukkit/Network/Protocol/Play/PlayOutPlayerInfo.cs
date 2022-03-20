@@ -3,7 +3,7 @@ using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutPlayerInfo : Packet
+    public class PlayOutPlayerInfo : IPacket
     {
         private readonly EnumPlayerInfoAction _action;
         private readonly EntityPlayer _player;
@@ -13,7 +13,7 @@ namespace NiaBukkit.Network.Protocol.Play
             _player = player;
         }
         
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteVarInt((int) _action);
@@ -59,7 +59,7 @@ namespace NiaBukkit.Network.Protocol.Play
             }
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             return protocol switch
             {

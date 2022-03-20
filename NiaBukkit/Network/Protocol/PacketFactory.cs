@@ -10,7 +10,7 @@ namespace NiaBukkit.Network.Protocol
 {
     public static class PacketFactory
     {
-        private static ReadOnlyCollection<PlayInPacket> _playPackets;
+        private static ReadOnlyCollection<IPacket> _playPackets;
         internal static void Handle(NetworkManager networkManager, ByteBuf buf, int packetId)
         {
             switch (networkManager.PacketMode)
@@ -71,20 +71,18 @@ namespace NiaBukkit.Network.Protocol
             if (_playPackets == null)
                 PlayPacketInit();
             
-            foreach(PlayInPacket packet in _playPackets!)
+            foreach(var packet in _playPackets!)
             {
-                if (packet.GetPacketId(networkManager.Protocol) == packetId)
-                {
-                    packet.Read(networkManager, buf);
-                    return;
-                }
+                if (packet.GetPacketId(networkManager.Protocol) != packetId) continue;
+                packet.Read(networkManager, buf);
+                return;
             }
         }
 
         private static void PlayPacketInit()
         {
-            List<PlayInPacket> packets = new List<PlayInPacket>();
-            packets.AddRange(new PlayInPacket[]
+            var packets = new List<IPacket>();
+            packets.AddRange(new IPacket[]
             {
                 new PlayInClientSettings(),
                 new PlayInLook(),
@@ -93,7 +91,7 @@ namespace NiaBukkit.Network.Protocol
                 new PlayInChatMessage(),
             });
 
-            _playPackets = new ReadOnlyCollection<PlayInPacket>(packets);
+            _playPackets = new ReadOnlyCollection<IPacket>(packets);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace NiaBukkit.Network.Protocol.Play
 {
-    public class PlayOutDisconnect : Packet
+    public class PlayOutDisconnect : IPacket
     {
         private readonly string _reason;
         
@@ -11,13 +11,13 @@ namespace NiaBukkit.Network.Protocol.Play
             _reason = reason;
         }
 
-        internal override void Write(ByteBuf buf, ProtocolVersion protocol)
+        public void Write(ByteBuf buf, ProtocolVersion protocol)
         {
             buf.WriteVarInt(GetPacketId(protocol));
             buf.WriteString(new JsonBuilder().Set("text", _reason).ToString());
         }
 
-        private static int GetPacketId(ProtocolVersion protocol)
+        public int GetPacketId(ProtocolVersion protocol)
         {
             if (protocol >= ProtocolVersion.v1_9)
                 return 26;
