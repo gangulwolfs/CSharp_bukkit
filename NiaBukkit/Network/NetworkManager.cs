@@ -1,16 +1,13 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
-using System.Threading;
 using NiaBukkit.API;
 using NiaBukkit.API.Compress;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Cryptography;
 using NiaBukkit.API.Entities;
-using NiaBukkit.API.Threads;
 using NiaBukkit.API.Util;
 using NiaBukkit.Minecraft;
 using NiaBukkit.Network.Protocol;
@@ -21,8 +18,6 @@ namespace NiaBukkit.Network
 {
     public class NetworkManager
     {
-        private const int ThreadDelay = 5;
-
         private const int Timeout = 25000;
         private const long KeepAliveTime = 50;
 
@@ -49,12 +44,13 @@ namespace NiaBukkit.Network
         private Stream _sendStream;
         private NetworkBuf _receiveStream;
 
-        private ConcurrentQueue<byte[]> _packet = new();
-        private ThreadFactory _threadFactory = new();
+        private EventHandler<byte[]> _sendEventHandler;
 
         internal NetworkManager(TcpClient client)
         {
             IsAvailable = true;
+            _sendEventHandler += OnSendEvent;
+
             client.NoDelay = true;
             
             _client = client;
@@ -63,16 +59,11 @@ namespace NiaBukkit.Network
 
             var so = new StateObject(_client.Client);
             so.TargetSocket.BeginReceive(so.Buffer, 0, StateObject.BufferSize, SocketFlags.None, ReceiveAsync, so);
-
-            _threadFactory.LaunchThread(new Thread(DoPacketSendQueueWork), false).Name = "Packet Send Thread";
-            // var so2 = new StateObject(_client.Client);
-            // so2.TargetSocket.BeginSend(so.buffer, 0, StateObject.BufferSize, SocketFlags.None, SendAsync, so2);
         }
 
         private void Disconnect()
         {
             IsAvailable = false;
-            _threadFactory.KillAll();
             // TODO: Client Disconnected
         }
 
@@ -112,7 +103,7 @@ namespace NiaBukkit.Network
                     var result = _receiveStream.ReadPacket();
                     while (result != null)
                     {
-                        PacketHandleUpdate(result);
+                        PacketHandle(result);
                         result = _receiveStream.ReadPacket();
                     }
 
@@ -132,10 +123,8 @@ namespace NiaBukkit.Network
             }
         }
         
-        private void PacketHandleUpdate(byte[] packet)
+        private void PacketHandle(byte[] packet)
         {
-
-            //TODO: 압축 추가
             if (CompressionEnabled)
                 packet = Decompress(packet);
 
@@ -272,12 +261,10 @@ namespace NiaBukkit.Network
             var (key, value) = await MojangAuth.IsAuthenticate(this, sharedKey);
             if(key)
             {
-                var profile = new GameProfile(new Uuid(value.Get<string>("id")),
-                    value.Get<string>("name"));
-                if (!InitEntityPlayer(profile))
-                {
+                var profile = new GameProfile(new Uuid(value.Get<string>("id")), value.Get<string>("name"));
+                if (!InitEntityPlayer(profile, value.Get<object[]>("properties")))
                     return;
-                }
+
                 Bukkit.ConsoleSender.SendMessage($"§eUser {profile.Name} authenticated with UUID {value.Get<string>("id")}");
                 Play();
             }
@@ -288,7 +275,7 @@ namespace NiaBukkit.Network
             }
         }
 
-        internal bool InitEntityPlayer(GameProfile profile)
+        internal bool InitEntityPlayer(GameProfile profile, object[] properties = null)
         {
             if (Bukkit.Players.ContainsKey(profile.Uuid))
             {
@@ -296,7 +283,7 @@ namespace NiaBukkit.Network
                 return false;
             }
             
-            Player = new EntityPlayer(this, profile, Bukkit.MainWorld, ServerProperties.GameMode);
+            Player = new EntityPlayer(this, profile, Bukkit.MainWorld, ServerProperties.GameMode, properties);
             return true;
         }
 
@@ -358,35 +345,6 @@ namespace NiaBukkit.Network
             }
         }
 
-        private void DoPacketSendQueueWork()
-        {
-            while (IsAvailable)
-            {
-                if(_packet.IsEmpty)
-                {
-                    try
-                    {
-                        Thread.Sleep(ThreadDelay);
-                    }catch(Exception)
-                    {
-                    }
-                    continue;
-                }
-
-                if (!_packet.TryDequeue(out var result)) continue;
-
-                try
-                {
-                    _sendStream.Write(result, 0, result.Length);
-                }
-                catch (Exception e)
-                {
-                    SocketSendExceptionCheck(e);
-                    Disconnect();
-                }
-            }
-        }
-
         private static byte[] Decompress(byte[] buf)
         {
             var result = new ByteBuf(buf);
@@ -417,13 +375,26 @@ namespace NiaBukkit.Network
             return result.Flush();
         }
 
+        private void OnSendEvent(object sender, byte[] data)
+        {
+            try
+            {
+                _sendStream.Write(data, 0, data.Length);
+            }
+            catch (Exception e)
+            {
+                SocketSendExceptionCheck(e);
+                Disconnect();
+            }
+        }
+
         public void SendPacket(IPacket packet)
         {
             if (_client is not {Connected: true}) return;
             
             var buf = new ByteBuf();
             packet.Write(buf, Protocol);
-            _packet.Enqueue(CompressionEnabled ? Compress(buf) : buf.Flush());
+            _sendEventHandler?.Invoke(this, CompressionEnabled ? Compress(buf) : buf.Flush());
         }
 
         private void SocketSendExceptionCheck(Exception e)
@@ -444,7 +415,7 @@ namespace NiaBukkit.Network
                     Kick(e.Message);
                     Console.Error.WriteLine(e);
                 }
-                else if (e is not InvalidOperationException && e is not NullReferenceException)
+                else if (e is not InvalidOperationException && e is not NullReferenceException && e is not ObjectDisposedException)
                 {
                     Kick(e.Message);
                     Console.Error.WriteLine(e);

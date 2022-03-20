@@ -17,9 +17,17 @@ namespace NiaBukkit.API.Util
         public T Get<T>(string key)
         {
             return _items.TryGetValue(key, out var value)
-                ? (T) value
+                ? (T)value
                 : default;
         }
+
+        public bool TryGetValue<T>(string key, out T value) where T : class
+        {
+            var has = _items.TryGetValue(key, out var result);
+            value = result as T;
+            return has;
+        }
+
 
         public JsonBuilder Replace<T>(string key, T value) {
             if(_items.ContainsKey(key)) _items.Remove(key);

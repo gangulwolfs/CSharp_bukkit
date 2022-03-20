@@ -26,7 +26,21 @@ namespace NiaBukkit.Network.Protocol.Play
                     buf.WriteString(_player.Name);
                     
                     //TODO: Player Property Send
-                    buf.WriteVarInt(0); // Property Length
+                    buf.WriteVarInt(_player.Properties.Length); // Property Length
+
+                    for(var i = 0; i < _player.Properties.Length; i++)
+                    {
+                        var property = (JsonBuilder) _player.Properties[i];
+                        buf.WriteString(property.Get<string>("name"));
+                        buf.WriteString(property.Get<string>("value"));
+                        if (property.TryGetValue<string>("signature", out var signature))
+                        {
+                            buf.WriteBool(true);
+                            buf.WriteString(signature);
+                        }
+                        else
+                            buf.WriteBool(false);
+                    }
                     
                     buf.WriteVarInt((int) _player.GameMode);
                     buf.WriteVarInt(_player.Ping); // PING

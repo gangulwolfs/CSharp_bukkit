@@ -35,10 +35,14 @@ namespace NiaBukkit.API.Entities
 
 		private Location _beforeLocation;
 
-		public EntityPlayer(NetworkManager networkManager, GameProfile profile, World.World world, GameMode gameMode) : base(profile, world, gameMode)
+		public object[] Properties { get; private set; }
+
+
+		public EntityPlayer(NetworkManager networkManager, GameProfile profile, World.World world, GameMode gameMode, object[] properties) : base(profile, world, gameMode)
 		{
 			NetworkManager = networkManager;
 			_beforeLocation = (Location) Location.Clone();
+			Properties = properties ?? Array.Empty<object>();
 		}
 
 		/**
