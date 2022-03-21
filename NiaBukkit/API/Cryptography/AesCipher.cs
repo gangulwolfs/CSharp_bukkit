@@ -50,7 +50,15 @@ namespace NiaBukkit.API.Cryptography
             var length = input.Length;
             var outBytes = new byte[length];
             EncryptBlock(input, 0, outBytes, 0, length);
-            
+
+            return outBytes;
+        }
+        public byte[] EncryptBlock(ReadOnlySpan<byte> input)
+        {
+            var length = input.Length;
+            var outBytes = new byte[length];
+            EncryptBlock(input.ToArray(), 0, outBytes, 0, length);
+
             return outBytes;
         }
 

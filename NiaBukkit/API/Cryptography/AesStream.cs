@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace NiaBukkit.API.Cryptography
 {
@@ -41,6 +42,11 @@ namespace NiaBukkit.API.Cryptography
         public override void Write(byte[] buffer, int offset, int count)
         {
             _baseStream.Write(_encryptor.EncryptBlock(buffer), offset, count);
+        }
+
+        public override void Write(ReadOnlySpan<byte> buffer)
+        {
+            base.Write(_encryptor.EncryptBlock(buffer));
         }
 
         public override bool CanRead => _baseStream.CanRead;

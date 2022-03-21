@@ -44,7 +44,7 @@ namespace NiaBukkit.Network
         private Stream _sendStream;
         private NetworkBuf _receiveStream;
 
-        private EventHandler<byte[]> _sendEventHandler;
+        private event Action<byte[]> _sendEventHandler;
 
         internal NetworkManager(TcpClient client)
         {
@@ -375,7 +375,7 @@ namespace NiaBukkit.Network
             return result.Flush();
         }
 
-        private void OnSendEvent(object sender, byte[] data)
+        private void OnSendEvent(byte[] data)
         {
             try
             {
@@ -394,7 +394,8 @@ namespace NiaBukkit.Network
             
             var buf = new ByteBuf();
             packet.Write(buf, Protocol);
-            _sendEventHandler?.Invoke(this, CompressionEnabled ? Compress(buf) : buf.Flush());
+
+            _sendEventHandler?.Invoke(CompressionEnabled ? Compress(buf) : buf.Flush());
         }
 
         private void SocketSendExceptionCheck(Exception e)

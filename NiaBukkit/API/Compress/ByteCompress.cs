@@ -20,12 +20,7 @@ namespace NiaBukkit.API.Compress
         public static byte[] ZLipDecompress(byte[] origin)
         {
             using var ms = new MemoryStream(origin);
-            //ZLib head : 2 bytes
-            ms.Position = 2;
-            
-            using var zip = new System.IO.Compression.DeflateStream(ms, CompressionMode.Decompress);
-            //zipStream.Write(origin, 2, origin.Length - 2);
-            //zipStream.Close();
+            using var zip = new ZLibStream(ms, CompressionMode.Decompress);
             using var rs = new MemoryStream();
             zip.CopyTo(rs);
 
@@ -47,8 +42,10 @@ namespace NiaBukkit.API.Compress
             using var ms = new MemoryStream(origin);
             
             using var zipStream = new GZipStream(ms, CompressionMode.Decompress);
-            
-            return ms.ToArray();
+            using var rs = new MemoryStream();
+            zipStream.CopyTo(rs);
+
+            return rs.ToArray();
         }
     }
 }
