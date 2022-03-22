@@ -82,7 +82,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData Sandstone = Init(new BlockData(Material.Sandstone).SetDurability(.8F));
         public static readonly BlockData ChiseledSandstone = Init(new BlockData(Material.ChiseledSandstone).SetDurability(.8F));
         public static readonly BlockData CutSandstone = Init(new BlockData(Material.CutSandStone).SetDurability(.8F));
-        public static readonly BlockData NoteBlock;
+        public static readonly BlockData NoteBlock = Init(new BlockNote(Material.NoteBlock).SetSound(SoundEffectType.WoodEffect).SetDurability(.8F));
         public static readonly BlockData WhiteBed = Init(new BlockBed(Material.WhiteBed).SetSound(SoundEffectType.WoodEffect).SetDurability(.2F));
         public static readonly BlockData OrangeBed = Init(new BlockBed(Material.OrangeBed).SetSound(SoundEffectType.WoodEffect).SetDurability(.2F));
         public static readonly BlockData MagentaBed = Init(new BlockBed(Material.MagentaBed).SetSound(SoundEffectType.WoodEffect).SetDurability(.2F));
@@ -386,7 +386,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData AcaciaStairs = Init(new BlockStairs(Material.AcaciaStairs).SetBase(AcaciaPlanks));
         public static readonly BlockData DarkOakStairs = Init(new BlockStairs(Material.DarkOakStairs).SetBase(DarkOakPlanks));
         public static readonly BlockData SlimeBlock;
-        public static readonly BlockData Barrier;
+        public static readonly BlockData Barrier = Init(new BlockData(Material.Barrier).SetBreakData(-1, 3600000.8F));
         public static readonly BlockData IronTrapdoor = Init(new BlockTrapdoor(Material.IronTrapdoor).SetDurability(5).SetSound(SoundEffectType.MetalEffect));
         public static readonly BlockData Prismarine = Init(new BlockData(Material.Prismarine).SetBreakData(1.5F, 6));
         public static readonly BlockData PrismarineBricks = Init(new BlockData(Material.PrismarineBricks).SetBreakData(1.5F, 6));

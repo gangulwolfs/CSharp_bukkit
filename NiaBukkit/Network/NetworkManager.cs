@@ -78,6 +78,7 @@ namespace NiaBukkit.Network
             {
                 _client.Close();
                 _client.Dispose();
+                _sendStream.Dispose();
             }
             catch (Exception e)
             {
@@ -115,11 +116,7 @@ namespace NiaBukkit.Network
             }
             catch (Exception e)
             {
-                Console.Error.WriteLine(e);
-                if (e is not ObjectDisposedException)
-                {
-                    so!.TargetSocket.BeginReceive(so.Buffer, 0, StateObject.BufferSize, 0, ReceiveAsync, so);
-                }
+                SocketExceptionCheck(e);
             }
         }
         
@@ -131,6 +128,8 @@ namespace NiaBukkit.Network
             var buf = new ByteBuf(packet);
             var packetId = buf.ReadVarInt();
             PacketFactory.Handle(this, buf, packetId);
+            /*if(packetId != 11 && packetId != 13 && packetId != 15 && packetId != 14)
+                Bukkit.ConsoleSender.SendMessage(packetId);*/
         }
 
         internal void Update()
@@ -383,7 +382,7 @@ namespace NiaBukkit.Network
             }
             catch (Exception e)
             {
-                SocketSendExceptionCheck(e);
+                SocketExceptionCheck(e);
                 Disconnect();
             }
         }
@@ -398,7 +397,7 @@ namespace NiaBukkit.Network
             _sendEventHandler?.Invoke(CompressionEnabled ? Compress(buf) : buf.Flush());
         }
 
-        private void SocketSendExceptionCheck(Exception e)
+        private void SocketExceptionCheck(Exception e)
         {
             while (true)
             {
@@ -426,17 +425,23 @@ namespace NiaBukkit.Network
             }
         }
 
-        private class StateObject
+        private class StateObject : IDisposable
         {
             public const int BufferSize = 1024;
             public readonly byte[] Buffer = new byte[BufferSize];
             public Socket TargetSocket { get; }
 
-            public StateObject(Socket socket, byte[] buffer = null)
+            public StateObject(Socket socket)
             {
                 TargetSocket = socket;
-                if (buffer != null)
-                    Buffer = buffer;
+            }
+
+            public void Dispose()
+            {
+                try
+                {
+                    TargetSocket?.Dispose();
+                }catch(Exception) { }
             }
         }
     }

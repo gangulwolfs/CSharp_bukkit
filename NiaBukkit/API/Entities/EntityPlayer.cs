@@ -1,13 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Threads;
 using NiaBukkit.API.Util;
@@ -135,5 +129,11 @@ namespace NiaBukkit.API.Entities
 				WorldThreadManager.AddRequireChunk(chunkCoord, this);
 			}
 		}
+
+		internal void UpdateAbilities(bool isFly)
+        {
+			PlayerAbilities.IsFly = isFly && PlayerAbilities.CanFly;
+			NetworkManager.SendPacket(new PlayOutPlayerAbilities(PlayerAbilities));
+        }
 	}
 }

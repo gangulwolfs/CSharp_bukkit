@@ -95,6 +95,26 @@ namespace NiaBukkit.API.Util
         NorthEast
     }
 
+    public enum PropertyInstrument
+    {
+        Harp,
+        BaseDrum,
+        Snare,
+        Hat,
+        Bass,
+        Flute,
+        Bell,
+        Guitar,
+        Chime,
+        Xylophone,
+        IronXylophone,
+        CowBell,
+        Didgeridoo,
+        Bit,
+        Banjo,
+        Pling
+    }
+
     public static class BlockStateExtensions
     {
 
@@ -261,6 +281,13 @@ namespace NiaBukkit.API.Util
         {
             var data = properties?.GetString("shape");
             return data == null ? defaultValue : Enum.Parse<PropertyTrackPosition>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyInstrument GetState(this NBTTagCompound properties, PropertyInstrument defaultValue)
+        {
+            var data = properties?.GetString("instrument");
+            return data == null ? defaultValue : Enum.Parse<PropertyInstrument>(data.Minecraft2Name());
         }
     }
 }

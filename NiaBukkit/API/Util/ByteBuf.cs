@@ -239,12 +239,12 @@ namespace NiaBukkit.API.Util
 
         public float ReadFloat()
         {
-            return NetworkToHostOrder(BitConverter.ToSingle(Read(4)));
+            return BitConverter.ToSingle(NetworkToHostOrder(Read(4)), 0);
         }
 
         public double ReadDouble()
         {
-            return NetworkToHostOrder(Read(8));
+            return BitConverter.ToDouble(NetworkToHostOrder(Read(8)), 0);
         }
 
         public Uuid ReadUuid()
@@ -372,13 +372,12 @@ namespace NiaBukkit.API.Util
 
         public void WriteDouble(double data)
         {
-            _buf.AddRange(HostToNetworkOrder(data));
+            _buf.AddRange(HostToNetworkOrder(BitConverter.GetBytes(data)));
         }
 
         public void WriteFloat(float data)
         {
-            _buf.AddRange(BitConverter.GetBytes(data));
-            // buf.AddRange(HostToNetworkOrder(data));
+            _buf.AddRange(HostToNetworkOrder(BitConverter.GetBytes(data)));
         }
 
         public void WriteLong(long data)
@@ -405,31 +404,22 @@ namespace NiaBukkit.API.Util
             WriteLong(uuid.GetLeastSignificantBits());
         }
 
-        private byte[] HostToNetworkOrder(double d)
+        private byte[] HostToNetworkOrder(byte[] d)
         {
-            byte[] data = BitConverter.GetBytes(d);
             if(BitConverter.IsLittleEndian)
-                Array.Reverse(data);
+                Array.Reverse(d);
 
-            return data;
+            return d;
         }
 
-        private float NetworkToHostOrder(float host)
-        {
-            var data = BitConverter.GetBytes(host);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(data);
-
-            return BitConverter.ToSingle(data, 0);
-        }
-
-        private double NetworkToHostOrder(byte[] data)
+        private byte[] NetworkToHostOrder(byte[] data)
         {
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(data);
             }
-            return BitConverter.ToDouble(data, 0);
+            return data;
+            //return BitConverter.ToDouble(data, 0);
         }
 
         public byte[] Flush()

@@ -1,5 +1,4 @@
-﻿using System;
-using NiaBukkit.API.NBT;
+﻿using NiaBukkit.API.NBT;
 using NiaBukkit.API.Util;
 
 namespace NiaBukkit.API.Blocks.Data
@@ -24,7 +23,7 @@ namespace NiaBukkit.API.Blocks.Data
             stairs.Facing = properties.GetState(Direction.East);
             stairs.Half = properties.GetState(PropertyHalf.Bottom);
             stairs.Shape = properties.GetState(PropertyShape.Straight);
-            
+
             return base.GetBlockData(block, properties);
         }
 

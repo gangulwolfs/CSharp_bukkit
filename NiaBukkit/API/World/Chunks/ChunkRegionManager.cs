@@ -12,7 +12,8 @@ namespace NiaBukkit.API.World.Chunks
         
         internal static Chunk GetChunk(World world, int x, int z)
         {
-            var buf = RegionFile.Load($"D:/마인크래프트/1.16.5/world_b/region/r.{x >> 5}.{z >> 5}.mca", x, z);
+            //var buf = RegionFile.Load($"D:/마인크래프트/1.16.5/world_b/region/r.{x >> 5}.{z >> 5}.mca", x, z);
+            var buf = RegionFile.Load($"C:/Users/skyne/AppData/Roaming/.minecraft/saves/New World (5)/region/r.{x >> 5}.{z >> 5}.mca", x, z);
             // var buf = RegionFile.Load($"C:/Users/skyne/AppData/Roaming/.minecraft/saves/New World-/region/r.{x >> 5}.{z >> 5}.mca", x, z);
             if (buf == null)
                 return null;
@@ -102,12 +103,10 @@ namespace NiaBukkit.API.World.Chunks
             {
                 if(paletteList[i] is not NBTTagCompound paletteCompound) continue;
                 var T = section.GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(paletteCompound.GetString("Name"))
-                    .GetBlockData(paletteCompound.GetCompound("Properties")));
+                    .GetBlockData(paletteCompound.GetCompound("Properties") ?? new NBTTagCompound()));
 
-                // Bukkit.ConsoleSender.SendMessage(paletteCompound);
-                // Bukkit.ConsoleSender.SendMessage(T + ": " + BlockData
-                //     .GetBlockDataByName(paletteCompound.GetString("Name"))
-                //     .GetBlockData(paletteCompound.GetCompound("Properties")));
+                //Bukkit.ConsoleSender.SendMessage(paletteCompound);
+                Bukkit.ConsoleSender.SendMessage(T + ": " + paletteCompound);
             }
 
             ChunkDataVersionUtil.IterateCompactArrayWithPadding(bits, blockStateList, section.SetBlock);

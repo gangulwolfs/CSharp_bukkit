@@ -1,5 +1,4 @@
-﻿using NiaBukkit.API;
-using NiaBukkit.API.Cryptography;
+﻿using NiaBukkit.API.Cryptography;
 
 namespace NiaBukkit.Network
 {

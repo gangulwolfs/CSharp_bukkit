@@ -147,8 +147,7 @@ namespace NiaBukkit.API.NBT
 
         public bool GetBool(string tagName)
         {
-            _data.TryGetValue(tagName, out var nbt);
-            if (nbt == null) return false;
+            if (!_data.TryGetValue(tagName, out var nbt)) return false;
 
             if (nbt.NBTType == NBTType.String)
                 return bool.TryParse(((NBTTagString) nbt).Data, out var result) && result;

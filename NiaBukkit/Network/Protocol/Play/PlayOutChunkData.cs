@@ -68,11 +68,11 @@ namespace NiaBukkit.Network.Protocol.Play
                 // var bitsPerBlock = maxBitsBlock;
                 data.WriteByte(bitsPerBlock);
                 
-                // data.WriteVarInt(4);
-                // data.WriteVarInt(0);
-                // data.WriteVarInt(7 << 4);
-                // data.WriteVarInt(2 << 4);
-                // data.WriteVarInt(66 << 4 | 7);
+                /*data.WriteVarInt(4);
+                data.WriteVarInt(0);
+                data.WriteVarInt(7 << 4);
+                data.WriteVarInt(2 << 4);
+                data.WriteVarInt(25 << 4);*/
 
                 if (bitsPerBlock != maxBitsBlock)
                 {
@@ -85,7 +85,7 @@ namespace NiaBukkit.Network.Protocol.Play
                 }
                 else
                     data.WriteVarInt(0);
-                
+
                 ChunkDataVersionUtil.CreateCompactArray(data, bitsPerBlock,
                     bitsPerBlock == maxBitsBlock ? section.GetFlatId : section.GetPaletteIndex);
                 

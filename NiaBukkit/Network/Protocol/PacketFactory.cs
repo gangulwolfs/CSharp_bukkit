@@ -89,6 +89,7 @@ namespace NiaBukkit.Network.Protocol
                 new PlayInPositionLook(),
                 new PlayInPosition(),
                 new PlayInChatMessage(),
+                new PlayInPlayerAbilities(),
             });
 
             _playPackets = new ReadOnlyCollection<IPacket>(packets);

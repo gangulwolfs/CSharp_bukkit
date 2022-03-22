@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Cryptography;
 
 namespace NiaBukkit.API.Cryptography
 {
     //https://stackoverflow.com/questions/34420086/aes-decryption-encryption-implementation-in-c-sharp-not-using-libraries
-    public class AesCipher
+    public class AesCipher : IDisposable
     {
-        public byte[] Key { get; }
+        public byte[] Key { get; private set; }
 
-        public byte[] IV { get; }
+        public byte[] IV { get; private set; }
 
         private byte[] _cV;
         public int FeedbackSize => 8;
         public int InputBlockSize => 16;
         public static int RoundCount => 10;
 
-        public uint[,] RoundKey { get; } = new uint[RoundCount + 1, 4];
+        public uint[,] RoundKey { get; private set; } = new uint[RoundCount + 1, 4];
 
         private int _blockSize; 
 
@@ -183,5 +182,13 @@ namespace NiaBukkit.API.Cryptography
             return _blockSize;
         }
         #endregion
+
+        public virtual void Dispose()
+        {
+            Key = null;
+            IV = null;
+            _cV = null;
+            RoundKey = null;
+        }
     }
 }
