@@ -29,7 +29,7 @@ namespace NiaBukkit
             Console.CancelKeyPress += ConsoleCloseEvent;
 
             Bukkit.MainWorld.WorldSpawn.Set(0, 73, 0);
-            Bukkit.MainWorld.GetChunk(1 >> 4, 2);
+            Bukkit.MainWorld.GetChunk(0, 12);
         }
 
         private static void Init()

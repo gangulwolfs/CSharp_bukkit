@@ -98,7 +98,7 @@ namespace NiaBukkit.API.Util
     public enum PropertyInstrument
     {
         Harp,
-        BaseDrum,
+        Basedrum,
         Snare,
         Hat,
         Bass,
