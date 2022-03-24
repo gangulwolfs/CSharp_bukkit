@@ -184,7 +184,7 @@ namespace NiaBukkit.API.Util
         
         //TODO: What?
         [MaterialAttribute(24, 2)]
-        CutSandStone,
+        CutSandstone,
         
         [MaterialAttribute(25)]
         NoteBlock,
@@ -2065,7 +2065,7 @@ namespace NiaBukkit.API.Util
         MovingPiston,
         [MaterialAttribute(50)]
         WallTorch,
-        [MaterialAttribute(16396,51)]
+        [MaterialAttribute(51)]
         Fire,
         [MaterialAttribute(30163,51)]
         SoulFire,
@@ -2350,7 +2350,7 @@ namespace NiaBukkit.API.Util
                 case Material.CrimsonHyphae: case Material.WarpedHyphae: case Material.OakLeaves: case Material.SpruceLeaves: case Material.BirchLeaves:
                 case Material.JungleLeaves: case Material.AcaciaLeaves: case Material.DarkOakLeaves: case Material.Sponge: case Material.WetSponge:
                 case Material.Glass: case Material.LapisOre: case Material.LapisBlock: case Material.Dispenser: case Material.Sandstone: case Material.ChiseledSandstone:
-                case Material.CutSandStone: case Material.NoteBlock: case Material.PoweredRail: case Material.DetectorRail: case Material.StickyPiston: case Material.Cobweb:
+                case Material.CutSandstone: case Material.NoteBlock: case Material.PoweredRail: case Material.DetectorRail: case Material.StickyPiston: case Material.Cobweb:
                 case Material.Grass: case Material.Fern: case Material.DeadBush: case Material.Seagrass: case Material.SeaPickle: case Material.Piston: case Material.WhiteWool:
                 case Material.OrangeWool: case Material.MagentaWool: case Material.LightBlueWool: case Material.YellowWool: case Material.LimeWool: case Material.PinkWool:
                 case Material.GrayWool: case Material.LightGrayWool: case Material.CyanWool: case Material.PurpleWool: case Material.BlueWool: case Material.BrownWool:
@@ -2507,7 +2507,7 @@ namespace NiaBukkit.API.Util
                 case Material.StrippedWarpedHyphae: case Material.OakWood: case Material.SpruceWood: case Material.BirchWood: case Material.JungleWood: case Material.AcaciaWood:
                 case Material.DarkOakWood: case Material.CrimsonHyphae: case Material.WarpedHyphae: case Material.OakLeaves: case Material.SpruceLeaves: case Material.BirchLeaves:
                 case Material.JungleLeaves: case Material.AcaciaLeaves: case Material.DarkOakLeaves: case Material.Sponge: case Material.WetSponge: case Material.Glass: case Material.LapisOre:
-                case Material.LapisBlock: case Material.Dispenser: case Material.Sandstone: case Material.ChiseledSandstone: case Material.CutSandStone: case Material.NoteBlock:
+                case Material.LapisBlock: case Material.Dispenser: case Material.Sandstone: case Material.ChiseledSandstone: case Material.CutSandstone: case Material.NoteBlock:
                 case Material.StickyPiston: case Material.Piston: case Material.WhiteWool: case Material.OrangeWool: case Material.MagentaWool: case Material.LightBlueWool:
                 case Material.YellowWool: case Material.LimeWool: case Material.PinkWool: case Material.GrayWool: case Material.LightGrayWool: case Material.CyanWool: case Material.PurpleWool:
                 case Material.BlueWool: case Material.BrownWool: case Material.GreenWool: case Material.RedWool: case Material.BlackWool: case Material.Bamboo: case Material.GoldBlock:

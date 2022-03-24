@@ -72,7 +72,7 @@ namespace NiaBukkit.Network.Protocol.Play
                 data.WriteVarInt(0);
                 data.WriteVarInt(7 << 4);
                 data.WriteVarInt(2 << 4);
-                data.WriteVarInt(6 << 4 | 1 | 1 << 3);*/
+                data.WriteVarInt(51 << 4 | 16);*/
 
                 if (bitsPerBlock != maxBitsBlock)
                 {

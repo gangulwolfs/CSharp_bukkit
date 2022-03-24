@@ -78,10 +78,10 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData Glass = Init(new BlockData(Material.Glass).SetDurability(.3F).SetSound(SoundEffectType.GlassEffect));
         public static readonly BlockData LapisOre = Init(new BlockOre(Material.LapisOre).SetBreakData(3, 3));
         public static readonly BlockData LapisBlock = Init(new BlockData(Material.LapisBlock).SetBreakData(3, 3));
-        public static readonly BlockData Dispenser;
+        public static readonly BlockData Dispenser = Init(new BlockDispenser(Material.Dispenser).SetDurability(3.5F));
         public static readonly BlockData Sandstone = Init(new BlockData(Material.Sandstone).SetDurability(.8F));
         public static readonly BlockData ChiseledSandstone = Init(new BlockData(Material.ChiseledSandstone).SetDurability(.8F));
-        public static readonly BlockData CutSandstone = Init(new BlockData(Material.CutSandStone).SetDurability(.8F));
+        public static readonly BlockData CutSandstone = Init(new BlockData(Material.CutSandstone).SetDurability(.8F));
         public static readonly BlockData NoteBlock = Init(new BlockNote(Material.NoteBlock).SetSound(SoundEffectType.WoodEffect).SetDurability(.8F));
         public static readonly BlockData WhiteBed = Init(new BlockBed(Material.WhiteBed).SetSound(SoundEffectType.WoodEffect).SetDurability(.2F));
         public static readonly BlockData OrangeBed = Init(new BlockBed(Material.OrangeBed).SetSound(SoundEffectType.WoodEffect).SetDurability(.2F));
@@ -151,7 +151,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData Obsidian = Init(new BlockData(Material.Obsidian).SetBreakData(50, 1200));
         public static readonly BlockData Torch = Init(new BlockTorch(Material.Torch, Particles.Flame).SetSound(SoundEffectType.WoodEffect).SetLight(14));
         public static readonly BlockData WallTorch = Init(new BlockTorchWall(Material.WallTorch, Particles.Flame).SetSound(SoundEffectType.WoodEffect).SetLight(14));
-        public static readonly BlockData Fire;
+        public static readonly BlockData Fire = Init(new BlockFire(Material.Fire).SetLight(15).SetSound(SoundEffectType.WoolEffect));
         public static readonly BlockData SoulFire;
         public static readonly BlockData Spawner;
         public static readonly BlockData OakStairs = Init(new BlockStairs(Material.OakStairs).SetBase(OakPlanks));
