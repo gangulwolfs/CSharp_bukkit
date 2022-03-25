@@ -11,6 +11,7 @@ namespace NiaBukkit.API.Blocks.Data
         public bool South { get; private set; }
         public bool North { get; private set; }
         public bool West { get; private set; }
+        public bool Up { get; private set; }
         public int Age { get; private set; }
 
         public BlockFire(Material type) : base(type)
@@ -29,6 +30,7 @@ namespace NiaBukkit.API.Blocks.Data
             o.South = properties.GetBool("south");
             o.North = properties.GetBool("north");
             o.West = properties.GetBool("west");
+            o.Up = properties.GetBool("up");
             o.Age = properties.GetInt("age");
             return base.GetBlockData(block, properties);
         }
@@ -39,7 +41,7 @@ namespace NiaBukkit.API.Blocks.Data
             if (o2 is not BlockFire o) return false;
 
             return o.East == o1.East && o.South == o1.South && o.North == o1.North &&
-                   o.West == o1.West && o.Age == o1.Age && (BlockData)o1 == o;
+                   o.West == o1.West && o.Up == o1.Up && o.Age == o1.Age && (BlockData)o1 == o;
         }
 
         public static bool operator !=(BlockFire o1, BlockData o2) => !(o1 == o2);
@@ -58,6 +60,7 @@ namespace NiaBukkit.API.Blocks.Data
             properties.Set("south", new NBTTagString(South.ToString().ToLower()));
             properties.Set("north", new NBTTagString(North.ToString().ToLower()));
             properties.Set("west", new NBTTagString(West.ToString().ToLower()));
+            properties.Set("up", new NBTTagString(Up.ToString().ToLower()));
             properties.Set("age", new NBTTagString(Age.ToString()));
 
             return tag;

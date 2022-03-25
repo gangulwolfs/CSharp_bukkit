@@ -99,8 +99,8 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData GreenBed = Init(new BlockBed(Material.GreenBed).SetSound(SoundEffectType.WoodEffect).SetDurability(.2F));
         public static readonly BlockData RedBed = Init(new BlockBed(Material.RedBed).SetSound(SoundEffectType.WoodEffect).SetDurability(.2F));
         public static readonly BlockData BlackBed = Init(new BlockBed(Material.BlackBed).SetSound(SoundEffectType.WoodEffect).SetDurability(.2F));
-        public static readonly BlockData PoweredRail;
-        public static readonly BlockData DetectorRail;
+        public static readonly BlockData PoweredRail = Init(new BlockPoweredRail(Material.PoweredRail).SetDurability(.7F).SetSound(SoundEffectType.MetalEffect));
+        public static readonly BlockData DetectorRail = Init(new BlockDetectorRail(Material.DetectorRail).SetDurability(.7F).SetSound(SoundEffectType.MetalEffect));
         public static readonly BlockData StickyPiston;
         public static readonly BlockData Cobweb;
         public static readonly BlockData Grass = Init(new BlockLongGrass(Material.Grass).SetSound(SoundEffectType.GrassEffect));
@@ -171,7 +171,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData DarkOakSign;
         public static readonly BlockData OakDoor = Init(new BlockDoor(Material.OakDoor).SetDurability(3).SetSound(SoundEffectType.WoodEffect));
         public static readonly BlockData Ladder;
-        public static readonly BlockData Rail = Init(new BlockMinecartTrack(Material.Rail).SetDurability(.4F).SetSound(SoundEffectType.MetalEffect));
+        public static readonly BlockData Rail = Init(new BlockRail(Material.Rail).SetDurability(.4F).SetSound(SoundEffectType.MetalEffect));
         public static readonly BlockData CobblestoneStairs = Init(new BlockStairs(Material.CobblestoneStairs).SetBase(Cobblestone));
         public static readonly BlockData OakWallSign;
         public static readonly BlockData SpruceWallSign;

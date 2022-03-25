@@ -79,6 +79,8 @@ namespace NiaBukkit.Network
                 _client.Close();
                 _client.Dispose();
                 _sendStream.Dispose();
+                _receiveStream = null;
+                Player = null;
             }
             catch (Exception e)
             {
