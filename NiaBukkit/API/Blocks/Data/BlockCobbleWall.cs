@@ -32,11 +32,6 @@ namespace NiaBukkit.API.Blocks.Data
             return base.GetBlockData(block, properties);
         }
 
-        internal override bool CanPlace(BlockPosition position)
-        {
-            return !position.Down().GetBlockData().Type.IsTransparent();
-        }
-
         public static bool operator ==(BlockCobbleWall o1, BlockData o2)
         {
             if (o1 is null || o2 is null) return o1 is null && o2 is null;

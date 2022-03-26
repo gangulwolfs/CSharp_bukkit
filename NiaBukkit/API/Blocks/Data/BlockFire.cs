@@ -4,7 +4,7 @@ using System;
 
 namespace NiaBukkit.API.Blocks.Data
 {
-    class BlockFire : BlockData
+    public class BlockFire : BlockData
     {
         //NBTTagCompound(Properties=NBTTagCompound(east="true", south="false", north="false", west="true", up="false", age="8"), Name="minecraft:fire")
         public bool East { get; private set; }
@@ -67,5 +67,27 @@ namespace NiaBukkit.API.Blocks.Data
         }
 
         public override int GetFlatId() => base.GetFlatId() | Age;
+    }
+
+    public class BlockSoulFire : BlockFire
+    {
+        public BlockSoulFire(Material type) : base(type)
+        {
+        }
+
+        internal override BlockData GetBlockData(NBTTagCompound properties)
+        {
+            return GetBlockData(new BlockSoulFire(Type), properties);
+        }
+
+        internal override bool CanPlace(BlockPosition position)
+        {
+            return position.Down().GetBlockData().Type switch
+            {
+                Material.SoulSand => true,
+                Material.SoulSoil => true,
+                _ => false
+            };
+        }
     }
 }

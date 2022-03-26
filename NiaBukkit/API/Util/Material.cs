@@ -277,7 +277,7 @@ namespace NiaBukkit.API.Util
         [MaterialAttribute(39)]
         BrownMushroom,
         [MaterialAttribute(40)]
-        RedMushRoom,
+        RedMushroom,
         
         //TODO: WHAT?
         [MaterialAttribute( 38)]
@@ -2356,7 +2356,7 @@ namespace NiaBukkit.API.Util
                 case Material.GrayWool: case Material.LightGrayWool: case Material.CyanWool: case Material.PurpleWool: case Material.BlueWool: case Material.BrownWool:
                 case Material.GreenWool: case Material.RedWool: case Material.BlackWool: case Material.Dandelion: case Material.Poppy: case Material.BlueOrchid: case Material.Allium:
                 case Material.AzureBluet: case Material.RedTulip: case Material.OrangeTulip: case Material.WhiteTulip: case Material.PinkTulip: case Material.OxeyeDaisy: case Material.Cornflower:
-                case Material.LilyOfTheValley: case Material.WitherRose: case Material.BrownMushroom: case Material.RedMushRoom: case Material.CrimsonFungus: case Material.WarpedFungus:
+                case Material.LilyOfTheValley: case Material.WitherRose: case Material.BrownMushroom: case Material.RedMushroom: case Material.CrimsonFungus: case Material.WarpedFungus:
                 case Material.CrimsonRoots: case Material.WarpedRoots: case Material.NetherSprouts: case Material.WeepingVines: case Material.TwistingVines: case Material.SugarCane:
                 case Material.Kelp: case Material.Bamboo: case Material.GoldBlock: case Material.IronBlock: case Material.OakSlab: case Material.SpruceSlab: case Material.BirchSlab:
                 case Material.JungleSlab: case Material.AcaciaSlab: case Material.DarkOakSlab: case Material.CrimsonSlab: case Material.WarpedSlab: case Material.StoneSlab: case Material.SmoothStoneSlab:
@@ -2598,7 +2598,7 @@ namespace NiaBukkit.API.Util
                 case Material.Air: case Material.OakSapling: case Material.SpruceSapling: case Material.BirchSapling: case Material.JungleSapling: case Material.AcaciaSapling: case Material.DarkOakSapling:
                 case Material.PoweredRail: case Material.DetectorRail: case Material.Grass: case Material.Fern: case Material.DeadBush: case Material.Dandelion: case Material.Poppy: case Material.BlueOrchid:
                 case Material.Allium: case Material.AzureBluet: case Material.RedTulip: case Material.OrangeTulip: case Material.WhiteTulip: case Material.PinkTulip: case Material.OxeyeDaisy: case Material.BrownMushroom:
-                case Material.RedMushRoom: case Material.SugarCane: case Material.Torch: case Material.EndRod: case Material.ChorusPlant: case Material.ChorusFlower: case Material.Ladder: case Material.Rail:
+                case Material.RedMushroom: case Material.SugarCane: case Material.Torch: case Material.EndRod: case Material.ChorusPlant: case Material.ChorusFlower: case Material.Ladder: case Material.Rail:
                 case Material.Lever: case Material.RedstoneTorch: case Material.Snow: case Material.Vine: case Material.LilyPad: case Material.TripwireHook: case Material.StoneButton: case Material.OakButton:
                 case Material.SpruceButton: case Material.BirchButton: case Material.JungleButton: case Material.AcaciaButton: case Material.DarkOakButton: case Material.ActivatorRail: case Material.Barrier:
                 case Material.WhiteCarpet: case Material.OrangeCarpet: case Material.MagentaCarpet: case Material.LightBlueCarpet: case Material.YellowCarpet: case Material.LimeCarpet: case Material.PinkCarpet:

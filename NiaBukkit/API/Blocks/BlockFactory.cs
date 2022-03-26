@@ -138,10 +138,10 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData PinkTulip = Init(new BlockFlowers(Material.PinkTulip).SetSound(SoundEffectType.GrassEffect));
         public static readonly BlockData OxeyeDaisy = Init(new BlockFlowers(Material.OxeyeDaisy).SetSound(SoundEffectType.GrassEffect));
         public static readonly BlockData Cornflower = Init(new BlockFlowers(Material.Cornflower).SetSound(SoundEffectType.GrassEffect));
-        public static readonly BlockData WitherRose;
+        public static readonly BlockData WitherRose = Init(new BlockWitherRose(Material.WitherRose).SetSound(SoundEffectType.GrassEffect));
         public static readonly BlockData LilyOfTheValley = Init(new BlockFlowers(Material.LilyOfTheValley).SetSound(SoundEffectType.GrassEffect));
-        public static readonly BlockData BrownMushroom;
-        public static readonly BlockData RedMushroom;
+        public static readonly BlockData BrownMushroom = Init(new BlockMushroom(Material.BrownMushroom).SetSound(SoundEffectType.GrassEffect).SetLight(1));
+        public static readonly BlockData RedMushroom = Init(new BlockMushroom(Material.RedMushroom).SetSound(SoundEffectType.GrassEffect));
         public static readonly BlockData GoldBlock = Init(new BlockData(Material.GoldBlock).SetBreakData(3, 6).SetSound(SoundEffectType.MetalEffect));
         public static readonly BlockData IronBlock = Init(new BlockData(Material.IronBlock).SetBreakData(5, 6).SetSound(SoundEffectType.MetalEffect));
         public static readonly BlockData Bricks = Init(new BlockData(Material.Bricks).SetBreakData(2, 6));
@@ -152,7 +152,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData Torch = Init(new BlockTorch(Material.Torch, Particles.Flame).SetSound(SoundEffectType.WoodEffect).SetLight(14));
         public static readonly BlockData WallTorch = Init(new BlockTorchWall(Material.WallTorch, Particles.Flame).SetSound(SoundEffectType.WoodEffect).SetLight(14));
         public static readonly BlockData Fire = Init(new BlockFire(Material.Fire).SetLight(15).SetSound(SoundEffectType.WoolEffect));
-        public static readonly BlockData SoulFire;
+        public static readonly BlockData SoulFire = Init(new BlockSoulFire(Material.SoulFire).SetLight(10).SetSound(SoundEffectType.WoolEffect));
         public static readonly BlockData Spawner = Init(new BlockMobSpawner(Material.Spawner).SetDurability(5).SetSound(SoundEffectType.MetalEffect));
         public static readonly BlockData OakStairs = Init(new BlockStairs(Material.OakStairs).SetBase(OakPlanks));
         public static readonly BlockData Chest = Init(new BlockChest(Material.Chest).SetDurability(2.5F).SetSound(SoundEffectType.WoodEffect));
