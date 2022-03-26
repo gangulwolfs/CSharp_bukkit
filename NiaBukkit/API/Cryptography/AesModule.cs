@@ -87,10 +87,10 @@ namespace NiaBukkit.API.Cryptography
 
         internal static uint Shift(uint data, int shift) => data >> shift | data << 32 - shift;
 
-        internal static uint SubByte(uint data) => (uint) (SBox[data & byte.MaxValue] |
-                                                           SBox[(data >> 8) & byte.MaxValue] << 8 |
-                                                           SBox[(data >> 16) & byte.MaxValue] << 16 |
-                                                           SBox[(data >> 24) & byte.MaxValue] << 24);
+        internal static uint SubByte(uint data) => (uint) (SBox[(byte) data] |
+                                                           SBox[(byte) (data >> 8)] << 8 |
+                                                           SBox[(byte) (data >> 16)] << 16 |
+                                                           SBox[(byte) (data >> 24)] << 24);
 
 
 
@@ -114,16 +114,15 @@ namespace NiaBukkit.API.Cryptography
             }
         }
 
-        internal static uint SubAndShift(uint a, uint b, uint c, uint d)
-        {
-            return (uint) (SBox[a & byte.MaxValue] ^ SBox[b & byte.MaxValue] << 8 ^ SBox[c & byte.MaxValue] << 16 ^
-                           SBox[d & byte.MaxValue] << 24);
-        }
+        internal static uint SubAndShift(uint a, uint b, uint c, uint d) => (uint) (SBox[(byte) a] |
+                                                                                    SBox[(byte) b] << 8 |
+                                                                                    SBox[(byte) c] << 16 |
+                                                                                    SBox[(byte) d] << 24);
 
         internal static uint SubMixColumnHelper(uint a, uint b, uint c, uint d)
         {
-            return T0[a & byte.MaxValue] ^ Shift(T0[b & byte.MaxValue], 24) ^ Shift(T0[c & byte.MaxValue], 16) ^
-                   Shift(T0[d & byte.MaxValue], 8);
+            return T0[(byte) a] ^ Shift(T0[(byte) b], 24) ^ Shift(T0[(byte) c], 16) ^
+                   Shift(T0[(byte) d], 8);
         }
     }
 }
