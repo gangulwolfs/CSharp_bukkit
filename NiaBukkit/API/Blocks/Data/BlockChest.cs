@@ -5,6 +5,7 @@ namespace NiaBukkit.API.Blocks.Data
 {
     public class BlockChest : BlockWaterlogged
     {
+        //Properties=NBTTagCompound(waterlogged="false", facing="north", type="single")
         public Direction Facing { get; private set; }
         public PropertyChestType ChestType { get; private set; }
         
@@ -29,7 +30,7 @@ namespace NiaBukkit.API.Blocks.Data
             if (o1 is null || o2 is null) return o1 is null && o2 is null;
             if (o2 is not BlockChest o) return false;
 
-            return o1.Facing == o.Facing && o1.ChestType == o.ChestType && (BlockData) o1 == o;
+            return o1.Facing == o.Facing && o1.ChestType == o.ChestType && (BlockWaterlogged) o1 == o;
         }
 
         public static bool operator !=(BlockChest o1, BlockData o2) => !(o1 == o2);

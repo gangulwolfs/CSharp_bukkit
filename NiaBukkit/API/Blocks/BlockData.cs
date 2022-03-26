@@ -115,9 +115,6 @@ namespace NiaBukkit.API.Blocks
             return data == this;
         }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine((int) Type, Speed, Durability, SoundEffectType, BlockLight);
-        }
+        public override int GetHashCode() => GetFlatId();
     }
 }

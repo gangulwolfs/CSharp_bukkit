@@ -245,11 +245,11 @@ namespace NiaBukkit.API.Util
         RedWool,
         [MaterialAttribute(35, 15)]
         BlackWool,
-        [MaterialAttribute( 37)]
+        [MaterialAttribute(37)]
         Dandelion,
-        [MaterialAttribute( 38)]
+        [MaterialAttribute(38)]
         Poppy,
-        [MaterialAttribute( 38, 1)]
+        [MaterialAttribute(38, 1)]
         BlueOrchid,
         [MaterialAttribute(38, 2)]
         Allium,

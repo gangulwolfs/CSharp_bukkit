@@ -1,4 +1,5 @@
-﻿using NiaBukkit.API.Util;
+﻿using NiaBukkit.API.NBT;
+using NiaBukkit.API.Util;
 
 namespace NiaBukkit.API.Blocks.Data
 {
@@ -9,5 +10,10 @@ namespace NiaBukkit.API.Blocks.Data
         }
 
         internal override bool CanPlace(BlockPosition position) => false;
+
+        internal override BlockData GetBlockData(NBTTagCompound properties)
+        {
+            return GetBlockData(new BlockSeagrass(Type), properties);
+        }
     }
 }

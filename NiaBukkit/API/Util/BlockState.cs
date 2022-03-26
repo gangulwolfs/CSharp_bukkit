@@ -115,6 +115,12 @@ namespace NiaBukkit.API.Util
         Pling
     }
 
+    public enum PropertyPistionType
+    {
+        Normal,
+        Sticky
+    }
+
     public static class BlockStateExtensions
     {
 
@@ -197,7 +203,8 @@ namespace NiaBukkit.API.Util
         };
 
         public static byte GetMeta(this PropertyWallHeight data) => (byte) data;
-        public static byte GetMeta(this PropertyTrackPosition data) => (byte) data;
+        public static byte GetMeta(this PropertyTrackPosition data) => (byte)data;
+        public static byte GetMeta(this PropertyPistionType data) => (byte)data;
 
 
         public static Direction GetState(this NBTTagCompound properties, Direction defaultValue)
@@ -288,6 +295,13 @@ namespace NiaBukkit.API.Util
         {
             var data = properties?.GetString("instrument");
             return data == null ? defaultValue : Enum.Parse<PropertyInstrument>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyPistionType GetState(this NBTTagCompound properties, PropertyPistionType defaultValue)
+        {
+            var data = properties?.GetString("type");
+            return data == null ? defaultValue : Enum.Parse<PropertyPistionType>(data.Minecraft2Name());
         }
     }
 }
