@@ -80,6 +80,11 @@ namespace NiaBukkit.API.World
             return GetChunk(x >> 4, z >> 4).GetBlock(x % 16, y, z % 16);
         }
 
+        public void SetBlock(int x, int y, int z, Material material)
+        {
+            GetChunk(x >> 4, z >> 4).SetBlock(x % 16, y, z % 16, material);
+        }
+
         public byte GetLightLevel(int x, int y, int z)
         {
             return GetChunk(x >> 4, z >> 4).GetLightLevel(x % 16, y, z % 16);

@@ -85,7 +85,7 @@ namespace NiaBukkit.API.World.Chunks
 
         public void SetBlock(int x, int y, int z, Material block)
         {
-            _blocks[Index(x, y, z)] = GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(block.GetName()));
+            _blocks[Index(x, y, z)] = GetOrCreatePaletteIndex(BlockData.GetBlockDataByName(block.GetName()).GetBlockData(new NBT.NBTTagCompound()));
         }
 
         internal void SetBlock(int x, int y, int z, int id)
