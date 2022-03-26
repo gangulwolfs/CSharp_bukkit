@@ -79,8 +79,6 @@ namespace NiaBukkit.Network
                 _client.Close();
                 _client.Dispose();
                 _sendStream.Dispose();
-                _receiveStream = null;
-                Player = null;
             }
             catch (Exception e)
             {
@@ -89,6 +87,8 @@ namespace NiaBukkit.Network
             
             if (Player != null)
                 Bukkit.RemovePlayer(Player);
+            _receiveStream = null;
+            Player = null;
         }
 
         private void ReceiveAsync(IAsyncResult rs)

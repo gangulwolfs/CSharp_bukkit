@@ -121,6 +121,13 @@ namespace NiaBukkit.API.Util
         Sticky
     }
 
+    public enum PropertyRedstoneSide
+    {
+        Up,
+        Side,
+        None
+    }
+
     public static class BlockStateExtensions
     {
 
@@ -277,7 +284,7 @@ namespace NiaBukkit.API.Util
         }
 
 
-        public static PropertyWallHeight GetState(this NBTTagCompound properties, string key)
+        public static PropertyWallHeight GetWallState(this NBTTagCompound properties, string key)
         {
             var data = properties?.GetString(key);
             return data == null ? PropertyWallHeight.None : Enum.Parse<PropertyWallHeight>(data.Minecraft2Name());
@@ -302,6 +309,13 @@ namespace NiaBukkit.API.Util
         {
             var data = properties?.GetString("type");
             return data == null ? defaultValue : Enum.Parse<PropertyPistionType>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyRedstoneSide GetRedstoneState(this NBTTagCompound properties, string key)
+        {
+            var data = properties?.GetString(key);
+            return data == null ? PropertyRedstoneSide.Up : Enum.Parse<PropertyRedstoneSide>(data.Minecraft2Name());
         }
     }
 }

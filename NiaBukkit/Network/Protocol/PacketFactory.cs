@@ -84,6 +84,7 @@ namespace NiaBukkit.Network.Protocol
             var packets = new List<IPacket>();
             packets.AddRange(new IPacket[]
             {
+                new PlayInKeepAlive(),
                 new PlayInClientSettings(),
                 new PlayInLook(),
                 new PlayInPositionLook(),

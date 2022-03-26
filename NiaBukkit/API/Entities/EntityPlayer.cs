@@ -17,7 +17,7 @@ namespace NiaBukkit.API.Entities
 		public ChatMode ChatMode { get; internal set; }
 		public bool ChatColor { get; internal set; }
 		public int SkinPart { get; internal set; }
-		public int Ping { get; internal set; } = 0;
+		public int Ping { get; private set; } = 0;
 
 		public readonly PlayerAbilities PlayerAbilities = new();
 
@@ -129,6 +129,15 @@ namespace NiaBukkit.API.Entities
 				WorldThreadManager.AddRequireChunk(chunkCoord, this);
 			}
 		}
+
+		internal void SetPing(int ping)
+        {
+			if (Ping != ping)
+			{
+				Ping = ping;
+				MinecraftServer.Broadcast(new PlayOutPlayerInfo(PlayOutPlayerInfo.EnumPlayerInfoAction.UpdateLatency, this));
+			}
+        }
 
 		internal void UpdateAbilities(bool isFly)
         {

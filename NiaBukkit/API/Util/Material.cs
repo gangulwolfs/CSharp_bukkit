@@ -2069,7 +2069,7 @@ namespace NiaBukkit.API.Util
         Fire,
         [MaterialAttribute(30163,51)]
         SoulFire,
-        [MaterialAttribute(25984, 55)]
+        [MaterialAttribute(55)]
         RedstoneWire,
         [MaterialAttribute(12984,68)]
         OakWallSign,

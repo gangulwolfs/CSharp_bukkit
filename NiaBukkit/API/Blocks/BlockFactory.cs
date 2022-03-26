@@ -126,7 +126,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData GreenWool = Init(new BlockData(Material.GreenWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
         public static readonly BlockData RedWool = Init(new BlockData(Material.RedWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
         public static readonly BlockData BlackWool = Init(new BlockData(Material.BlackWool).SetDurability(.8F).SetSound(SoundEffectType.WoolEffect));
-        public static readonly BlockData MovingPiston;
+        public static readonly BlockData MovingPiston = Init(new BlockPistonMoving(Material.MovingPiston).SetDurability(-1));
         public static readonly BlockData Dandelion = Init(new BlockFlowers(Material.Dandelion).SetSound(SoundEffectType.GrassEffect));
         public static readonly BlockData Poppy = Init(new BlockFlowers(Material.Poppy).SetSound(SoundEffectType.GrassEffect));
         public static readonly BlockData BlueOrchid = Init(new BlockFlowers(Material.BlueOrchid).SetSound(SoundEffectType.GrassEffect));
@@ -153,10 +153,10 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData WallTorch = Init(new BlockTorchWall(Material.WallTorch, Particles.Flame).SetSound(SoundEffectType.WoodEffect).SetLight(14));
         public static readonly BlockData Fire = Init(new BlockFire(Material.Fire).SetLight(15).SetSound(SoundEffectType.WoolEffect));
         public static readonly BlockData SoulFire;
-        public static readonly BlockData Spawner;
+        public static readonly BlockData Spawner = Init(new BlockMobSpawner(Material.Spawner).SetDurability(5).SetSound(SoundEffectType.MetalEffect));
         public static readonly BlockData OakStairs = Init(new BlockStairs(Material.OakStairs).SetBase(OakPlanks));
         public static readonly BlockData Chest = Init(new BlockChest(Material.Chest).SetDurability(2.5F).SetSound(SoundEffectType.WoodEffect));
-        public static readonly BlockData RedstoneWire;
+        public static readonly BlockData RedstoneWire = Init(new BlockRedstoneWire(Material.RedstoneWire));
         public static readonly BlockData DiamondOre = Init(new BlockOre(Material.DiamondOre).SetBreakData(3, 3));
         public static readonly BlockData DiamondBlock = Init(new BlockData(Material.DiamondBlock).SetBreakData(5, 6).SetSound(SoundEffectType.MetalEffect));
         public static readonly BlockData CraftingTable;
