@@ -66,6 +66,10 @@
             SoundEffects.BlockLadderStep, SoundEffects.BlockLadderPlace, SoundEffects.BlockLadderHit,
             SoundEffects.BlockLadderFall);
 
+        public static readonly SoundEffectType SnowEffect = new(1, 1, SoundEffects.BlockSnowBreak,
+            SoundEffects.BlockSnowStep, SoundEffects.BlockSnowPlace, SoundEffects.BlockSnowHit,
+            SoundEffects.BlockSnowFall);
+
 
 
 
