@@ -2687,6 +2687,11 @@ namespace NiaBukkit.API.Util
             return false;
         }
 
+        public static bool IsLiquid(this Material m)
+        {
+            return m.IsBlock() && !m.IsSolid();
+        }
+
         public static string GetName(this Material m)
         {
             return m.ToString().Name2Minecraft();

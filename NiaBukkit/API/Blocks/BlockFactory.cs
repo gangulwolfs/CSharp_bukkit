@@ -179,7 +179,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData AcaciaWallSign;
         public static readonly BlockData JungleWallSign;
         public static readonly BlockData DarkOakWallSign;
-        public static readonly BlockData Lever;
+        public static readonly BlockData Lever = Init(new BlockLever(Material.Lever).SetDurability(.5F).SetSound(SoundEffectType.WoodEffect));
         public static readonly BlockData StonePressurePlate = Init(new BlockPressurePlate(BlockPressurePlate.EnumMobType.Mobs, Material.StonePressurePlate).SetDurability(.5F));
         public static readonly BlockData IronDoor = Init(new BlockDoor(Material.IronDoor).SetDurability(5).SetSound(SoundEffectType.MetalEffect));
         public static readonly BlockData OakPressurePlate = Init(new BlockPressurePlate(BlockPressurePlate.EnumMobType.EveryThing, Material.OakPressurePlate).SetDurability(.5F).SetSound(SoundEffectType.WoodEffect));
@@ -195,7 +195,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData Snow;
         public static readonly BlockData Ice;
         public static readonly BlockData SnowBlock = Init(new BlockData(Material.SnowBlock).SetDurability(.2F).SetSound(SoundEffectType.SnowEffect));
-        public static readonly BlockData Cactus;
+        public static readonly BlockData Cactus = Init(new BlockCactus(Material.Cactus).SetDurability(.4F).SetSound(SoundEffectType.WoolEffect));
         public static readonly BlockData Clay = Init(new BlockData(Material.Clay).SetDurability(.6F).SetSound(SoundEffectType.GravelEffect));
         public static readonly BlockData SugarCane;
         public static readonly BlockData Jukebox;

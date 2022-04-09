@@ -128,6 +128,13 @@ namespace NiaBukkit.API.Util
         None
     }
 
+    public enum PropertyAttachPosition
+    {
+        Floor,
+        Wall,
+        Ceiling
+    }
+
     public static class BlockStateExtensions
     {
 
@@ -212,6 +219,7 @@ namespace NiaBukkit.API.Util
         public static byte GetMeta(this PropertyWallHeight data) => (byte) data;
         public static byte GetMeta(this PropertyTrackPosition data) => (byte)data;
         public static byte GetMeta(this PropertyPistionType data) => (byte)data;
+        public static byte GetMeta(this PropertyAttachPosition data) => (byte)data;
 
 
         public static Direction GetState(this NBTTagCompound properties, Direction defaultValue)
@@ -316,6 +324,13 @@ namespace NiaBukkit.API.Util
         {
             var data = properties?.GetString(key);
             return data == null ? PropertyRedstoneSide.Up : Enum.Parse<PropertyRedstoneSide>(data.Minecraft2Name());
+        }
+
+
+        public static PropertyAttachPosition GetState(this NBTTagCompound properties, PropertyAttachPosition defaultValue)
+        {
+            var data = properties?.GetString("face");
+            return data == null ? defaultValue : Enum.Parse<PropertyAttachPosition>(data.Minecraft2Name());
         }
     }
 }
