@@ -68,11 +68,11 @@ namespace NiaBukkit.Network.Protocol.Play
                 // var bitsPerBlock = maxBitsBlock;
                 data.WriteByte(bitsPerBlock);
 
-                /*data.WriteVarInt(4);
-                data.WriteVarInt(0);
-                data.WriteVarInt(7 << 4);
-                data.WriteVarInt(2 << 4);
-                data.WriteVarInt(55 << 4 | 15);*/
+                // data.WriteVarInt(4);
+                // data.WriteVarInt(0);
+                // data.WriteVarInt(7 << 4);
+                // data.WriteVarInt(2 << 4);
+                // data.WriteVarInt(69 << 4 | 1 << 3 | 1);
 
                 if (bitsPerBlock != maxBitsBlock)
                 {

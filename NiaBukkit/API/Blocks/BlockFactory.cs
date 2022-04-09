@@ -197,7 +197,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData SnowBlock = Init(new BlockData(Material.SnowBlock).SetDurability(.2F).SetSound(SoundEffectType.SnowEffect));
         public static readonly BlockData Cactus = Init(new BlockCactus(Material.Cactus).SetDurability(.4F).SetSound(SoundEffectType.WoolEffect));
         public static readonly BlockData Clay = Init(new BlockData(Material.Clay).SetDurability(.6F).SetSound(SoundEffectType.GravelEffect));
-        public static readonly BlockData SugarCane;
+        public static readonly BlockData SugarCane = Init(new BlockSugarCane(Material.SugarCane).SetSound(SoundEffectType.GrassEffect));
         public static readonly BlockData Jukebox;
         public static readonly BlockData OakFence = Init(new BlockFence(Material.OakFence).SetBreakData(2, 3).SetSound(SoundEffectType.WoodEffect));
         public static readonly BlockData Pumpkin;
@@ -213,7 +213,7 @@ namespace NiaBukkit.API.Blocks
         public static readonly BlockData CarvedPumpkin;
         public static readonly BlockData JackOLantern;
         public static readonly BlockData Cake;
-        public static readonly BlockData Repeater;
+        public static readonly BlockData Repeater = Init(new BlockRepeater(Material.Repeater).SetSound(SoundEffectType.WoodEffect));
         public static readonly BlockData WhiteStainedGlass;
         public static readonly BlockData OrangeStainedGlass;
         public static readonly BlockData MagentaStainedGlass;

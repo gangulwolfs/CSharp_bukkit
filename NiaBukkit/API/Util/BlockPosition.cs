@@ -47,5 +47,16 @@ namespace NiaBukkit.API.Util
         {
             return new BlockPosition(World, X + amount, Y, Z);
         }
+
+        public BlockPosition[] GetBesideBlocks()
+        {
+            return new[]
+            {
+                North(),
+                South(),
+                West(),
+                East()
+            };
+        }
     }
 }
