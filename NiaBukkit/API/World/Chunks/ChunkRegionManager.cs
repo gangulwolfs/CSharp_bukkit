@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using NiaBukkit.API.Blocks;
 using NiaBukkit.API.NBT;
 using NiaBukkit.API.Util;
@@ -8,13 +9,9 @@ namespace NiaBukkit.API.World.Chunks
 {
     public class ChunkRegionManager
     {
-        private const byte MaxBitsBlock = 15;
-        
         internal static Chunk GetChunk(World world, int x, int z)
         {
-            //var buf = RegionFile.Load($"D:/마인크래프트/1.16.5/world_b/region/r.{x >> 5}.{z >> 5}.mca", x, z);
-            var buf = RegionFile.Load($"C:/Users/skyne/AppData/Roaming/.minecraft/saves/New World (5)/region/r.{x >> 5}.{z >> 5}.mca", x, z);
-            // var buf = RegionFile.Load($"C:/Users/skyne/AppData/Roaming/.minecraft/saves/New World-/region/r.{x >> 5}.{z >> 5}.mca", x, z);
+            var buf = RegionFile.Load(Path.Join(world.WorldPath, RegionFile.RegionName, $"r.{x >> 5}.{z >> 5}.mca"), x, z);
             if (buf == null)
                 return null;
 

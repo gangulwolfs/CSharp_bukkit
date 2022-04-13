@@ -7,6 +7,8 @@ namespace NiaBukkit.API.World.Chunks
 {
     public static class RegionFile
     {
+        public const string RegionName = "region";
+        
         public static ByteBuf Load(string path, int x, int z)
         {
             if (!File.Exists(path)) return null;

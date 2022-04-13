@@ -3,7 +3,7 @@ using NiaBukkit.API.Util;
 
 namespace NiaBukkit.API.Blocks.Data
 {
-    class BlockSign : BlockWaterlogged
+    public class BlockSign : BlockWaterlogged
     {
         //Properties=NBTTagCompound(waterlogged="false", rotation="15")
         public int Rotation { get; private set; }

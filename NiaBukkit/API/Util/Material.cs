@@ -2071,19 +2071,19 @@ namespace NiaBukkit.API.Util
         SoulFire,
         [MaterialAttribute(55)]
         RedstoneWire,
-        [MaterialAttribute(12984,68)]
+        [MaterialAttribute(68)]
         OakWallSign,
-        [MaterialAttribute(7352,68)]
+        [MaterialAttribute(68)]
         SpruceWallSign,
-        [MaterialAttribute(9887,68)]
+        [MaterialAttribute(68)]
         BirchWallSign,
-        [MaterialAttribute(20316,68)]
+        [MaterialAttribute(68)]
         AcaciaWallSign,
-        [MaterialAttribute(29629,68)]
+        [MaterialAttribute(68)]
         JungleWallSign,
-        [MaterialAttribute(9508,68)]
+        [MaterialAttribute(68)]
         DarkOakWallSign,
-        [MaterialAttribute(7595, 76)]
+        [MaterialAttribute(76)]
         RedstoneWallTorch,
         [MaterialAttribute(27500)]
         SoulWallTorch,
@@ -2102,7 +2102,7 @@ namespace NiaBukkit.API.Util
         MelonStem,
         [MaterialAttribute(119)]
         EndPortal,
-        [MaterialAttribute(29709,127)]
+        [MaterialAttribute(127)]
         Cocoa,
         [MaterialAttribute(132)]
         Tripwire,

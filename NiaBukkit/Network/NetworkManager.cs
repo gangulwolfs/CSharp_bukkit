@@ -429,7 +429,7 @@ namespace NiaBukkit.Network
 
         private class StateObject : IDisposable
         {
-            public const int BufferSize = 1024;
+            public const int BufferSize = 512;
             public readonly byte[] Buffer = new byte[BufferSize];
             public Socket TargetSocket { get; }
 

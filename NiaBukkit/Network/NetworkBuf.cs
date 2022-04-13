@@ -1,5 +1,4 @@
 ﻿using System;
-using NiaBukkit.API;
 using NiaBukkit.API.Util;
 
 namespace NiaBukkit.Network

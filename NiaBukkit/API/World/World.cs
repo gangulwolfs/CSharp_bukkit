@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.IO;
 using NiaBukkit.API.Blocks;
 using NiaBukkit.API.Config;
 using NiaBukkit.API.Entities;
@@ -31,13 +32,29 @@ namespace NiaBukkit.API.World
 
         public Location WorldSpawn { get; private set; }
 
-        public World(string name)
+        public readonly string WorldPath;
+
+        public World(string name, bool createDir = true)
         {
             Name = name;
+            WorldPath = Path.Join(Bukkit.ServerPath, Name);
+            if (createDir)
+                CreateDirectory();
+            
             WorldType = WorldType.Flat;
             _provider = new WorldProviderFlat(this);
             
             WorldSpawn = new Location(this, 0, 5, 0);
+        }
+
+        private void CreateDirectory()
+        {
+            if (!Directory.Exists(WorldPath))
+                Directory.CreateDirectory(WorldPath);
+
+            var nextDir = Path.Join(WorldPath, RegionFile.RegionName);
+            if (!Directory.Exists(nextDir))
+                Directory.CreateDirectory(nextDir);
         }
 
         internal Chunk GetChunk(int x, int z)
